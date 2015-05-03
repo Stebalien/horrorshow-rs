@@ -80,7 +80,7 @@
 //!
 //! * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 //!
-//! * `: rust_expression `: { rust_code }` -- Evaluate the expression or block and insert result current position.
+//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result current position.
 //!
 //! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
 //! result at the current position.
