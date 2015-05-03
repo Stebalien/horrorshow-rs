@@ -14,10 +14,13 @@
 //!         }
 //!         body {
 //!             // attributes
-//!             h1(id="heading") { : "Hello!" }
+//!             h1(id="heading") {
+//!                 // Insert escaped text (actually, anything that defines Display)
+//!                 : "Hello! This is <html />"
+//!             }
 //!             p {
-//!                 // Insert text (actually, anything that defines Display)
-//!                 : "Let's count to 10!"
+//!                 // Insert raw text (unescaped)
+//!                 ! "Let's <i>count</i> to 10!"
 //!             }
 //!             ol(id="count") {
 //!                 // run some inline code...
@@ -40,7 +43,7 @@
 //!     }
 //! };
 //!
-//! let expected = "<html><head><title>Hello world!</title></head><body><h1 id=\"heading\">Hello!</h1><p>Let's count to 10!</p><ol id=\"count\"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ol><br /><br /><p>Easy!</p></body></html>";
+//! let expected = "<html><head><title>Hello world!</title></head><body><h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1><p>Let's <i>count</i> to 10!</p><ol id=\"count\"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ol><br /><br /><p>Easy!</p></body></html>";
 //! assert_eq!(expected, actual);
 //!
 //! # }
@@ -104,13 +107,48 @@
 //! 1. This library does no escaping, sanitization. You have to do that yourself!
 //! 2. There are bugs.
 use std::cell::RefCell;
+use std::fmt;
 
 #[macro_use]
 mod html;
 
-// TODO: Escape?
+thread_local!(static __TEMPLATE: RefCell<Option<Template>> = RefCell::new(None));
 
-thread_local!(static __TEMPLATE: RefCell<Option<String>> = RefCell::new(None));
+/// Private helper for storing template output. We need this to do escaping.
+#[doc(hidden)]
+struct Template {
+    data: String,
+    escape: bool,
+}
+
+impl Template {
+    fn new() -> Template {
+        Template {
+            data: String::new(),
+            escape: false,
+        }
+    }
+}
+
+impl fmt::Write for Template {
+    fn write_str(&mut self, text: &str) -> fmt::Result {
+        if self.escape {
+            self.data.reserve(text.len());
+            for c in text.chars() {
+                match c {
+                    '&' => self.data.push_str("&amp;"),
+                    '"' => self.data.push_str("&quot;"),
+                    '<' => self.data.push_str("&lt;"),
+                    '>' => self.data.push_str("&gt;"),
+                    _ => self.data.push(c),
+                }
+            }
+        } else {
+            self.data.push_str(text);
+        }
+        Ok(())
+    }
+}
 
 /// Call `f` with a new template scope.
 ///
@@ -120,11 +158,11 @@ thread_local!(static __TEMPLATE: RefCell<Option<String>> = RefCell::new(None));
 pub fn __with_template_scope<F: FnMut()>(mut f: F) -> String {
     // The scoped variant is unstable so we do this ourselves...
     __TEMPLATE.with(|current| {
-        let mut stash = Some(String::new());
+        let mut stash = Some(Template::new());
         ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
         (f)();
         ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
-        stash.unwrap()
+        stash.unwrap().data
     })
 }
 
@@ -133,18 +171,76 @@ pub fn __with_template_scope<F: FnMut()>(mut f: F) -> String {
 /// Returns the evaluated template.
 #[doc(hidden)]
 #[inline]
-pub fn __with_template<F: FnMut(&mut String)>(mut f: F) {
+pub fn __with_template<F: FnMut(&mut Template)>(escape: bool, mut f: F) {
     // The scoped variant is unstable so we do this ourselves...
-    __TEMPLATE.with(|template| (f)(template.borrow_mut().as_mut().unwrap()));
+    __TEMPLATE.with(|template| {
+        // Make the borrow checker happy...
+        let mut borrow = template.borrow_mut();
+        let inner = borrow.as_mut().unwrap();
+        let old_escape = inner.escape;
+        inner.escape = escape;
+        (f)(inner);
+        inner.escape = old_escape;
+    });
+}
+
+#[macro_export]
+macro_rules! append_raw {
+    ($($tok:tt)+) => {{
+        use ::std::fmt::Write;
+        $crate::__with_template(false, |template| {
+            // TODO: Handle errors?
+            write!(template, $($tok)+).unwrap();
+        });
+    }}
 }
 
 #[macro_export]
 macro_rules! append {
     ($($tok:tt)+) => {{
         use ::std::fmt::Write;
-        $crate::__with_template(|template| {
+        $crate::__with_template(true, |template| {
             // TODO: Handle errors?
             write!(template, $($tok)+).unwrap();
         });
     }}
+}
+
+#[test]
+fn test() {
+    println!("{}", html! {
+        html {
+            head {
+                title { : "Hello world!" }
+            }
+            body {
+                // attributes
+                h1(id="heading") {
+                    // Insert escaped text (actually, anything that defines Display)
+                    : "Hello! This is <html />"
+                }
+                p {
+                    // Insert raw text (unescaped)
+                    ! "Let's <i>count</i> to 10!"
+                }
+                ol(id="count") {
+                    // run some inline code...
+                    @ for i in 0..10 {
+                        // append to the current template.
+                        append_html! {
+                            li {
+                                // format some text
+                                #{"{}", i+1 }
+                            }
+                        }
+                    }
+                }
+                // You need semi-colons for tags without children.
+                br; br;
+                p {
+                    : "Easy!"
+                }
+            }
+        }
+    });
 }

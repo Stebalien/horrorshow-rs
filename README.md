@@ -12,10 +12,13 @@ html! {
         }
         body {
             // attributes
-            h1(id="heading") { : "Hello!" }
+            h1(id="heading") {
+                // Insert escaped text (actually, anything that defines Display)
+                : "Hello! This is <html />"
+            }
             p {
-                // Insert text (actually, anything that defines Display)
-                : "Let's count to 10!"
+                // Insert raw text (unescaped)
+                ! "Let's <i>count</i> to 10!"
             }
             ol(id="count") {
                 // run some inline code...
@@ -39,7 +42,7 @@ html! {
 }
 ```
 
-Becomes
+Becomes (whitespace added for clarity).
 
 ```html
 <html>
@@ -47,8 +50,8 @@ Becomes
     <title>Hello world!</title>
   </head>
   <body>
-    <h1 id="heading">Hello!</h1>
-    <p>Let's count to 10!</p>
+    <h1 id="heading">Hello! This is &lt;html /&gt;</h1>
+    <p>Let's <i>count</i> to 10!</p>
     <ol id="count">
       <li>1</li>
       <li>2</li>
@@ -61,7 +64,7 @@ Becomes
       <li>9</li>
       <li>10</li>
     </ol>
-    <br /><br />
+    <br /> <br />
     <p>Easy!</p>
   </body>
 </html>
@@ -75,24 +78,28 @@ Inside an html template, the following expressions are valid:
 * `some_tag;` -- Insert a the tag `some_tag`.
 
 * `some_tag(attr=rust_expresion,...);` -- Insert a the tag `some_tag` with the specified
-   attributes. The attribute values will be evaluated as rust expressions at runtime.
+   attributes. The attribute values will be evaluated as rust expressions at
+   runtime and will be escaped.
 
-* `some_tag { ... }` -- Insert a the tag `some_tag` and recursivly evaluate the `...`.
+* `some_tag { ... }` -- Insert a the tag `some_tag` and recursively evaluate the `...`.
 
 * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 
-* `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result current position.
+* `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result current position (escaped).
 
-* `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
-result at the current position.
+* `! rust_expression`, `! { rust_code }` -- Same as above but the output isn't escaped.
+
+* `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the result at the current position (escaped).
 
 * `@ rust_expression`, `@ { rust_code }` -- Evaluate the expression or block.
 
-In rust code embedded inside of a template, you can invoke `append!("format_str", args...)` or
-`append_html! { html_template... }` to append to the template at the current position. That's how
-the for loop works in the example above.
 
-## Notes:
+In rust code embedded inside of a template, you can invoke
+`append!("format_str", args...)` to escape and append text,
+`append_raw!("format_str", args...)` to append raw text, or `append_html! { html_template... }`
+to append to the template at the current position. That's how the for loop works in the example above.
 
-1. This library does no escaping, sanitization. You have to do that yourself!
-2. There are bugs.
+# Disclaimer
+
+This library is mostly untested and probably a security hazard.
+
