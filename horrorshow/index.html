@@ -47,11 +47,11 @@
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
-<p>An xml (mostly just the html subset) templating library.</p>
+<p>An html (mostly just the html subset) templating library.</p>
 
 <h2 id="example:" class='section-header'><a
                            href="#example:">Example:</a></h2><pre id='rust-example-rendered' class='rust '>
-<span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>xml</span><span class='macro'>!</span> {
+<span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>html</span><span class='macro'>!</span> {
     <span class='ident'>html</span> {
         <span class='ident'>head</span> {
             <span class='ident'>title</span> { : <span class='string'>&quot;Hello world!&quot;</span> }
@@ -67,7 +67,7 @@
                 <span class='comment'>// run some inline code...</span>
                 <span class='kw-2'>@</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
                     <span class='comment'>// append to the current template.</span>
-                    <span class='macro'>append_xml</span><span class='macro'>!</span> {
+                    <span class='macro'>append_html</span><span class='macro'>!</span> {
                         <span class='ident'>li</span> {
                             <span class='comment'>// format some text</span>
                             <span class='attribute'>#{<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span> }
@@ -117,7 +117,7 @@
 
 <h2 id="usage" class='section-header'><a
                            href="#usage">Usage</a></h2>
-<p>Inside an xml template, the following expressions are valid:</p>
+<p>Inside an html template, the following expressions are valid:</p>
 
 <ul>
 <li><p><code>some_tag;</code> -- Insert a the tag <code>some_tag</code>.</p></li>
@@ -132,7 +132,7 @@ result at the current position.</p></li>
 </ul>
 
 <p>In rust code embedded inside of a template, you can invoke <code>append!(&quot;format_str&quot;, args...)</code> or
-<code>append_xml! { xml_template... }</code> to append to the template at the current position. That&#39;s how
+<code>append_html! { html_template... }</code> to append to the template at the current position. That&#39;s how
 the for loop works in the example above.</p>
 
 <h2 id="notes:" class='section-header'><a
@@ -152,16 +152,16 @@ the for loop works in the example above.</p>
                     </tr>
                 
                     <tr class=' module-item'>
-                        <td><a class='macro' href='macro.append_xml!.html'
-                               title='horrorshow::append_xml!'>append_xml!</a></td>
+                        <td><a class='macro' href='macro.append_html!.html'
+                               title='horrorshow::append_html!'>append_html!</a></td>
                         <td class='docblock short'>
                              
                         </td>
                     </tr>
                 
                     <tr class=' module-item'>
-                        <td><a class='macro' href='macro.xml!.html'
-                               title='horrorshow::xml!'>xml!</a></td>
+                        <td><a class='macro' href='macro.html!.html'
+                               title='horrorshow::html!'>html!</a></td>
                         <td class='docblock short'>
                              
                         </td>
