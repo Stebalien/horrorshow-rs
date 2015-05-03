@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `horrorshow` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, horrorshow">
+
+    <title>horrorshow - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'horrorshow', ty: 'mod', relpath: '../'};</script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>horrorshow</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-186' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'>
+<h1 id="horrorshow" class='section-header'><a
+                           href="#horrorshow">Horrorshow</a></h1>
+<p>An xml (mostly just the html subset) templating library.</p>
+
+<h2 id="example:" class='section-header'><a
+                           href="#example:">Example:</a></h2><pre id='rust-example-rendered' class='rust '>
+<span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>xml</span><span class='macro'>!</span> {
+    <span class='ident'>html</span> {
+        <span class='ident'>head</span> {
+            <span class='ident'>title</span> { : <span class='string'>&quot;Hello world!&quot;</span> }
+        }
+        <span class='ident'>body</span> {
+            <span class='ident'>h1</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;heading&quot;</span>) { : <span class='string'>&quot;Hello!&quot;</span> }
+            <span class='ident'>p</span> { : <span class='string'>&quot;Let&#39;s count to 10!&quot;</span> }
+            <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
+                <span class='kw-2'>@</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
+                    <span class='macro'>append_xml</span><span class='macro'>!</span> {
+                        <span class='ident'>li</span> {
+                            <span class='attribute'>#{<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span> }
+                        }
+                    }
+                }
+            }
+            <span class='ident'>br</span>; <span class='ident'>br</span>;
+            <span class='ident'>p</span> {
+                : <span class='string'>&quot;Easy!&quot;</span>
+            }
+        }
+    }
+};
+
+<span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello!&lt;/h1&gt;&lt;p&gt;Let&#39;s count to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
+</pre>
+
+<p>Or cleaned up:</p>
+
+<pre><code class="language-html">&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Hello world!&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1 id=&quot;heading&quot;&gt;Hello!&lt;/h1&gt;
+    &lt;p&gt;Let&#39;s count to 10!&lt;/p&gt;
+    &lt;ol id=&quot;count&quot;&gt;
+      &lt;li&gt;1&lt;/li&gt;
+      &lt;li&gt;2&lt;/li&gt;
+      &lt;li&gt;3&lt;/li&gt;
+      &lt;li&gt;4&lt;/li&gt;
+      &lt;li&gt;5&lt;/li&gt;
+      &lt;li&gt;6&lt;/li&gt;
+      &lt;li&gt;7&lt;/li&gt;
+      &lt;li&gt;8&lt;/li&gt;
+      &lt;li&gt;9&lt;/li&gt;
+      &lt;li&gt;10&lt;/li&gt;
+    &lt;/ol&gt;
+    &lt;br /&gt;&lt;br /&gt;
+    &lt;p&gt;Easy!&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h2 id="usage" class='section-header'><a
+                           href="#usage">Usage</a></h2>
+<p>Inside an xml template, the following expressions are valid:</p>
+
+<ul>
+<li><p><code>some_tag;</code> -- Insert a the tag <code>some_tag</code>.</p></li>
+<li><p><code>some_tag(attr=rust_expresion,...);</code> -- Insert a the tag <code>some_tag</code> with the specified
+attributes. The attribute values will be evaluated as rust expressions at runtime.</p></li>
+<li><p><code>some_tag { ... }</code> -- Insert a the tag <code>some_tag</code> and recursivly evaluate the <code>...</code>.</p></li>
+<li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
+<li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result current position.</p></li>
+<li><p><code>#{&quot;format_str&quot;, rust_expressions... }</code> -- Format the arguments according to <code>format_str</code> and insert the
+result at the current position.</p></li>
+<li><p><code>@ rust_expression</code>, <code>@ { rust_code }</code> -- Evaluate the expression or block.</p></li>
+</ul>
+
+<p>In rust code embedded inside of a template, you can invoke <code>append!(&quot;format_str&quot;, args...)</code> or
+<code>append_xml! { xml_template... }</code> to append to the template at the current position. That&#39;s how
+the for loop works in the example above.</p>
+
+<h2 id="notes:" class='section-header'><a
+                           href="#notes:">Notes:</a></h2>
+<ol>
+<li>This library does no escaping, sanitization. You have to do that yourself!</li>
+<li>There are bugs.</li>
+</ol>
+</div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.append!.html'
+                               title='horrorshow::append!'>append!</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.append_xml!.html'
+                               title='horrorshow::append_xml!'>append_xml!</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.xml!.html'
+                               title='horrorshow::xml!'>xml!</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table><h2 id='statics' class='section-header'><a href="#statics">Statics</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='static' href='static.__TEMPLATE.html'
+                               title='horrorshow::__TEMPLATE'>__TEMPLATE</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "horrorshow";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
