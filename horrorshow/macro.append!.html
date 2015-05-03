@@ -43,12 +43,12 @@
     <section id='main' class="content macro">
 <h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>append!</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-156' class='srclink' href='../src/horrorshow/lib.rs.html#142-150' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-297' class='srclink' href='../src/horrorshow/lib.rs.html#199-207' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append</span> {
     ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> {{
         <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='boolval'>true</span>, <span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
             <span class='comment'>// TODO: Handle errors?</span>
             <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>template</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>).<span class='ident'>unwrap</span>();
         });

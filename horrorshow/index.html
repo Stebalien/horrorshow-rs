@@ -43,7 +43,7 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>horrorshow</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-150' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-246' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -58,10 +58,13 @@
         }
         <span class='ident'>body</span> {
             <span class='comment'>// attributes</span>
-            <span class='ident'>h1</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;heading&quot;</span>) { : <span class='string'>&quot;Hello!&quot;</span> }
+            <span class='ident'>h1</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;heading&quot;</span>) {
+                <span class='comment'>// Insert escaped text (actually, anything that defines Display)</span>
+                : <span class='string'>&quot;Hello! This is &lt;html /&gt;&quot;</span>
+            }
             <span class='ident'>p</span> {
-                <span class='comment'>// Insert text (actually, anything that defines Display)</span>
-                : <span class='string'>&quot;Let&#39;s count to 10!&quot;</span>
+                <span class='comment'>// Insert raw text (unescaped)</span>
+                <span class='op'>!</span> <span class='string'>&quot;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&quot;</span>
             }
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
                 <span class='comment'>// run some inline code...</span>
@@ -84,7 +87,7 @@
     }
 };
 
-<span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello!&lt;/h1&gt;&lt;p&gt;Let&#39;s count to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;
+<span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
 </pre>
 
@@ -154,6 +157,14 @@ the for loop works in the example above.</p>
                     <tr class=' module-item'>
                         <td><a class='macro' href='macro.append_html!.html'
                                title='horrorshow::append_html!'>append_html!</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.append_raw!.html'
+                               title='horrorshow::append_raw!'>append_raw!</a></td>
                         <td class='docblock short'>
                              
                         </td>

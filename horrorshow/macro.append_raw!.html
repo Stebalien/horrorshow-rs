@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `html!` macro in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, html!">
+    <meta name="description" content="API documentation for the Rust `append_raw!` macro in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, append_raw!">
 
-    <title>horrorshow::html! - Rust</title>
+    <title>horrorshow::append_raw! - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'html!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'append_raw!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -41,15 +41,17 @@
     </nav>
 
     <section id='main' class="content macro">
-<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>html!</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>append_raw!</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-294' class='srclink' href='../src/horrorshow/html.rs.html#2-8' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-296' class='srclink' href='../src/horrorshow/lib.rs.html#188-196' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>html</span> {
-    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template_scope</span>(<span class='op'>||</span> {
-            <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
-        })
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append_raw</span> {
+    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> {{
+        <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='boolval'>false</span>, <span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
+            <span class='comment'>// TODO: Handle errors?</span>
+            <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>template</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>).<span class='ident'>unwrap</span>();
+        });
     }}
 }
 </pre>
