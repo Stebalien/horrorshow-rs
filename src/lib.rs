@@ -107,20 +107,39 @@ use std::cell::RefCell;
 
 // TODO: Escape?
 
+thread_local!(static __TEMPLATE: RefCell<Option<String>> = RefCell::new(None));
+
+/// Call `f` with a new template scope.
+///
+/// Returns the evaluated template.
 #[doc(hidden)]
-thread_local!(pub static __TEMPLATE: RefCell<Option<String>> = RefCell::new(None));
+#[inline]
+pub fn __with_template_scope<F: FnMut()>(mut f: F) -> String {
+    // The scoped variant is unstable so we do this ourselves...
+    __TEMPLATE.with(|current| {
+        let mut stash = Some(String::new());
+        ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
+        (f)();
+        ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
+        stash.unwrap()
+    })
+}
+
+/// Call `f` with a mutable reference to the current template string.
+///
+/// Returns the evaluated template.
+#[doc(hidden)]
+#[inline]
+pub fn __with_template<F: FnMut(&mut String)>(mut f: F) {
+    // The scoped variant is unstable so we do this ourselves...
+    __TEMPLATE.with(|template| (f)(template.borrow_mut().as_mut().unwrap()));
+}
 
 #[macro_export]
 macro_rules! xml {
     ($($inner:tt)*) => {{
-        // The scoped variant is unstable
-        use ::std::cell::RefCell;
-        $crate::__TEMPLATE.with(|current| {
-            let mut stash = Some(String::new());
-            ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
+        $crate::__with_template_scope(|| {
             append_xml!($($inner)*);
-            ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
-            stash.unwrap()
         })
     }}
 }
@@ -129,9 +148,9 @@ macro_rules! xml {
 macro_rules! append {
     ($($tok:tt)+) => {{
         use ::std::fmt::Write;
-        $crate::__TEMPLATE.with(|value| {
+        $crate::__with_template(|template| {
             // TODO: Handle errors?
-            write!(value.borrow_mut().as_mut().unwrap(), $($tok)+).unwrap();
+            write!(template, $($tok)+).unwrap();
         });
     }}
 }
