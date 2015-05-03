@@ -1,13 +1,13 @@
 //! # Horrorshow
 //!
-//! An xml (mostly just the html subset) templating library.
+//! An html templating library.
 //!
 //! ## Example:
 //!
 //! ```
 //! # #[macro_use] extern crate horrorshow;
 //! # fn main() {
-//! let actual = xml! {
+//! let actual = html! {
 //!     html {
 //!         head {
 //!             title { : "Hello world!" }
@@ -23,7 +23,7 @@
 //!                 // run some inline code...
 //!                 @ for i in 0..10 {
 //!                     // append to the current template.
-//!                     append_xml! {
+//!                     append_html! {
 //!                         li {
 //!                             // format some text
 //!                             #{"{}", i+1 }
@@ -77,7 +77,7 @@
 //! ## Usage
 //!
 //!
-//! Inside an xml template, the following expressions are valid:
+//! Inside an html template, the following expressions are valid:
 //!
 //! * `some_tag;` -- Insert a the tag `some_tag`.
 //!
@@ -96,7 +96,7 @@
 //! * `@ rust_expression`, `@ { rust_code }` -- Evaluate the expression or block.
 //!
 //! In rust code embedded inside of a template, you can invoke `append!("format_str", args...)` or
-//! `append_xml! { xml_template... }` to append to the template at the current position. That's how
+//! `append_html! { html_template... }` to append to the template at the current position. That's how
 //! the for loop works in the example above.
 //!
 //! ## Notes:
@@ -106,7 +106,7 @@
 use std::cell::RefCell;
 
 #[macro_use]
-mod xml;
+mod html;
 
 // TODO: Escape?
 
