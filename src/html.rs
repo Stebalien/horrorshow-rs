@@ -62,5 +62,5 @@ macro_rules! append_html {
     ($tag:ident) => {{
         append!(concat!("<", stringify!($tag), "/>"))
     }};
-    () => {""};
+    () => {};
 }
