@@ -43,7 +43,7 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>horrorshow</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-186' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-194' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -57,17 +57,25 @@
             <span class='ident'>title</span> { : <span class='string'>&quot;Hello world!&quot;</span> }
         }
         <span class='ident'>body</span> {
+            <span class='comment'>// attributes</span>
             <span class='ident'>h1</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;heading&quot;</span>) { : <span class='string'>&quot;Hello!&quot;</span> }
-            <span class='ident'>p</span> { : <span class='string'>&quot;Let&#39;s count to 10!&quot;</span> }
+            <span class='ident'>p</span> {
+                <span class='comment'>// Insert text (actually, anything that defines Display)</span>
+                : <span class='string'>&quot;Let&#39;s count to 10!&quot;</span>
+            }
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
+                <span class='comment'>// run some inline code...</span>
                 <span class='kw-2'>@</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
+                    <span class='comment'>// append to the current template.</span>
                     <span class='macro'>append_xml</span><span class='macro'>!</span> {
                         <span class='ident'>li</span> {
+                            <span class='comment'>// format some text</span>
                             <span class='attribute'>#{<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span> }
                         }
                     }
                 }
             }
+            <span class='comment'>// You need semi-colons for tags without children.</span>
             <span class='ident'>br</span>; <span class='ident'>br</span>;
             <span class='ident'>p</span> {
                 : <span class='string'>&quot;Easy!&quot;</span>

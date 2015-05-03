@@ -226,6 +226,14 @@
 <span id="184">184</span>
 <span id="185">185</span>
 <span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -242,17 +250,25 @@
 <span class='doccomment'>//!             title { : &quot;Hello world!&quot; }</span>
 <span class='doccomment'>//!         }</span>
 <span class='doccomment'>//!         body {</span>
+<span class='doccomment'>//!             // attributes</span>
 <span class='doccomment'>//!             h1(id=&quot;heading&quot;) { : &quot;Hello!&quot; }</span>
-<span class='doccomment'>//!             p { : &quot;Let&#39;s count to 10!&quot; }</span>
+<span class='doccomment'>//!             p {</span>
+<span class='doccomment'>//!                 // Insert text (actually, anything that defines Display)</span>
+<span class='doccomment'>//!                 : &quot;Let&#39;s count to 10!&quot;</span>
+<span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!             ol(id=&quot;count&quot;) {</span>
+<span class='doccomment'>//!                 // run some inline code...</span>
 <span class='doccomment'>//!                 @ for i in 0..10 {</span>
+<span class='doccomment'>//!                     // append to the current template.</span>
 <span class='doccomment'>//!                     append_xml! {</span>
 <span class='doccomment'>//!                         li {</span>
+<span class='doccomment'>//!                             // format some text</span>
 <span class='doccomment'>//!                             #{&quot;{}&quot;, i+1 }</span>
 <span class='doccomment'>//!                         }</span>
 <span class='doccomment'>//!                     }</span>
 <span class='doccomment'>//!                 }</span>
 <span class='doccomment'>//!             }</span>
+<span class='doccomment'>//!             // You need semi-colons for tags without children.</span>
 <span class='doccomment'>//!             br; br;</span>
 <span class='doccomment'>//!             p {</span>
 <span class='doccomment'>//!                 : &quot;Easy!&quot;</span>
