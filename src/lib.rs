@@ -13,17 +13,25 @@
 //!             title { : "Hello world!" }
 //!         }
 //!         body {
+//!             // attributes
 //!             h1(id="heading") { : "Hello!" }
-//!             p { : "Let's count to 10!" }
+//!             p {
+//!                 // Insert text (actually, anything that defines Display)
+//!                 : "Let's count to 10!"
+//!             }
 //!             ol(id="count") {
+//!                 // run some inline code...
 //!                 @ for i in 0..10 {
+//!                     // append to the current template.
 //!                     append_xml! {
 //!                         li {
+//!                             // format some text
 //!                             #{"{}", i+1 }
 //!                         }
 //!                     }
 //!                 }
 //!             }
+//!             // You need semi-colons for tags without children.
 //!             br; br;
 //!             p {
 //!                 : "Easy!"
