@@ -43,7 +43,7 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>horrorshow</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-209' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-201' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -59,7 +59,7 @@
         <span class='ident'>body</span> {
             <span class='comment'>// attributes</span>
             <span class='ident'>h1</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;heading&quot;</span>) {
-                <span class='comment'>// Insert escaped text (actually, anything that defines Display)</span>
+                <span class='comment'>// Insert escaped text</span>
                 : <span class='string'>&quot;Hello! This is &lt;html /&gt;&quot;</span>
             }
             <span class='ident'>p</span> {
@@ -134,21 +134,28 @@ result at the current position.</p></li>
 <li><p><code>@ rust_expression</code>, <code>@ { rust_code }</code> -- Evaluate the expression or block.</p></li>
 </ul>
 
-<p>In rust code embedded inside of a template, you can invoke <code>append!(&quot;format_str&quot;, args...)</code> or
-<code>append_html! { html_template... }</code> to append to the template at the current position. That&#39;s how
-the for loop works in the example above.</p>
+<p>In rust code embedded inside of a template, you can append text with any of the following
+macros:</p>
 
-<h2 id="notes:" class='section-header'><a
-                           href="#notes:">Notes:</a></h2>
-<ol>
-<li>This library does no escaping, sanitization. You have to do that yourself!</li>
-<li>There are bugs.</li>
-</ol>
+<ul>
+<li><code>append_fmt!(&quot;format_str&quot;, args...)</code> -- format, escape, and append arguments</li>
+<li><code>append_raw!(text)</code> -- append text without escaping</li>
+<li><code>append!(text)</code> -- escape and append text</li>
+<li><code>append_html! { html_template... }</code> -- append an html template.</li>
+</ul>
 </div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                     <tr class=' module-item'>
                         <td><a class='macro' href='macro.append!.html'
                                title='horrorshow::append!'>append!</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.append_fmt!.html'
+                               title='horrorshow::append_fmt!'>append_fmt!</a></td>
                         <td class='docblock short'>
                              
                         </td>

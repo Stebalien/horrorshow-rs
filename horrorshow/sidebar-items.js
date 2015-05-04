@@ -1,1 +1,1 @@
-initSidebarItems({"macro":[["append!",""],["append_html!",""],["append_raw!",""],["html!",""]]});
+initSidebarItems({"macro":[["append!",""],["append_fmt!",""],["append_html!",""],["append_raw!",""],["html!",""]]});

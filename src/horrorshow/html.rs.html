@@ -151,26 +151,26 @@
 <span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append_html</span> {
     (: {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>);<span class='op'>+</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);<span class='op'>+</span>});
+        <span class='macro'>append</span><span class='macro'>!</span>({$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);<span class='op'>+</span>});
         <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>; $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
+        <span class='macro'>append</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
         <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
+        <span class='macro'>append</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
     }};
     (<span class='op'>!</span> {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>);<span class='op'>+</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);<span class='op'>+</span>});
+        <span class='macro'>append_raw</span><span class='macro'>!</span>({$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);<span class='op'>+</span>});
         <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (<span class='op'>!</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>; $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
+        <span class='macro'>append_raw</span><span class='macro'>!</span>( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
         <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (<span class='op'>!</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
+        <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
     }};
     (<span class='kw-2'>@</span> {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>);<span class='op'>+</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
         $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);<span class='op'>+</span>
@@ -184,14 +184,14 @@
         <span class='macro'>append_html</span><span class='macro'>!</span>(<span class='kw-2'>@</span> {<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>});
     }};
     (<span class='attribute'>#{$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>:<span class='ident'>tt</span>)<span class='op'>+</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro'>append</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>);
+        <span class='macro'>append_fmt</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>);
         <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>:<span class='ident'>ident</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>:<span class='ident'>ident</span><span class='op'>=</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>:<span class='ident'>expr</span>),<span class='op'>+</span>) { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>children</span>:<span class='ident'>tt</span>)<span class='op'>*</span> } $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot;&lt;&quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>)));
         $(
             <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot; &quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>), <span class='string'>&quot;=\&quot;&quot;</span>));
-            <span class='macro'>append</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>);
+            <span class='macro'>append_fmt</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>);
             <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;\&quot;&quot;</span>);
         )<span class='op'>+</span>
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;&gt;&quot;</span>);
@@ -203,7 +203,7 @@
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot;&lt;&quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>)));
         $(
             <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot; &quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>), <span class='string'>&quot;=\&quot;&quot;</span>));
-            <span class='macro'>append</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>);
+            <span class='macro'>append_fmt</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>);
             <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;\&quot;&quot;</span>);
         )<span class='op'>+</span>
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot; /&gt;&quot;</span>);
@@ -213,7 +213,7 @@
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot;&lt;&quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>)));
         $(
             <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot; &quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>), <span class='string'>&quot;=\&quot;&quot;</span>));
-            <span class='macro'>append</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>);
+            <span class='macro'>append_fmt</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>);
             <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot;\&quot;&quot;</span>);
         )<span class='op'>+</span>
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='string'>&quot; /&gt;&quot;</span>);
