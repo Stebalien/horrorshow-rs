@@ -247,6 +247,13 @@
 <span id="205">205</span>
 <span id="206">206</span>
 <span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -372,29 +379,36 @@
 }
 
 <span class='kw'>impl</span> <span class='ident'>Template</span> {
-    <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>Template</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>with_capacity</span>(<span class='ident'>n</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>Template</span> {
         <span class='ident'>Template</span> {
-            <span class='ident'>data</span>: <span class='ident'>String</span>::<span class='ident'>new</span>(),
+            <span class='ident'>data</span>: <span class='ident'>String</span>::<span class='ident'>with_capacity</span>(<span class='ident'>n</span>),
             <span class='ident'>escape</span>: <span class='boolval'>false</span>,
         }
     }
 }
 
 <span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Write</span> <span class='kw'>for</span> <span class='ident'>Template</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>text</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>escape</span> {
             <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>reserve</span>(<span class='ident'>text</span>.<span class='ident'>len</span>());
             <span class='kw'>for</span> <span class='ident'>c</span> <span class='kw'>in</span> <span class='ident'>text</span>.<span class='ident'>chars</span>() {
-                <span class='kw'>match</span> <span class='ident'>c</span> {
-                    <span class='string'>&#39;&amp;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;amp;&quot;</span>),
-                    <span class='string'>&#39;&quot;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;quot;&quot;</span>),
-                    <span class='string'>&#39;&lt;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;lt;&quot;</span>),
-                    <span class='string'>&#39;&gt;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;gt;&quot;</span>),
-                    _ <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push</span>(<span class='ident'>c</span>),
-                }
+                <span class='kw'>let</span> _ <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>write_char</span>(<span class='ident'>c</span>);
             }
         } <span class='kw'>else</span> {
             <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='ident'>text</span>);
+        }
+        <span class='prelude-val'>Ok</span>(())
+    }
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>write_char</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>c</span>: <span class='ident'>char</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+        <span class='kw'>match</span> <span class='ident'>c</span> {
+            <span class='string'>&#39;&amp;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;amp;&quot;</span>),
+            <span class='string'>&#39;&quot;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;quot;&quot;</span>),
+            <span class='string'>&#39;&lt;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;lt;&quot;</span>),
+            <span class='string'>&#39;&gt;&#39;</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;&amp;gt;&quot;</span>),
+            _ <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push</span>(<span class='ident'>c</span>),
         }
         <span class='prelude-val'>Ok</span>(())
     }
@@ -405,10 +419,10 @@
 <span class='doccomment'>/// Returns the evaluated template.</span>
 <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
 <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__with_template_scope</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnMut</span>()<span class='op'>&gt;</span>(<span class='kw-2'>mut</span> <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__with_template_scope</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnMut</span>()<span class='op'>&gt;</span>(<span class='ident'>n</span>: <span class='ident'>usize</span>, <span class='kw-2'>mut</span> <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
     <span class='comment'>// The scoped variant is unstable so we do this ourselves...</span>
     <span class='ident'>__TEMPLATE</span>.<span class='ident'>with</span>(<span class='op'>|</span><span class='ident'>current</span><span class='op'>|</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stash</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>Template</span>::<span class='ident'>new</span>());
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stash</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>Template</span>::<span class='ident'>with_capacity</span>(<span class='ident'>n</span>));
         ::<span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>current</span>.<span class='ident'>borrow_mut</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stash</span>);
         (<span class='ident'>f</span>)();
         ::<span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>current</span>.<span class='ident'>borrow_mut</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stash</span>);

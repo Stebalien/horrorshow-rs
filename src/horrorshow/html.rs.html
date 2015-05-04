@@ -135,11 +135,13 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
+<span id="96">96</span>
 </pre><pre class='rust '>
 <span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>html</span> {
     ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template_scope</span>(<span class='op'>||</span> {
+        <span class='comment'>// Stringify the template content to get a hint at how much we should allocate...</span>
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template_scope</span>(<span class='macro'>stringify</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>).<span class='ident'>len</span>(), <span class='op'>||</span> {
             <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
         })
     }}
