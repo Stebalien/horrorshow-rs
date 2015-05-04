@@ -3,3 +3,7 @@ name = "horrorshow"
 description = "a templating library written in rust macros"
 version = "0.1.0"
 authors = ["Steven Allen <steven@stebalien.com>"]
+
+[dev-dependencies]
+maud = "*"
+maud_macros = "*"
