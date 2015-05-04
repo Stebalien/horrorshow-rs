@@ -121,6 +121,7 @@ impl Template {
     fn with_capacity(n: usize) -> Template {
         Template(String::with_capacity(n))
     }
+    #[inline]
     pub fn write_raw(&mut self, text: &str) {
         self.0.push_str(text);
     }
@@ -136,6 +137,7 @@ impl fmt::Write for Template {
                 b'"' => self.0.push_str("&quot;"),
                 b'<' => self.0.push_str("&lt;"),
                 b'>' => self.0.push_str("&gt;"),
+                // This is safe because we're working bytewise.
                 _ => unsafe { self.0.as_mut_vec() }.push(b)
             }
         }
