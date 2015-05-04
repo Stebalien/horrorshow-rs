@@ -136,22 +136,17 @@ impl fmt::Write for Template {
     fn write_str(&mut self, text: &str) -> fmt::Result {
         if self.escape {
             self.data.reserve(text.len());
-            for c in text.chars() {
-                let _ = self.write_char(c);
+            for b in text.bytes() {
+                match b {
+                    b'&' => self.data.push_str("&amp;"),
+                    b'"' => self.data.push_str("&quot;"),
+                    b'<' => self.data.push_str("&lt;"),
+                    b'>' => self.data.push_str("&gt;"),
+                    _ => unsafe { self.data.as_mut_vec() }.push(b)
+                }
             }
         } else {
             self.data.push_str(text);
-        }
-        Ok(())
-    }
-    #[inline]
-    fn write_char(&mut self, c: char) -> fmt::Result {
-        match c {
-            '&' => self.data.push_str("&amp;"),
-            '"' => self.data.push_str("&quot;"),
-            '<' => self.data.push_str("&lt;"),
-            '>' => self.data.push_str("&gt;"),
-            _ => self.data.push(c),
         }
         Ok(())
     }
