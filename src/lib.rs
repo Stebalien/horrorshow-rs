@@ -15,7 +15,7 @@
 //!         body {
 //!             // attributes
 //!             h1(id="heading") {
-//!                 // Insert escaped text (actually, anything that defines Display)
+//!                 // Insert escaped text
 //!                 : "Hello! This is <html />"
 //!             }
 //!             p {
@@ -79,7 +79,6 @@
 //!
 //! ## Usage
 //!
-//!
 //! Inside an html template, the following expressions are valid:
 //!
 //! * `some_tag;` -- Insert a the tag `some_tag`.
@@ -98,14 +97,13 @@
 //!
 //! * `@ rust_expression`, `@ { rust_code }` -- Evaluate the expression or block.
 //!
-//! In rust code embedded inside of a template, you can invoke `append!("format_str", args...)` or
-//! `append_html! { html_template... }` to append to the template at the current position. That's how
-//! the for loop works in the example above.
+//! In rust code embedded inside of a template, you can append text with any of the following
+//! macros:
 //!
-//! ## Notes:
-//!
-//! 1. This library does no escaping, sanitization. You have to do that yourself!
-//! 2. There are bugs.
+//! * `append_fmt!("format_str", args...)` -- format, escape, and append arguments
+//! * `append_raw!(text)` -- append text without escaping
+//! * `append!(text)` -- escape and append text
+//! * `append_html! { html_template... }` -- append an html template.
 use std::cell::RefCell;
 use std::fmt;
 
@@ -116,37 +114,30 @@ thread_local!(static __TEMPLATE: RefCell<Option<Template>> = RefCell::new(None))
 
 /// Private helper for storing template output. We need this to do escaping.
 #[doc(hidden)]
-struct Template {
-    data: String,
-    escape: bool,
-}
+pub struct Template(String);
 
 impl Template {
     #[inline]
     fn with_capacity(n: usize) -> Template {
-        Template {
-            data: String::with_capacity(n),
-            escape: false,
-        }
+        Template(String::with_capacity(n))
+    }
+    pub fn write_raw(&mut self, text: &str) {
+        self.0.push_str(text);
     }
 }
 
 impl fmt::Write for Template {
     #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
-        if self.escape {
-            self.data.reserve(text.len());
-            for b in text.bytes() {
-                match b {
-                    b'&' => self.data.push_str("&amp;"),
-                    b'"' => self.data.push_str("&quot;"),
-                    b'<' => self.data.push_str("&lt;"),
-                    b'>' => self.data.push_str("&gt;"),
-                    _ => unsafe { self.data.as_mut_vec() }.push(b)
-                }
+        self.0.reserve(text.len());
+        for b in text.bytes() {
+            match b {
+                b'&' => self.0.push_str("&amp;"),
+                b'"' => self.0.push_str("&quot;"),
+                b'<' => self.0.push_str("&lt;"),
+                b'>' => self.0.push_str("&gt;"),
+                _ => unsafe { self.0.as_mut_vec() }.push(b)
             }
-        } else {
-            self.data.push_str(text);
         }
         Ok(())
     }
@@ -164,7 +155,7 @@ pub fn __with_template_scope<F: FnMut()>(n: usize, mut f: F) -> String {
         ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
         (f)();
         ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
-        stash.unwrap().data
+        stash.unwrap().0
     })
 }
 
@@ -173,25 +164,27 @@ pub fn __with_template_scope<F: FnMut()>(n: usize, mut f: F) -> String {
 /// Returns the evaluated template.
 #[doc(hidden)]
 #[inline]
-pub fn __with_template<F: FnMut(&mut Template)>(escape: bool, mut f: F) {
+pub fn __with_template<F: FnMut(&mut Template)>(mut f: F) {
     // The scoped variant is unstable so we do this ourselves...
     __TEMPLATE.with(|template| {
-        // Make the borrow checker happy...
-        let mut borrow = template.borrow_mut();
-        let inner = borrow.as_mut().unwrap();
-        let old_escape = inner.escape;
-        inner.escape = escape;
-        (f)(inner);
-        inner.escape = old_escape;
+        (f)(template.borrow_mut().as_mut().unwrap());
     });
 }
 
 #[macro_export]
 macro_rules! append_raw {
+    ($s:expr) => {{
+        $crate::__with_template(|template| {
+            template.write_raw(&($s));
+        });
+    }}
+}
+
+#[macro_export]
+macro_rules! append_fmt {
     ($($tok:tt)+) => {{
         use ::std::fmt::Write;
-        $crate::__with_template(false, |template| {
-            // TODO: Handle errors?
+        $crate::__with_template(|template| {
             write!(template, $($tok)+).unwrap();
         });
     }}
@@ -199,11 +192,10 @@ macro_rules! append_raw {
 
 #[macro_export]
 macro_rules! append {
-    ($($tok:tt)+) => {{
+    ($s:expr) => {{
         use ::std::fmt::Write;
-        $crate::__with_template(true, |template| {
-            // TODO: Handle errors?
-            write!(template, $($tok)+).unwrap();
+        $crate::__with_template(|template| {
+            template.write_str(&($s)).unwrap();
         });
     }}
 }

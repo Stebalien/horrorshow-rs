@@ -13,7 +13,7 @@ html! {
         body {
             // attributes
             h1(id="heading") {
-                // Insert escaped text (actually, anything that defines Display)
+                // Insert escaped text
                 : "Hello! This is <html />"
             }
             p {
@@ -72,34 +72,33 @@ Becomes (whitespace added for clarity).
 
 ## Usage
 
-
 Inside an html template, the following expressions are valid:
 
 * `some_tag;` -- Insert a the tag `some_tag`.
 
 * `some_tag(attr=rust_expresion,...);` -- Insert a the tag `some_tag` with the specified
-   attributes. The attribute values will be evaluated as rust expressions at
-   runtime and will be escaped.
+   attributes. The attribute values will be evaluated as rust expressions at runtime.
 
-* `some_tag { ... }` -- Insert a the tag `some_tag` and recursively evaluate the `...`.
+* `some_tag { ... }` -- Insert a the tag `some_tag` and recursivly evaluate the `...`.
 
 * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 
-* `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result current position (escaped).
+* `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result current position.
 
-* `! rust_expression`, `! { rust_code }` -- Same as above but the output isn't escaped.
-
-* `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the result at the current position (escaped).
+* `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
+result at the current position.
 
 * `@ rust_expression`, `@ { rust_code }` -- Evaluate the expression or block.
 
+In rust code embedded inside of a template, you can append text with any of the following
+macros:
 
-In rust code embedded inside of a template, you can invoke
-`append!("format_str", args...)` to escape and append text,
-`append_raw!("format_str", args...)` to append raw text, or `append_html! { html_template... }`
-to append to the template at the current position. That's how the for loop works in the example above.
+* `append_fmt!("format_str", args...)` -- format, escape, and append arguments
+* `append_raw!(text)` -- append text without escaping
+* `append!(text)` -- escape and append text
+* `append_html! { html_template... }` -- append an html template.
 
-# Disclaimer
+## Disclaimer
 
 This library is mostly untested and probably a security hazard.
 
