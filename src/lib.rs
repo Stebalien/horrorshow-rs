@@ -122,29 +122,36 @@ struct Template {
 }
 
 impl Template {
-    fn new() -> Template {
+    #[inline]
+    fn with_capacity(n: usize) -> Template {
         Template {
-            data: String::new(),
+            data: String::with_capacity(n),
             escape: false,
         }
     }
 }
 
 impl fmt::Write for Template {
+    #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
         if self.escape {
             self.data.reserve(text.len());
             for c in text.chars() {
-                match c {
-                    '&' => self.data.push_str("&amp;"),
-                    '"' => self.data.push_str("&quot;"),
-                    '<' => self.data.push_str("&lt;"),
-                    '>' => self.data.push_str("&gt;"),
-                    _ => self.data.push(c),
-                }
+                let _ = self.write_char(c);
             }
         } else {
             self.data.push_str(text);
+        }
+        Ok(())
+    }
+    #[inline]
+    fn write_char(&mut self, c: char) -> fmt::Result {
+        match c {
+            '&' => self.data.push_str("&amp;"),
+            '"' => self.data.push_str("&quot;"),
+            '<' => self.data.push_str("&lt;"),
+            '>' => self.data.push_str("&gt;"),
+            _ => self.data.push(c),
         }
         Ok(())
     }
@@ -155,10 +162,10 @@ impl fmt::Write for Template {
 /// Returns the evaluated template.
 #[doc(hidden)]
 #[inline]
-pub fn __with_template_scope<F: FnMut()>(mut f: F) -> String {
+pub fn __with_template_scope<F: FnMut()>(n: usize, mut f: F) -> String {
     // The scoped variant is unstable so we do this ourselves...
     __TEMPLATE.with(|current| {
-        let mut stash = Some(Template::new());
+        let mut stash = Some(Template::with_capacity(n));
         ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
         (f)();
         ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);

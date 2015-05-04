@@ -1,7 +1,8 @@
 #[macro_export]
 macro_rules! html {
     ($($inner:tt)*) => {{
-        $crate::__with_template_scope(|| {
+        // Stringify the template content to get a hint at how much we should allocate...
+        $crate::__with_template_scope(stringify!($($inner)*).len(), || {
             append_html!($($inner)*);
         })
     }}
