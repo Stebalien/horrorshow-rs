@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `append!` macro in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, append!">
+    <meta name="description" content="API documentation for the Rust `__block_identity!` macro in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, __block_identity!">
 
-    <title>horrorshow::append! - Rust</title>
+    <title>horrorshow::__block_identity! - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'append!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: '__block_identity!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -41,18 +41,12 @@
     </nav>
 
     <section id='main' class="content macro">
-<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>append!</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>__block_identity!</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-287' class='srclink' href='../src/horrorshow/lib.rs.html#197-205' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-283' class='srclink' href='../src/horrorshow/html.rs.html#14-16' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>s</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> {{
-        <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
-            <span class='kw'>let</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>s</span>;
-            <span class='ident'>template</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>s</span>).<span class='ident'>unwrap</span>();
-        });
-    }}
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>__block_identity</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>:<span class='ident'>block</span>) <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span> };
 }
 </pre>
 </section>
