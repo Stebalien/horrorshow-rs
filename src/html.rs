@@ -1,3 +1,4 @@
+/// Crate a new html template
 #[macro_export]
 macro_rules! html {
     ($($inner:tt)*) => {{
@@ -8,14 +9,7 @@ macro_rules! html {
     }}
 }
 
-// TODO: We shouldn't need this but without it I get the folloowing error:
-// error: unexpected token: `an interpolated tt`
-#[macro_export]
-macro_rules! __block_identity {
-    ($b:block) => { $b };
-}
-
-
+/// Append html to the current template.
 #[macro_export]
 macro_rules! append_html {
     (: {$($code:tt)*} $($next:tt)*) => {{
@@ -41,7 +35,7 @@ macro_rules! append_html {
         append_raw!($code);
     }};
     (@ {$($code:tt)*} $($next:tt)*) => {{
-        __block_identity!({$($code)*});
+        __horrorshow_block_identity!({$($code)*});
         append_html!($($next)*);
     }};
     (@ $code:stmt; $($next:tt)* ) => {{

@@ -173,6 +173,7 @@ pub fn __with_template<F: FnMut(&mut Template)>(mut f: F) {
     });
 }
 
+/// Append text without escaping.
 #[macro_export]
 macro_rules! append_raw {
     ($s:expr) => {{
@@ -183,6 +184,7 @@ macro_rules! append_raw {
     }}
 }
 
+/// Format, escape, and append arguments.
 #[macro_export]
 macro_rules! append_fmt {
     ($($tok:tt)+) => {{
@@ -193,6 +195,7 @@ macro_rules! append_fmt {
     }}
 }
 
+/// Escape and append text. 
 #[macro_export]
 macro_rules! append {
     ($s:expr) => {{
@@ -202,4 +205,12 @@ macro_rules! append {
             template.write_str(&s).unwrap();
         });
     }}
+}
+
+// We shouldn't need this but without it I get the folloowing error:
+// error: unexpected token: `an interpolated tt`
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __horrorshow_block_identity {
+    ($b:block) => { $b };
 }
