@@ -177,7 +177,8 @@ pub fn __with_template<F: FnMut(&mut Template)>(mut f: F) {
 macro_rules! append_raw {
     ($s:expr) => {{
         $crate::__with_template(|template| {
-            template.write_raw(&($s));
+            let s = $s;
+            template.write_raw(&s);
         });
     }}
 }
@@ -197,7 +198,8 @@ macro_rules! append {
     ($s:expr) => {{
         use ::std::fmt::Write;
         $crate::__with_template(|template| {
-            template.write_str(&($s)).unwrap();
+            let s = $s;
+            template.write_str(&s).unwrap();
         });
     }}
 }

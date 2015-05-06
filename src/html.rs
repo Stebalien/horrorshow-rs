@@ -8,11 +8,18 @@ macro_rules! html {
     }}
 }
 
+// TODO: We shouldn't need this but without it I get the folloowing error:
+// error: unexpected token: `an interpolated tt`
+#[macro_export]
+macro_rules! __block_identity {
+    ($b:block) => { $b };
+}
+
 
 #[macro_export]
 macro_rules! append_html {
-    (: {$($code:expr);+} $($next:tt)*) => {{
-        append!({$($code);+});
+    (: {$($code:tt)*} $($next:tt)*) => {{
+        append!({$($code)*})
         append_html!($($next)*);
     }};
     (: $code:expr; $($next:tt)* ) => {{
@@ -22,8 +29,8 @@ macro_rules! append_html {
     (: $code:expr ) => {{
         append!($code);
     }};
-    (! {$($code:expr);+} $($next:tt)*) => {{
-        append_raw!({$($code);+});
+    (! {$($code:tt)*} $($next:tt)*) => {{
+        append_raw!({$($code)*});
         append_html!($($next)*);
     }};
     (! $code:expr; $($next:tt)* ) => {{
@@ -33,16 +40,16 @@ macro_rules! append_html {
     (! $code:expr ) => {{
         append_raw!($code);
     }};
-    (@ {$($code:expr);+} $($next:tt)*) => {{
-        $($code);+
+    (@ {$($code:tt)*} $($next:tt)*) => {{
+        __block_identity!({$($code)*});
         append_html!($($next)*);
     }};
-    (@ $code:expr; $($next:tt)* ) => {{
+    (@ $code:stmt; $($next:tt)* ) => {{
         $code;
         append_html!($($next)*);
     }};
-    (@ $code:expr ) => {{
-        append_html!(@ {$code});
+    (@ $code:stmt ) => {{
+        $code;
     }};
     (#{$($tok:tt)+} $($next:tt)*) => {{
         append_fmt!($($tok)+);
