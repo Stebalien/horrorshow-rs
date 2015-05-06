@@ -43,7 +43,7 @@
     <section id='main' class="content macro">
 <h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>append_html!</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-284' class='srclink' href='../src/horrorshow/html.rs.html#20-103' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-283' class='srclink' href='../src/horrorshow/html.rs.html#14-97' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append_html</span> {
     (: {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>tt</span>)<span class='op'>*</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
@@ -69,7 +69,7 @@
         <span class='macro'>append_raw</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>);
     }};
     (<span class='kw-2'>@</span> {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>tt</span>)<span class='op'>*</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro'>__block_identity</span><span class='macro'>!</span>({$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)<span class='op'>*</span>});
+        <span class='macro'>__horrorshow_block_identity</span><span class='macro'>!</span>({$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)<span class='op'>*</span>});
         <span class='macro'>append_html</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (<span class='kw-2'>@</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>stmt</span>; $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
@@ -130,7 +130,8 @@
     () <span class='op'>=&gt;</span> {};
 }
 </pre>
-</section>
+<div class='docblock'><p>Append html to the current template.</p>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
