@@ -1,6 +1,10 @@
 # Horrorshow
 
-An html templating library.
+[![Build Status](https://travis-ci.org/Stebalien/horrorshow-rs.svg?branch=master)](https://travis-ci.org/Stebalien/horrorshow-rs)
+
+A macro-based html templating library (1.0 compatible).
+
+API: https://stebalien.github.io/horrorshow-rs/horrorshow/
 
 ## Example:
 
