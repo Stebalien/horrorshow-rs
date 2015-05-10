@@ -45,12 +45,12 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-279' class='srclink' href='../src/horrorshow/lib.rs.html#188-195' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-328' class='srclink' href='../src/horrorshow/lib.rs.html#205-212' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append_fmt</span> {
     ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> {{
         <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template_reentrant</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
             <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>template</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>).<span class='ident'>unwrap</span>();
         });
     }}
