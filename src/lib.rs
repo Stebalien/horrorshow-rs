@@ -161,7 +161,7 @@ pub fn __with_template_scope<F: FnMut()>(n: usize, mut f: F) -> String {
 }
 
 /// Call `f` with a mutable reference to the current template string.
-///
+/// NOT REENTRANT!
 /// Returns the evaluated template.
 #[doc(hidden)]
 #[inline]
@@ -172,13 +172,30 @@ pub fn __with_template<F: FnMut(&mut Template)>(mut f: F) {
     });
 }
 
+/// Call `f` with a mutable reference to the current template string.
+/// This is the slower reentrant version.
+///
+/// Returns the evaluated template.
+#[doc(hidden)]
+#[inline]
+pub fn __with_template_reentrant<F: FnMut(&mut Template)>(mut f: F) {
+    // The scoped variant is unstable so we do this ourselves...
+    __TEMPLATE.with(|template| {
+        let mut local_template = None;
+        ::std::mem::swap(&mut *template.borrow_mut(), &mut local_template);
+        (f)(local_template.as_mut().unwrap());
+        ::std::mem::swap(&mut *template.borrow_mut(), &mut local_template);
+    });
+}
+
 /// Append text without escaping.
 #[macro_export]
 macro_rules! append_raw {
     ($s:expr) => {{
+        let output = $s;
+        let s: &str = &output;
         $crate::__with_template(|template| {
-            let s = $s;
-            template.write_raw(&s);
+            template.write_raw(s);
         });
     }}
 }
@@ -188,7 +205,7 @@ macro_rules! append_raw {
 macro_rules! append_fmt {
     ($($tok:tt)+) => {{
         use ::std::fmt::Write;
-        $crate::__with_template(|template| {
+        $crate::__with_template_reentrant(|template| {
             write!(template, $($tok)+).unwrap();
         });
     }}
@@ -199,9 +216,10 @@ macro_rules! append_fmt {
 macro_rules! append {
     ($s:expr) => {{
         use ::std::fmt::Write;
+        let output = $s;
+        let s: &str = &output;
         $crate::__with_template(|template| {
-            let s = $s;
-            template.write_str(&s).unwrap();
+            template.write_str(s).unwrap();
         });
     }}
 }
