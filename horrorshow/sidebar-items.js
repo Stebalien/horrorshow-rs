@@ -1,1 +1,1 @@
-initSidebarItems({"macro":[["append!","Escape and append text."],["append_fmt!","Format, escape, and append arguments."],["append_html!","Append html to the current template."],["append_raw!","Append text without escaping."],["html!","Crate a new html template"]]});
+initSidebarItems({"macro":[["append!","Escape and append text."],["append_fmt!","Format, escape, and append arguments."],["append_html!","Append html to the current template."],["append_raw!","Append text without escaping."],["html!","Crate a new html template"],["stringify_compressed!",""]]});
