@@ -2,14 +2,14 @@
 
 [![Build Status](https://travis-ci.org/Stebalien/horrorshow-rs.svg?branch=master)](https://travis-ci.org/Stebalien/horrorshow-rs)
 
-A macro-based html templating library (1.0 compatible).
+A macro-based xml templating library (1.0 compatible).
 
 API: https://stebalien.github.io/horrorshow-rs/horrorshow/
 
 ## Example:
 
 ```rust
-html! {
+xml! {
     html {
         head {
             title { : "Hello world!" }
@@ -28,7 +28,7 @@ html! {
                 // run some inline code...
                 @ for i in 0..10 {
                     // append to the current template.
-                    append_html! {
+                    append_xml! {
                         li {
                             // format some text
                             #{"{}", i+1 }
@@ -76,7 +76,7 @@ Becomes (whitespace added for clarity).
 
 ## Usage
 
-Inside an html template, the following expressions are valid:
+Inside an xml template, the following expressions are valid:
 
 * `some_tag;` -- Insert a the tag `some_tag`.
 
@@ -100,7 +100,7 @@ macros:
 * `append_fmt!("format_str", args...)` -- format, escape, and append arguments
 * `append_raw!(text)` -- append text without escaping
 * `append!(text)` -- escape and append text
-* `append_html! { html_template... }` -- append an html template.
+* `append_xml! { xml_template... }` -- append an xml template.
 
 ## Disclaimer
 

@@ -7,7 +7,7 @@ extern crate horrorshow;
 #[bench]
 fn bench(b: &mut test::Bencher) {
     b.iter(|| {
-        test::black_box(html! {
+        test::black_box(xml! {
             html {
                 head {
                     title { : "Hello world!" }

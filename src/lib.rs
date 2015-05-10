@@ -1,13 +1,13 @@
 //! # Horrorshow
 //!
-//! An html templating library.
+//! An xml templating library.
 //!
 //! ## Example:
 //!
 //! ```
 //! # #[macro_use] extern crate horrorshow;
 //! # fn main() {
-//! let actual = html! {
+//! let actual = xml! {
 //!     html {
 //!         head {
 //!             title { : "Hello world!" }
@@ -26,7 +26,7 @@
 //!                 // run some inline code...
 //!                 @ for i in 0..10 {
 //!                     // append to the current template.
-//!                     append_html! {
+//!                     append_xml! {
 //!                         li {
 //!                             // format some text
 //!                             #{"{}", i+1 }
@@ -79,7 +79,7 @@
 //!
 //! ## Usage
 //!
-//! Inside an html template, the following expressions are valid:
+//! Inside an xml template, the following expressions are valid:
 //!
 //! * `some_tag;` -- Insert a the tag `some_tag`.
 //!
@@ -103,12 +103,12 @@
 //! * `append_fmt!("format_str", args...)` -- format, escape, and append arguments
 //! * `append_raw!(text)` -- append text without escaping
 //! * `append!(text)` -- escape and append text
-//! * `append_html! { html_template... }` -- append an html template.
+//! * `append_xml! { xml_template... }` -- append an xml template.
 use std::cell::RefCell;
 use std::fmt;
 
 #[macro_use]
-mod html;
+mod xml;
 
 thread_local!(static __TEMPLATE: RefCell<Option<Template>> = RefCell::new(None));
 

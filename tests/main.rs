@@ -3,28 +3,28 @@ extern crate horrorshow;
 
 #[test]
 fn test_reentrant() {
-    assert_eq!(&html! {
+    assert_eq!(&xml! {
         p {
-            #{"{}", html! { a(href="abcde") }}
+            #{"{}", xml! { a(href="abcde") }}
         }
     }, "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
-    assert_eq!(&html! {
+    assert_eq!(&xml! {
         p {
-            @ append!(html! { a(href="abcde") });
+            @ append!(xml! { a(href="abcde") });
         }
     }, "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
-    assert_eq!(&html! {
+    assert_eq!(&xml! {
         p {
-            ! html! { a(href="abcde") };
+            ! xml! { a(href="abcde") };
         }
     }, "<p><a href=\"abcde\" /></p>");
 }
 
 #[test]
 fn test_namespace() {
-    assert_eq!(html! {
+    assert_eq!(xml! {
         a:first {
             b:inner;
         }
@@ -36,7 +36,7 @@ fn test_namespace() {
 
 #[test]
 fn test_dash() {
-    assert_eq!(html! {
+    assert_eq!(xml! {
         my_tag {
             inner(data-test="abcde");
         }
