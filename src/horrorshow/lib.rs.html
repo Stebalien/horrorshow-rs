@@ -276,14 +276,14 @@
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! An html templating library.</span>
+<span class='doccomment'>//! An xml templating library.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Example:</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! # #[macro_use] extern crate horrorshow;</span>
 <span class='doccomment'>//! # fn main() {</span>
-<span class='doccomment'>//! let actual = html! {</span>
+<span class='doccomment'>//! let actual = xml! {</span>
 <span class='doccomment'>//!     html {</span>
 <span class='doccomment'>//!         head {</span>
 <span class='doccomment'>//!             title { : &quot;Hello world!&quot; }</span>
@@ -302,7 +302,7 @@
 <span class='doccomment'>//!                 // run some inline code...</span>
 <span class='doccomment'>//!                 @ for i in 0..10 {</span>
 <span class='doccomment'>//!                     // append to the current template.</span>
-<span class='doccomment'>//!                     append_html! {</span>
+<span class='doccomment'>//!                     append_xml! {</span>
 <span class='doccomment'>//!                         li {</span>
 <span class='doccomment'>//!                             // format some text</span>
 <span class='doccomment'>//!                             #{&quot;{}&quot;, i+1 }</span>
@@ -355,7 +355,7 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Usage</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! Inside an html template, the following expressions are valid:</span>
+<span class='doccomment'>//! Inside an xml template, the following expressions are valid:</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag;` -- Insert a the tag `some_tag`.</span>
 <span class='doccomment'>//!</span>
@@ -379,12 +379,12 @@
 <span class='doccomment'>//! * `append_fmt!(&quot;format_str&quot;, args...)` -- format, escape, and append arguments</span>
 <span class='doccomment'>//! * `append_raw!(text)` -- append text without escaping</span>
 <span class='doccomment'>//! * `append!(text)` -- escape and append text</span>
-<span class='doccomment'>//! * `append_html! { html_template... }` -- append an html template.</span>
+<span class='doccomment'>//! * `append_xml! { xml_template... }` -- append an xml template.</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cell</span>::<span class='ident'>RefCell</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
-<span class='kw'>mod</span> <span class='ident'>html</span>;
+<span class='kw'>mod</span> <span class='ident'>xml</span>;
 
 <span class='macro'>thread_local</span><span class='macro'>!</span>(<span class='kw'>static</span> <span class='ident'>__TEMPLATE</span>: <span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Template</span><span class='op'>&gt;&gt;</span> <span class='op'>=</span> <span class='ident'>RefCell</span>::<span class='ident'>new</span>(<span class='prelude-val'>None</span>));
 
