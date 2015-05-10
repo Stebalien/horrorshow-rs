@@ -130,7 +130,6 @@ impl Template {
 impl fmt::Write for Template {
     #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
-        self.0.reserve(text.len());
         for b in text.bytes() {
             match b {
                 b'&' => self.0.push_str("&amp;"),
