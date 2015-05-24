@@ -155,14 +155,6 @@
 <span id="113">113</span>
 <span id="114">114</span>
 <span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
 </pre><pre class='rust '>
 <span class='doccomment'>/// Crate a new xml template</span>
 <span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
@@ -170,7 +162,10 @@
     ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
         <span class='comment'>// Stringify the template content to get a hint at how much we should allocate...</span>
         <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__new_renderer</span>(<span class='macro'>stringify</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>).<span class='ident'>len</span>(), <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> {
+            <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_imports</span>)]</span>
             <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
+            <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_imports</span>)]</span>
+            <span class='kw'>use</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>TemplateComponent</span>;
             <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
         })
     }}
@@ -190,26 +185,15 @@
 <span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>__append_xml</span> {
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, : {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>tt</span>)<span class='op'>*</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span>{$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)<span class='op'>*</span>}).<span class='ident'>unwrap</span>();
+        <span class='kw-2'>&amp;</span>{$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)<span class='op'>*</span>}.<span class='ident'>render_into</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>);
         <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>; $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)).<span class='ident'>unwrap</span>();
+        <span class='kw-2'>&amp;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>).<span class='ident'>render_into</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>);
         <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, : <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)).<span class='ident'>unwrap</span>();
-    }};
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, <span class='op'>!</span> {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>tt</span>)<span class='op'>*</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_raw</span>(<span class='kw-2'>&amp;</span>{$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>)<span class='op'>*</span>});
-        <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
-    }};
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, <span class='op'>!</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span>; $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_raw</span>(<span class='kw-2'>&amp;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>));
-        <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
-    }};
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, <span class='op'>!</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>expr</span> ) <span class='op'>=&gt;</span> {{
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_raw</span>(<span class='kw-2'>&amp;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>));
+        <span class='kw-2'>&amp;</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>).<span class='ident'>render_into</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>);
     }};
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, <span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>var</span>:<span class='ident'>ident</span><span class='op'>|</span> {$(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>code</span>:<span class='ident'>tt</span>)<span class='op'>*</span>} $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
         (<span class='op'>|</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>var</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>Template</span><span class='op'>|</span> {

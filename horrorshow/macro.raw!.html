@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `xml!` macro in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, xml!">
+    <meta name="description" content="API documentation for the Rust `raw!` macro in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, raw!">
 
-    <title>horrorshow::xml! - Rust</title>
+    <title>horrorshow::raw! - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'xml!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'raw!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -41,26 +41,17 @@
     </nav>
 
     <section id='main' class="content macro">
-<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>xml!</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>raw!</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-417' class='srclink' href='../src/horrorshow/xml.rs.html#3-14' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-420' class='srclink' href='../src/horrorshow/lib.rs.html#152-154' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>xml</span> {
-    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='comment'>// Stringify the template content to get a hint at how much we should allocate...</span>
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__new_renderer</span>(<span class='macro'>stringify</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>).<span class='ident'>len</span>(), <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> {
-            <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_imports</span>)]</span>
-            <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-            <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_imports</span>)]</span>
-            <span class='kw'>use</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>TemplateComponent</span>;
-            <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
-        })
-    }}
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>raw</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>e</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> { <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>Raw</span>::<span class='ident'>new</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>e</span>) }
 }
 </pre>
-<div class='docblock'><p>Crate a new xml template</p>
+<div class='docblock'><p>Mark a string as a raw. The string will not be rendered.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

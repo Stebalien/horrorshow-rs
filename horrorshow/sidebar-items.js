@@ -1,1 +1,1 @@
-initSidebarItems({"macro":[["xml!","Crate a new xml template"]],"struct":[["Renderer","A template renderer."],["Template","Template builder."]],"trait":[["TemplateComponent","A component that can be appended to a template."]]});
+initSidebarItems({"macro":[["raw!","Mark a string as a raw. The string will not be rendered."],["xml!","Crate a new xml template"]],"struct":[["Raw","Raw content."],["Renderer","A template renderer."],["Template","Template builder."]],"trait":[["TemplateComponent","A component that can be appended to a template."]]});
