@@ -79,6 +79,12 @@ macro_rules! __append_html {
         $tmpl.write_raw(concat!("</", stringify!($tag), ">"));
         __append_html!($tmpl, $($next)*);
     }};
+    ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr; $($next:tt)* ) => {{
+        __append_html!($tmpl, $tag($($attr)+) { : $e; } $($next)* );
+    }};
+    ($tmpl:ident, $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next)* ) => {{
+        __append_html!($tmpl, $tag($($attr)+) { : {$($code)*} } $($next)* );
+    }};
     ($tmpl:ident, $tag:ident($($($($attr:ident)-+):+ = $value:expr),+); $($next:tt)*) => {{
         $tmpl.write_raw(concat!("<", stringify!($tag)));
         $(
@@ -104,9 +110,18 @@ macro_rules! __append_html {
         $tmpl.write_raw(concat!("</", stringify!($tag), ">"));
         __append_html!($tmpl, $($next)*);
     }};
+    ($tmpl:ident, $tag:ident : $e:expr; $($next:tt)* ) => {{
+        __append_html!($tmpl, $tag { : $e; } $($next)* );
+    }};
+    ($tmpl:ident, $tag:ident : {$($code:tt)*} $($next:tt)* ) => {{
+        __append_html!($tmpl, $tag { : {$($code)*} } $($next)* );
+    }};
     ($tmpl:ident, $tag:ident; $($next:tt)*) => {{
         $tmpl.write_raw(concat!("<", stringify!($tag), " />"));
         __append_html!($tmpl, $($next)*);
+    }};
+    ($tmpl:ident, $tag:ident : $e:expr) => {{
+        __append_html!($tmpl, $tag { : $e; });
     }};
     ($tmpl:ident, $tag:ident) => {{
         $tmpl.write_raw(concat!("<", stringify!($tag), "/>"))

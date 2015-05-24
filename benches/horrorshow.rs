@@ -18,10 +18,8 @@ fn bench(b: &mut test::Bencher) {
                         // Insert escaped text (actually, anything that defines Display)
                         : "Hello! This is <html />"
                     }
-                    p {
-                        // Insert raw text (unescaped)
-                        : raw!("Let's <i>count</i> to 10!")
-                    }
+                    // Insert raw text (unescaped)
+                    p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
                         |mut tmpl| for i in 0..10 {
@@ -37,9 +35,7 @@ fn bench(b: &mut test::Bencher) {
                     }
                     // You need semi-colons for tags without children.
                     br; br;
-                    p {
-                        : "Easy!"
-                    }
+                    p : "Easy!"
                 }
             }
         }.render());
