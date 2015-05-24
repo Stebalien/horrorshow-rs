@@ -52,7 +52,7 @@
         <span class='comment'>// Stringify the template content to get a hint at how much we should allocate...</span>
         <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__new_renderer</span>(<span class='macro'>stringify</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>).<span class='ident'>len</span>(), <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> {
             <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-            <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='ident'>tmpl</span> $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
+            <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
         })
     }}
 }
