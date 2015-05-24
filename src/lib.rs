@@ -24,14 +24,15 @@
 //!             }
 //!             ol(id="count") {
 //!                 // run some inline code...
-//!                 @ for i in 0..10 {
+//!                 |mut tmpl| for i in 0..10 {
 //!                     // append to the current template.
-//!                     append_xml! {
+//!                     // store output because rust bug #25753
+//!                     tmpl = tmpl << xml! {
 //!                         li {
 //!                             // format some text
 //!                             #{"{}", i+1 }
 //!                         }
-//!                     }
+//!                     };
 //!                 }
 //!             }
 //!             // You need semi-colons for tags without children.
@@ -41,7 +42,7 @@
 //!             }
 //!         }
 //!     }
-//! };
+//! }.render();
 //!
 //! let expected = "<html><head><title>Hello world!</title></head><body><h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1><p>Let's <i>count</i> to 10!</p><ol id=\"count\"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ol><br /><br /><p>Easy!</p></body></html>";
 //! assert_eq!(expected, actual);
@@ -95,39 +96,128 @@
 //! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
 //! result at the current position.
 //!
-//! * `@ rust_expression`, `@ { rust_code }` -- Evaluate the expression or block.
-//!
-//! In rust code embedded inside of a template, you can append text with any of the following
-//! macros:
-//!
-//! * `append_fmt!("format_str", args...)` -- format, escape, and append arguments
-//! * `append_raw!(text)` -- append text without escaping
-//! * `append!(text)` -- escape and append text
-//! * `append_xml! { xml_template... }` -- append an xml template.
-use std::cell::RefCell;
+//! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
+//! actually a closure so the block/expression can append to the current template through `tmpl`
+//! (of type `&mut Template`).
 use std::fmt;
+use std::fmt::Write;
 
 #[macro_use]
 mod xml;
 
-thread_local!(static __TEMPLATE: RefCell<Option<Template>> = RefCell::new(None));
 
-/// Private helper for storing template output. We need this to do escaping.
-#[doc(hidden)]
+/// A component that can be appended to a template.
+///
+/// In a perfect world, I'd just use the Display but the string format system is REALLY slow.
+pub trait TemplateComponent {
+    fn render_into(self, tmpl: &mut Template);
+}
+
+/// A template renderer.
+pub struct Renderer<F> {
+    renderer: F,
+    expected_size: usize,
+}
+
+impl<F> Renderer<F> where F: FnOnce(&mut Template) {
+    /// Render this template into a string.
+    pub fn render(self) -> String {
+        let mut tmpl = Template::with_capacity(self.expected_size);
+        self.render_into(&mut tmpl);
+        tmpl.0
+    }
+}
+
+impl<F> TemplateComponent for Renderer<F> where F: FnOnce(&mut Template) {
+    fn render_into(self, tmpl: &mut Template) {
+        (self.renderer)(tmpl);
+    }
+}
+
+impl<'a> TemplateComponent for &'a str {
+    #[inline]
+    fn render_into(self, tmpl: &mut Template) {
+        tmpl.write_str(self).unwrap();
+    }
+}
+
+impl<'a> TemplateComponent for &'a String {
+    #[inline]
+    fn render_into(self, tmpl: &mut Template) {
+        tmpl.write_str(&self).unwrap();
+    }
+}
+
+impl TemplateComponent for String {
+    #[inline]
+    fn render_into(self, tmpl: &mut Template) {
+        tmpl.write_str(&self).unwrap();
+    }
+}
+
+impl<'a, T> std::ops::Shl<T> for &'a mut Template where T: TemplateComponent {
+    type Output = &'a mut Template ;
+    #[inline]
+    fn shl(self, component: T) -> &'a mut Template {
+        component.render_into(self);
+        self
+    }
+}
+
+/// Template builder.
 pub struct Template(String);
 
-impl Template {
-    #[inline]
-    fn with_capacity(n: usize) -> Template {
-        Template(String::with_capacity(n))
+#[doc(hidden)]
+pub fn __new_renderer<F: FnOnce(&mut Template)>(expected_size: usize, f: F) -> Renderer<F> {
+    Renderer {
+        renderer: f,
+        expected_size: expected_size,
     }
+}
+
+impl Template {
+    /// Create a new template builder.
+    #[inline]
+    pub fn new() -> Template {
+        Template(String::new())
+    }
+    /// Create a new template builder with the given initial capacity.
+    #[inline]
+    pub fn with_capacity(capacity: usize) -> Template {
+        Template(String::with_capacity(capacity))
+    }
+
+    /// Append a raw string to the template.
     #[inline]
     pub fn write_raw(&mut self, text: &str) {
         self.0.push_str(text);
     }
 }
 
+impl std::ops::Deref for Template {
+    type Target = str;
+    #[inline]
+    fn deref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl AsRef<str> for Template {
+    #[inline]
+    fn as_ref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl From<Template> for String {
+    #[inline]
+    fn from(from: Template) -> String {
+        from.0
+    }
+}
+
 impl fmt::Write for Template {
+    /// Escape and write a string to the template.
     #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
         for b in text.bytes() {
@@ -142,86 +232,6 @@ impl fmt::Write for Template {
         }
         Ok(())
     }
-}
-
-/// Call `f` with a new template scope.
-///
-/// Returns the evaluated template.
-#[doc(hidden)]
-#[inline]
-pub fn __with_template_scope<F: FnMut()>(n: usize, mut f: F) -> String {
-    // The scoped variant is unstable so we do this ourselves...
-    __TEMPLATE.with(|current| {
-        let mut stash = Some(Template::with_capacity(n));
-        ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
-        (f)();
-        ::std::mem::swap(&mut *current.borrow_mut(), &mut stash);
-        stash.unwrap().0
-    })
-}
-
-/// Call `f` with a mutable reference to the current template string.
-/// NOT REENTRANT!
-/// Returns the evaluated template.
-#[doc(hidden)]
-#[inline]
-pub fn __with_template<F: FnMut(&mut Template)>(mut f: F) {
-    // The scoped variant is unstable so we do this ourselves...
-    __TEMPLATE.with(|template| {
-        (f)(template.borrow_mut().as_mut().unwrap());
-    });
-}
-
-/// Call `f` with a mutable reference to the current template string.
-/// This is the slower reentrant version.
-///
-/// Returns the evaluated template.
-#[doc(hidden)]
-#[inline]
-pub fn __with_template_reentrant<F: FnMut(&mut Template)>(mut f: F) {
-    // The scoped variant is unstable so we do this ourselves...
-    __TEMPLATE.with(|template| {
-        let mut local_template = None;
-        ::std::mem::swap(&mut *template.borrow_mut(), &mut local_template);
-        (f)(local_template.as_mut().unwrap());
-        ::std::mem::swap(&mut *template.borrow_mut(), &mut local_template);
-    });
-}
-
-/// Append text without escaping.
-#[macro_export]
-macro_rules! append_raw {
-    ($s:expr) => {{
-        let output = $s;
-        let s: &str = &output;
-        $crate::__with_template(|template| {
-            template.write_raw(s);
-        });
-    }}
-}
-
-/// Format, escape, and append arguments.
-#[macro_export]
-macro_rules! append_fmt {
-    ($($tok:tt)+) => {{
-        use ::std::fmt::Write;
-        $crate::__with_template_reentrant(|template| {
-            write!(template, $($tok)+).unwrap();
-        });
-    }}
-}
-
-/// Escape and append text. 
-#[macro_export]
-macro_rules! append {
-    ($s:expr) => {{
-        use ::std::fmt::Write;
-        let output = $s;
-        let s: &str = &output;
-        $crate::__with_template(|template| {
-            template.write_str(s).unwrap();
-        });
-    }}
 }
 
 // We shouldn't need this but without it I get the folloowing error:
