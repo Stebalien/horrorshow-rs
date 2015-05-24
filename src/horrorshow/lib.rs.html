@@ -314,14 +314,14 @@
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! An xml templating library.</span>
+<span class='doccomment'>//! An html templating library.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Example:</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! # #[macro_use] extern crate horrorshow;</span>
 <span class='doccomment'>//! # fn main() {</span>
-<span class='doccomment'>//! let actual = xml! {</span>
+<span class='doccomment'>//! let actual = html! {</span>
 <span class='doccomment'>//!     html {</span>
 <span class='doccomment'>//!         head {</span>
 <span class='doccomment'>//!             title { : &quot;Hello world!&quot; }</span>
@@ -341,7 +341,7 @@
 <span class='doccomment'>//!                 |mut tmpl| for i in 0..10 {</span>
 <span class='doccomment'>//!                     // append to the current template.</span>
 <span class='doccomment'>//!                     // store output because rust bug #25753</span>
-<span class='doccomment'>//!                     tmpl = tmpl &lt;&lt; xml! {</span>
+<span class='doccomment'>//!                     tmpl = tmpl &lt;&lt; html! {</span>
 <span class='doccomment'>//!                         li {</span>
 <span class='doccomment'>//!                             // format some text</span>
 <span class='doccomment'>//!                             #{&quot;{}&quot;, i+1 }</span>
@@ -394,7 +394,7 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Usage</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! Inside an xml template, the following expressions are valid:</span>
+<span class='doccomment'>//! Inside an html template, the following expressions are valid:</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag;` -- Insert a the tag `some_tag`.</span>
 <span class='doccomment'>//!</span>
@@ -406,7 +406,7 @@
 <span class='doccomment'>//! * `some_tag(...) { ... }` -- Same as above but with custom attributes.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result</span>
-<span class='doccomment'>//! current position. To insert literal xml, mark it as raw with the `raw!` macro.</span>
+<span class='doccomment'>//! current position. To insert literal html, mark it as raw with the `raw!` macro.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `#{&quot;format_str&quot;, rust_expressions... }` -- Format the arguments according to `format_str` and insert the</span>
 <span class='doccomment'>//! result at the current position.</span>
@@ -418,7 +418,7 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
 
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
-<span class='kw'>mod</span> <span class='ident'>xml</span>;
+<span class='kw'>mod</span> <span class='ident'>html</span>;
 
 
 <span class='doccomment'>/// A component that can be appended to a template.</span>

@@ -49,11 +49,11 @@
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
-<p>An xml templating library.</p>
+<p>An html templating library.</p>
 
 <h2 id="example:" class='section-header'><a
                            href="#example:">Example:</a></h2><pre id='rust-example-rendered' class='rust '>
-<span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>xml</span><span class='macro'>!</span> {
+<span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>html</span><span class='macro'>!</span> {
     <span class='ident'>html</span> {
         <span class='ident'>head</span> {
             <span class='ident'>title</span> { : <span class='string'>&quot;Hello world!&quot;</span> }
@@ -73,7 +73,7 @@
                 <span class='op'>|</span><span class='kw-2'>mut</span> <span class='ident'>tmpl</span><span class='op'>|</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
                     <span class='comment'>// append to the current template.</span>
                     <span class='comment'>// store output because rust bug #25753</span>
-                    <span class='ident'>tmpl</span> <span class='op'>=</span> <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>xml</span><span class='macro'>!</span> {
+                    <span class='ident'>tmpl</span> <span class='op'>=</span> <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
                         <span class='ident'>li</span> {
                             <span class='comment'>// format some text</span>
                             <span class='attribute'>#{<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span> }
@@ -123,7 +123,7 @@
 
 <h2 id="usage" class='section-header'><a
                            href="#usage">Usage</a></h2>
-<p>Inside an xml template, the following expressions are valid:</p>
+<p>Inside an html template, the following expressions are valid:</p>
 
 <ul>
 <li><p><code>some_tag;</code> -- Insert a the tag <code>some_tag</code>.</p></li>
@@ -132,7 +132,7 @@ attributes. The attribute values will be evaluated as rust expressions at runtim
 <li><p><code>some_tag { ... }</code> -- Insert a the tag <code>some_tag</code> and recursivly evaluate the <code>...</code>.</p></li>
 <li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result
-current position. To insert literal xml, mark it as raw with the <code>raw!</code> macro.</p></li>
+current position. To insert literal html, mark it as raw with the <code>raw!</code> macro.</p></li>
 <li><p><code>#{&quot;format_str&quot;, rust_expressions... }</code> -- Format the arguments according to <code>format_str</code> and insert the
 result at the current position.</p></li>
 <li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
@@ -142,19 +142,19 @@ actually a closure so the block/expression can append to the current template th
 </div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='macro' href='macro.raw!.html'
-                               title='horrorshow::raw!'>raw!</a></td>
+                        <td><a class='macro' href='macro.html!.html'
+                               title='horrorshow::html!'>html!</a></td>
                         <td class='docblock short'>
-                             <p>Mark a string as a raw. The string will not be rendered.</p>
+                             <p>Crate a new html template</p>
 
                         </td>
                     </tr>
                 
                     <tr class=' module-item'>
-                        <td><a class='macro' href='macro.xml!.html'
-                               title='horrorshow::xml!'>xml!</a></td>
+                        <td><a class='macro' href='macro.raw!.html'
+                               title='horrorshow::raw!'>raw!</a></td>
                         <td class='docblock short'>
-                             <p>Crate a new xml template</p>
+                             <p>Mark a string as a raw. The string will not be rendered.</p>
 
                         </td>
                     </tr>
