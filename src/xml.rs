@@ -10,6 +10,7 @@ macro_rules! xml {
     }}
 }
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! stringify_compressed {
     ($($tok:tt)*) => {
@@ -18,6 +19,8 @@ macro_rules! stringify_compressed {
 }
 
 /// Append xml to the current template.
+/// Don't call this manually.
+#[doc(hidden)]
 #[macro_export]
 macro_rules! __append_xml {
     ($tmpl:ident : {$($code:tt)*} $($next:tt)*) => {{
