@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-233' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-243' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -70,14 +70,15 @@
             }
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
                 <span class='comment'>// run some inline code...</span>
-                <span class='kw-2'>@</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
+                <span class='op'>|</span><span class='kw-2'>mut</span> <span class='ident'>tmpl</span><span class='op'>|</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
                     <span class='comment'>// append to the current template.</span>
-                    <span class='macro'>append_xml</span><span class='macro'>!</span> {
+                    <span class='comment'>// store output because rust bug #25753</span>
+                    <span class='ident'>tmpl</span> <span class='op'>=</span> <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>xml</span><span class='macro'>!</span> {
                         <span class='ident'>li</span> {
                             <span class='comment'>// format some text</span>
                             <span class='attribute'>#{<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span> }
                         }
-                    }
+                    };
                 }
             }
             <span class='comment'>// You need semi-colons for tags without children.</span>
@@ -87,7 +88,7 @@
             }
         }
     }
-};
+}.<span class='ident'>render</span>();
 
 <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
@@ -133,50 +134,15 @@ attributes. The attribute values will be evaluated as rust expressions at runtim
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result current position.</p></li>
 <li><p><code>#{&quot;format_str&quot;, rust_expressions... }</code> -- Format the arguments according to <code>format_str</code> and insert the
 result at the current position.</p></li>
-<li><p><code>@ rust_expression</code>, <code>@ { rust_code }</code> -- Evaluate the expression or block.</p></li>
-</ul>
-
-<p>In rust code embedded inside of a template, you can append text with any of the following
-macros:</p>
-
-<ul>
-<li><code>append_fmt!(&quot;format_str&quot;, args...)</code> -- format, escape, and append arguments</li>
-<li><code>append_raw!(text)</code> -- append text without escaping</li>
-<li><code>append!(text)</code> -- escape and append text</li>
-<li><code>append_xml! { xml_template... }</code> -- append an xml template.</li>
+<li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
+actually a closure so the block/expression can append to the current template through <code>tmpl</code>
+(of type <code>&amp;mut Template</code>).</p></li>
 </ul>
 </div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='macro' href='macro.append!.html'
-                               title='horrorshow::append!'>append!</a></td>
-                        <td class='docblock short'>
-                             <p>Escape and append text.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.append_fmt!.html'
-                               title='horrorshow::append_fmt!'>append_fmt!</a></td>
-                        <td class='docblock short'>
-                             <p>Format, escape, and append arguments.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.append_raw!.html'
-                               title='horrorshow::append_raw!'>append_raw!</a></td>
-                        <td class='docblock short'>
-                             <p>Append text without escaping.</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='macro' href='macro.append_xml!.html'
-                               title='horrorshow::append_xml!'>append_xml!</a></td>
+                        <td><a class='macro' href='macro.__append_xml!.html'
+                               title='horrorshow::__append_xml!'>__append_xml!</a></td>
                         <td class='docblock short'>
                              <p>Append xml to the current template.</p>
 
@@ -196,6 +162,35 @@ macros:</p>
                                title='horrorshow::xml!'>xml!</a></td>
                         <td class='docblock short'>
                              <p>Crate a new xml template</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Renderer.html'
+                               title='horrorshow::Renderer'>Renderer</a></td>
+                        <td class='docblock short'>
+                             <p>A template renderer.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Template.html'
+                               title='horrorshow::Template'>Template</a></td>
+                        <td class='docblock short'>
+                             <p>Template builder.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.TemplateComponent.html'
+                               title='horrorshow::TemplateComponent'>TemplateComponent</a></td>
+                        <td class='docblock short'>
+                             <p>A component that can be appended to a template.</p>
 
                         </td>
                     </tr>

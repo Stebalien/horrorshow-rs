@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `xml!` macro in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, xml!">
+    <meta name="description" content="API documentation for the Rust `Renderer` struct in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Renderer">
 
-    <title>horrorshow::xml! - Rust</title>
+    <title>horrorshow::Renderer - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'xml!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'Renderer', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -40,24 +40,18 @@
         </form>
     </nav>
 
-    <section id='main' class="content macro">
-<h1 class='fqn'><span class='in-band'><a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>xml!</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>horrorshow</a>::<wbr><a class='struct' href=''>Renderer</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-365' class='srclink' href='../src/horrorshow/xml.rs.html#3-11' title='goto source code'>[src]</a></span></h1>
-<pre class='rust macro'>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>xml</span> {
-    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='comment'>// Stringify the template content to get a hint at how much we should allocate...</span>
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__new_renderer</span>(<span class='macro'>stringify</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>).<span class='ident'>len</span>(), <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> {
-            <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-            <span class='macro'>__append_xml</span><span class='macro'>!</span>(<span class='ident'>tmpl</span> $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
-        })
-    }}
-}
-</pre>
-<div class='docblock'><p>Crate a new xml template</p>
+        </span><a id='src-19' class='srclink' href='../src/horrorshow/lib.rs.html#117-120' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Renderer&lt;F&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>A template renderer.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='struct' href='../horrorshow/struct.Renderer.html' title='horrorshow::Renderer'>Renderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.Template.html' title='horrorshow::Template'>Template</a>)</span></code></h3><div class='impl-items'><h4 id='method.render' class='method'><code>fn <a href='#method.render' class='fnname'>render</a>(self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+<div class='docblock'><p>Render this template into a string.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.TemplateComponent.html' title='horrorshow::TemplateComponent'>TemplateComponent</a> for <a class='struct' href='../horrorshow/struct.Renderer.html' title='horrorshow::Renderer'>Renderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.Template.html' title='horrorshow::Template'>Template</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_into' class='method'><code>fn <a href='../horrorshow/trait.TemplateComponent.html#method.render_into' class='fnname'>render_into</a>(self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.Template.html' title='horrorshow::Template'>Template</a>)</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 

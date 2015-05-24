@@ -273,6 +273,16 @@
 <span id="231">231</span>
 <span id="232">232</span>
 <span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -300,14 +310,15 @@
 <span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!             ol(id=&quot;count&quot;) {</span>
 <span class='doccomment'>//!                 // run some inline code...</span>
-<span class='doccomment'>//!                 @ for i in 0..10 {</span>
+<span class='doccomment'>//!                 |mut tmpl| for i in 0..10 {</span>
 <span class='doccomment'>//!                     // append to the current template.</span>
-<span class='doccomment'>//!                     append_xml! {</span>
+<span class='doccomment'>//!                     // store output because rust bug #25753</span>
+<span class='doccomment'>//!                     tmpl = tmpl &lt;&lt; xml! {</span>
 <span class='doccomment'>//!                         li {</span>
 <span class='doccomment'>//!                             // format some text</span>
 <span class='doccomment'>//!                             #{&quot;{}&quot;, i+1 }</span>
 <span class='doccomment'>//!                         }</span>
-<span class='doccomment'>//!                     }</span>
+<span class='doccomment'>//!                     };</span>
 <span class='doccomment'>//!                 }</span>
 <span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!             // You need semi-colons for tags without children.</span>
@@ -317,7 +328,7 @@
 <span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!         }</span>
 <span class='doccomment'>//!     }</span>
-<span class='doccomment'>//! };</span>
+<span class='doccomment'>//! }.render();</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let expected = &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;;</span>
 <span class='doccomment'>//! assert_eq!(expected, actual);</span>
@@ -371,39 +382,128 @@
 <span class='doccomment'>//! * `#{&quot;format_str&quot;, rust_expressions... }` -- Format the arguments according to `format_str` and insert the</span>
 <span class='doccomment'>//! result at the current position.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! * `@ rust_expression`, `@ { rust_code }` -- Evaluate the expression or block.</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! In rust code embedded inside of a template, you can append text with any of the following</span>
-<span class='doccomment'>//! macros:</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! * `append_fmt!(&quot;format_str&quot;, args...)` -- format, escape, and append arguments</span>
-<span class='doccomment'>//! * `append_raw!(text)` -- append text without escaping</span>
-<span class='doccomment'>//! * `append!(text)` -- escape and append text</span>
-<span class='doccomment'>//! * `append_xml! { xml_template... }` -- append an xml template.</span>
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>cell</span>::<span class='ident'>RefCell</span>;
+<span class='doccomment'>//! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is</span>
+<span class='doccomment'>//! actually a closure so the block/expression can append to the current template through `tmpl`</span>
+<span class='doccomment'>//! (of type `&amp;mut Template`).</span>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
 
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>mod</span> <span class='ident'>xml</span>;
 
-<span class='macro'>thread_local</span><span class='macro'>!</span>(<span class='kw'>static</span> <span class='ident'>__TEMPLATE</span>: <span class='ident'>RefCell</span><span class='op'>&lt;</span><span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Template</span><span class='op'>&gt;&gt;</span> <span class='op'>=</span> <span class='ident'>RefCell</span>::<span class='ident'>new</span>(<span class='prelude-val'>None</span>));
 
-<span class='doccomment'>/// Private helper for storing template output. We need this to do escaping.</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='doccomment'>/// A component that can be appended to a template.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// In a perfect world, I&#39;d just use the Display but the string format system is REALLY slow.</span>
+<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>TemplateComponent</span> {
+    <span class='kw'>fn</span> <span class='ident'>render_into</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>);
+}
+
+<span class='doccomment'>/// A template renderer.</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> {
+    <span class='ident'>renderer</span>: <span class='ident'>F</span>,
+    <span class='ident'>expected_size</span>: <span class='ident'>usize</span>,
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> <span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>) {
+    <span class='doccomment'>/// Render this template into a string.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>tmpl</span> <span class='op'>=</span> <span class='ident'>Template</span>::<span class='ident'>with_capacity</span>(<span class='self'>self</span>.<span class='ident'>expected_size</span>);
+        <span class='self'>self</span>.<span class='ident'>render_into</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>tmpl</span>);
+        <span class='ident'>tmpl</span>.<span class='number'>0</span>
+    }
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> <span class='ident'>TemplateComponent</span> <span class='kw'>for</span> <span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>) {
+    <span class='kw'>fn</span> <span class='ident'>render_into</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>) {
+        (<span class='self'>self</span>.<span class='ident'>renderer</span>)(<span class='ident'>tmpl</span>);
+    }
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>TemplateComponent</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>render_into</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>) {
+        <span class='ident'>tmpl</span>.<span class='ident'>write_str</span>(<span class='self'>self</span>).<span class='ident'>unwrap</span>();
+    }
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>TemplateComponent</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>String</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>render_into</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>) {
+        <span class='ident'>tmpl</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>).<span class='ident'>unwrap</span>();
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>TemplateComponent</span> <span class='kw'>for</span> <span class='ident'>String</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>render_into</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>) {
+        <span class='ident'>tmpl</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>).<span class='ident'>unwrap</span>();
+    }
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Shl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>Template</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>TemplateComponent</span> {
+    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>Template</span> ;
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>shl</span>(<span class='self'>self</span>, <span class='ident'>component</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>Template</span> {
+        <span class='ident'>component</span>.<span class='ident'>render_into</span>(<span class='self'>self</span>);
+        <span class='self'>self</span>
+    }
+}
+
+<span class='doccomment'>/// Template builder.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Template</span>(<span class='ident'>String</span>);
 
-<span class='kw'>impl</span> <span class='ident'>Template</span> {
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>with_capacity</span>(<span class='ident'>n</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>Template</span> {
-        <span class='ident'>Template</span>(<span class='ident'>String</span>::<span class='ident'>with_capacity</span>(<span class='ident'>n</span>))
+<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__new_renderer</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>)<span class='op'>&gt;</span>(<span class='ident'>expected_size</span>: <span class='ident'>usize</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> {
+    <span class='ident'>Renderer</span> {
+        <span class='ident'>renderer</span>: <span class='ident'>f</span>,
+        <span class='ident'>expected_size</span>: <span class='ident'>expected_size</span>,
     }
+}
+
+<span class='kw'>impl</span> <span class='ident'>Template</span> {
+    <span class='doccomment'>/// Create a new template builder.</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>Template</span> {
+        <span class='ident'>Template</span>(<span class='ident'>String</span>::<span class='ident'>new</span>())
+    }
+    <span class='doccomment'>/// Create a new template builder with the given initial capacity.</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>with_capacity</span>(<span class='ident'>capacity</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>Template</span> {
+        <span class='ident'>Template</span>(<span class='ident'>String</span>::<span class='ident'>with_capacity</span>(<span class='ident'>capacity</span>))
+    }
+
+    <span class='doccomment'>/// Append a raw string to the template.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_raw</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>text</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) {
         <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>push_str</span>(<span class='ident'>text</span>);
     }
 }
 
+<span class='kw'>impl</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Deref</span> <span class='kw'>for</span> <span class='ident'>Template</span> {
+    <span class='kw'>type</span> <span class='ident'>Target</span> <span class='op'>=</span> <span class='ident'>str</span>;
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>deref</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>str</span> {
+        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='number'>0</span>
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Template</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>as_ref</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>str</span> {
+        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='number'>0</span>
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>Template</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>String</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>from</span>: <span class='ident'>Template</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
+        <span class='ident'>from</span>.<span class='number'>0</span>
+    }
+}
+
 <span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Write</span> <span class='kw'>for</span> <span class='ident'>Template</span> {
+    <span class='doccomment'>/// Escape and write a string to the template.</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>text</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='kw'>for</span> <span class='ident'>b</span> <span class='kw'>in</span> <span class='ident'>text</span>.<span class='ident'>bytes</span>() {
@@ -418,86 +518,6 @@
         }
         <span class='prelude-val'>Ok</span>(())
     }
-}
-
-<span class='doccomment'>/// Call `f` with a new template scope.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Returns the evaluated template.</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__with_template_scope</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnMut</span>()<span class='op'>&gt;</span>(<span class='ident'>n</span>: <span class='ident'>usize</span>, <span class='kw-2'>mut</span> <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
-    <span class='comment'>// The scoped variant is unstable so we do this ourselves...</span>
-    <span class='ident'>__TEMPLATE</span>.<span class='ident'>with</span>(<span class='op'>|</span><span class='ident'>current</span><span class='op'>|</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stash</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>Template</span>::<span class='ident'>with_capacity</span>(<span class='ident'>n</span>));
-        ::<span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>current</span>.<span class='ident'>borrow_mut</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stash</span>);
-        (<span class='ident'>f</span>)();
-        ::<span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>current</span>.<span class='ident'>borrow_mut</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>stash</span>);
-        <span class='ident'>stash</span>.<span class='ident'>unwrap</span>().<span class='number'>0</span>
-    })
-}
-
-<span class='doccomment'>/// Call `f` with a mutable reference to the current template string.</span>
-<span class='doccomment'>/// NOT REENTRANT!</span>
-<span class='doccomment'>/// Returns the evaluated template.</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__with_template</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>)<span class='op'>&gt;</span>(<span class='kw-2'>mut</span> <span class='ident'>f</span>: <span class='ident'>F</span>) {
-    <span class='comment'>// The scoped variant is unstable so we do this ourselves...</span>
-    <span class='ident'>__TEMPLATE</span>.<span class='ident'>with</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
-        (<span class='ident'>f</span>)(<span class='ident'>template</span>.<span class='ident'>borrow_mut</span>().<span class='ident'>as_mut</span>().<span class='ident'>unwrap</span>());
-    });
-}
-
-<span class='doccomment'>/// Call `f` with a mutable reference to the current template string.</span>
-<span class='doccomment'>/// This is the slower reentrant version.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Returns the evaluated template.</span>
-<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='attribute'>#[<span class='ident'>inline</span>]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__with_template_reentrant</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Template</span>)<span class='op'>&gt;</span>(<span class='kw-2'>mut</span> <span class='ident'>f</span>: <span class='ident'>F</span>) {
-    <span class='comment'>// The scoped variant is unstable so we do this ourselves...</span>
-    <span class='ident'>__TEMPLATE</span>.<span class='ident'>with</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>local_template</span> <span class='op'>=</span> <span class='prelude-val'>None</span>;
-        ::<span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>template</span>.<span class='ident'>borrow_mut</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>local_template</span>);
-        (<span class='ident'>f</span>)(<span class='ident'>local_template</span>.<span class='ident'>as_mut</span>().<span class='ident'>unwrap</span>());
-        ::<span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>template</span>.<span class='ident'>borrow_mut</span>(), <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>local_template</span>);
-    });
-}
-
-<span class='doccomment'>/// Append text without escaping.</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append_raw</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>s</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> {{
-        <span class='kw'>let</span> <span class='ident'>output</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>s</span>;
-        <span class='kw'>let</span> <span class='ident'>s</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>output</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
-            <span class='ident'>template</span>.<span class='ident'>write_raw</span>(<span class='ident'>s</span>);
-        });
-    }}
-}
-
-<span class='doccomment'>/// Format, escape, and append arguments.</span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append_fmt</span> {
-    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> {{
-        <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template_reentrant</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
-            <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>template</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>).<span class='ident'>unwrap</span>();
-        });
-    }}
-}
-
-<span class='doccomment'>/// Escape and append text. </span>
-<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>append</span> {
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>s</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> {{
-        <span class='kw'>use</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
-        <span class='kw'>let</span> <span class='ident'>output</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>s</span>;
-        <span class='kw'>let</span> <span class='ident'>s</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>output</span>;
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>__with_template</span>(<span class='op'>|</span><span class='ident'>template</span><span class='op'>|</span> {
-            <span class='ident'>template</span>.<span class='ident'>write_str</span>(<span class='ident'>s</span>).<span class='ident'>unwrap</span>();
-        });
-    }}
 }
 
 <span class='comment'>// We shouldn&#39;t need this but without it I get the folloowing error:</span>
