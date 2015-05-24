@@ -1,1 +1,1 @@
-initSidebarItems({"macro":[["__append_xml!","Append xml to the current template."],["stringify_compressed!",""],["xml!","Crate a new xml template"]],"struct":[["Renderer","A template renderer."],["Template","Template builder."]],"trait":[["TemplateComponent","A component that can be appended to a template."]]});
+initSidebarItems({"macro":[["xml!","Crate a new xml template"]],"struct":[["Renderer","A template renderer."],["Template","Template builder."]],"trait":[["TemplateComponent","A component that can be appended to a template."]]});
