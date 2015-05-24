@@ -26,14 +26,15 @@ xml! {
             }
             ol(id="count") {
                 // run some inline code...
-                @ for i in 0..10 {
+                |mut tmpl| for i in 0..10 {
                     // append to the current template.
-                    append_xml! {
+                    // store output because rust bug #25753
+                    tmpl = tmpl << xml! {
                         li {
                             // format some text
                             #{"{}", i+1 }
                         }
-                    }
+                    };
                 }
             }
             // You need semi-colons for tags without children.
@@ -43,7 +44,7 @@ xml! {
             }
         }
     }
-}
+}.render();
 ```
 
 Becomes (whitespace added for clarity).
