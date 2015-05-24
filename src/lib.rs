@@ -20,7 +20,7 @@
 //!             }
 //!             p {
 //!                 // Insert raw text (unescaped)
-//!                 ! "Let's <i>count</i> to 10!"
+//!                 : raw!("Let's <i>count</i> to 10!")
 //!             }
 //!             ol(id="count") {
 //!                 // run some inline code...
@@ -91,7 +91,8 @@
 //!
 //! * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 //!
-//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result current position.
+//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result
+//! current position. To insert literal xml, mark it as raw with the `raw!` macro.
 //!
 //! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
 //! result at the current position.
@@ -119,6 +120,7 @@ pub struct Renderer<F> {
     expected_size: usize,
 }
 
+
 impl<F> Renderer<F> where F: FnOnce(&mut Template) {
     /// Render this template into a string.
     pub fn render(self) -> String {
@@ -133,6 +135,32 @@ impl<F> TemplateComponent for Renderer<F> where F: FnOnce(&mut Template) {
         (self.renderer)(tmpl);
     }
 }
+
+/// Raw content.
+///
+/// When rendered, raw content will not be escaped.
+pub struct Raw<S: AsRef<str>>(S);
+
+impl<S> Raw<S> where S: AsRef<str> {
+    /// Mark as raw.
+    pub fn new(content: S) -> Raw<S> {
+        Raw(content)
+    }
+}
+
+/// Mark a string as a raw. The string will not be rendered.
+#[macro_export]
+macro_rules! raw {
+    ($e:expr) => { $crate::Raw::new($e) }
+}
+
+impl<S> TemplateComponent for Raw<S> where S: AsRef<str> {
+    #[inline]
+    fn render_into(self, tmpl: &mut Template) {
+        tmpl.write_raw(self.0.as_ref());
+    }
+}
+
 
 impl<'a> TemplateComponent for &'a str {
     #[inline]

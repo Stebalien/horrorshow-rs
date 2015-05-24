@@ -4,7 +4,10 @@ macro_rules! xml {
     ($($inner:tt)*) => {{
         // Stringify the template content to get a hint at how much we should allocate...
         $crate::__new_renderer(stringify!($($inner)*).len(), |tmpl| {
+            #[allow(unused_imports)]
             use ::std::fmt::Write;
+            #[allow(unused_imports)]
+            use $crate::TemplateComponent;
             __append_xml!(tmpl, $($inner)*);
         })
     }}
@@ -24,26 +27,15 @@ macro_rules! stringify_compressed {
 #[macro_export]
 macro_rules! __append_xml {
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {{
-        $tmpl.write_str(&{$($code)*}).unwrap();
+        &{$($code)*}.render_into($tmpl);
         __append_xml!($tmpl, $($next)*);
     }};
     ($tmpl:ident, : $code:expr; $($next:tt)* ) => {{
-        $tmpl.write_str(&($code)).unwrap();
+        &($code).render_into($tmpl);
         __append_xml!($tmpl, $($next)*);
     }};
     ($tmpl:ident, : $code:expr ) => {{
-        $tmpl.write_str(&($code)).unwrap();
-    }};
-    ($tmpl:ident, ! {$($code:tt)*} $($next:tt)*) => {{
-        $tmpl.write_raw(&{$($code)*});
-        __append_xml!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, ! $code:expr; $($next:tt)* ) => {{
-        $tmpl.write_raw(&($code));
-        __append_xml!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, ! $code:expr ) => {{
-        $tmpl.write_raw(&($code));
+        &($code).render_into($tmpl);
     }};
     ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {{
         (|$var: &mut $crate::Template| {

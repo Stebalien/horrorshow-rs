@@ -22,7 +22,7 @@ xml! {
             }
             p {
                 // Insert raw text (unescaped)
-                ! "Let's <i>count</i> to 10!"
+                : raw!("Let's <i>count</i> to 10!")
             }
             ol(id="count") {
                 // run some inline code...

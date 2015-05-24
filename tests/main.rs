@@ -17,7 +17,7 @@ fn test_reentrant() {
 
     assert_eq!(&xml! {
         p {
-            ! xml! { a(href="abcde") }.render();
+            : raw!(xml! { a(href="abcde") }.render());
         }
     }.render(), "<p><a href=\"abcde\" /></p>");
 }
