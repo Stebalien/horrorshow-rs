@@ -3,40 +3,28 @@ extern crate horrorshow;
 
 #[test]
 fn test_reentrant() {
-    assert_eq!(&xml! {
+    assert_eq!(&html! {
         p {
-            #{"{}", xml! { a(href="abcde") }.render()}
+            #{"{}", html! { a(href="abcde") }.render()}
         }
     }.render(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
-    assert_eq!(&xml! {
+    assert_eq!(&html! {
         p {
-            |tmpl| tmpl << xml! { a(href="abcde") }.render();
+            |tmpl| tmpl << html! { a(href="abcde") }.render();
         }
     }.render(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
-    assert_eq!(&xml! {
+    assert_eq!(&html! {
         p {
-            : raw!(xml! { a(href="abcde") }.render());
+            : raw!(html! { a(href="abcde") }.render());
         }
     }.render(), "<p><a href=\"abcde\" /></p>");
 }
 
 #[test]
-fn test_namespace() {
-    assert_eq!(xml! {
-        a:first {
-            b:inner;
-        }
-        c:second(e:id="testing");
-        d:last;
-    }.render(), "<a:first><b:inner /></a:first><c:second e:id=\"testing\" /><d:last />");
-}
-
-
-#[test]
 fn test_dash() {
-    assert_eq!(xml! {
+    assert_eq!(html! {
         my_tag {
             inner(data-test="abcde");
         }

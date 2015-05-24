@@ -1,13 +1,13 @@
 //! # Horrorshow
 //!
-//! An xml templating library.
+//! An html templating library.
 //!
 //! ## Example:
 //!
 //! ```
 //! # #[macro_use] extern crate horrorshow;
 //! # fn main() {
-//! let actual = xml! {
+//! let actual = html! {
 //!     html {
 //!         head {
 //!             title { : "Hello world!" }
@@ -27,7 +27,7 @@
 //!                 |mut tmpl| for i in 0..10 {
 //!                     // append to the current template.
 //!                     // store output because rust bug #25753
-//!                     tmpl = tmpl << xml! {
+//!                     tmpl = tmpl << html! {
 //!                         li {
 //!                             // format some text
 //!                             #{"{}", i+1 }
@@ -80,7 +80,7 @@
 //!
 //! ## Usage
 //!
-//! Inside an xml template, the following expressions are valid:
+//! Inside an html template, the following expressions are valid:
 //!
 //! * `some_tag;` -- Insert a the tag `some_tag`.
 //!
@@ -92,7 +92,7 @@
 //! * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 //!
 //! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result
-//! current position. To insert literal xml, mark it as raw with the `raw!` macro.
+//! current position. To insert literal html, mark it as raw with the `raw!` macro.
 //!
 //! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
 //! result at the current position.
@@ -104,7 +104,7 @@ use std::fmt;
 use std::fmt::Write;
 
 #[macro_use]
-mod xml;
+mod html;
 
 
 /// A component that can be appended to a template.

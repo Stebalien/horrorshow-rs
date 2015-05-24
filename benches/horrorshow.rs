@@ -7,7 +7,7 @@ extern crate horrorshow;
 #[bench]
 fn bench(b: &mut test::Bencher) {
     b.iter(|| {
-        test::black_box(xml! {
+        test::black_box(html! {
             html {
                 head {
                     title { : "Hello world!" }
@@ -27,7 +27,7 @@ fn bench(b: &mut test::Bencher) {
                         |mut tmpl| for i in 0..10 {
                             // append to the current template.
                             // store output because rust bug #25753
-                            tmpl = tmpl << xml! {
+                            tmpl = tmpl << html! {
                                 li {
                                     // format some text
                                     #{"{}", i+1 }
