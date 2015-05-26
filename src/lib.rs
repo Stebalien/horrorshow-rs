@@ -99,9 +99,9 @@
 //!
 //! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
 //! actually a closure so the block/expression can append to the current template through `tmpl`
-//! (of type `&mut Template`).
+//! (of type `&mut TemplateBuilder`).
 use std::fmt;
-use std::fmt::Write;
+use std::io;
 
 #[macro_use]
 mod html;
@@ -111,7 +111,8 @@ mod html;
 ///
 /// In a perfect world, I'd just use the Display but the string format system is REALLY slow.
 pub trait TemplateComponent {
-    fn render_into(self, tmpl: &mut Template);
+    #[inline]
+    fn render_into<'a>(self, tmpl: &mut TemplateBuilder<'a>);
 }
 
 /// A template renderer.
@@ -120,19 +121,50 @@ pub struct Renderer<F> {
     expected_size: usize,
 }
 
-
-impl<F> Renderer<F> where F: FnOnce(&mut Template) {
-    /// Render this template into a string.
+impl<F> Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
+    /// Render this template into a new String.
     pub fn render(self) -> String {
-        let mut tmpl = Template::with_capacity(self.expected_size);
+        let mut string = String::with_capacity(self.expected_size);
+        self.render_into_string(&mut string);
+        string
+    }
+
+    /// Render this template into an existing String.
+    ///
+    /// Note: You could also use render_into_fmt but this is noticably faster.
+    pub fn render_into_string(self, string: &mut String) {
+        let mut tmpl = TemplateBuilder::new_str(string);
         self.render_into(&mut tmpl);
-        tmpl.0
+    }
+
+    pub fn render_into_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
+        let mut tmpl = TemplateBuilder::new_fmt(writer);
+        self.render_into(&mut tmpl);
+        match tmpl.0 {
+            TemplateWriter::Fmt { error, .. } => match error {
+                Some(e) => Err(e),
+                None => Ok(()),
+            },
+            _ => panic!(),
+        }
+    }
+
+    pub fn render_into_io(self, writer: &mut io::Write) -> Result<(), io::Error> {
+        let mut tmpl = TemplateBuilder::new_io(writer);
+        self.render_into(&mut tmpl);
+        match tmpl.0 {
+            TemplateWriter::Io { error, .. } => match error {
+                Some(e) => Err(e),
+                None => Ok(()),
+            },
+            _ => panic!(),
+        }
     }
 }
 
-impl<F> TemplateComponent for Renderer<F> where F: FnOnce(&mut Template) {
-    fn render_into(self, tmpl: &mut Template) {
-        (self.renderer)(tmpl);
+impl<F> TemplateComponent for Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        (self.renderer)(tmpl)
     }
 }
 
@@ -155,107 +187,163 @@ macro_rules! raw {
 }
 
 impl<S> TemplateComponent for Raw<S> where S: AsRef<str> {
-    #[inline]
-    fn render_into(self, tmpl: &mut Template) {
-        tmpl.write_raw(self.0.as_ref());
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        tmpl.write_raw(self.0.as_ref())
     }
 }
 
-
 impl<'a> TemplateComponent for &'a str {
     #[inline]
-    fn render_into(self, tmpl: &mut Template) {
-        tmpl.write_str(self).unwrap();
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        tmpl.write_str(self)
     }
 }
 
 impl<'a> TemplateComponent for &'a String {
     #[inline]
-    fn render_into(self, tmpl: &mut Template) {
-        tmpl.write_str(&self).unwrap();
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        tmpl.write_str(&self)
     }
 }
 
 impl TemplateComponent for String {
     #[inline]
-    fn render_into(self, tmpl: &mut Template) {
-        tmpl.write_str(&self).unwrap();
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        tmpl.write_str(&self)
     }
 }
 
-impl<'a, T> std::ops::Shl<T> for &'a mut Template where T: TemplateComponent {
-    type Output = &'a mut Template ;
-    #[inline]
-    fn shl(self, component: T) -> &'a mut Template {
+impl<'a, 'b, T> std::ops::Shl<T> for &'a mut TemplateBuilder<'b> where T: TemplateComponent {
+    type Output = &'a mut TemplateBuilder<'b>;
+    /// Render the component into the template.
+    ///
+    /// Note: If writing to the template fails, this method will neither panic nor return errors.
+    /// Instead, no more data will be written to the template and horrorshow abort template
+    /// rendering (return an error) when it re-gains control.
+    fn shl(self, component: T) -> &'a mut TemplateBuilder<'b> {
         component.render_into(self);
         self
     }
 }
 
-/// Template builder.
-pub struct Template(String);
+/// TemplateBuilder builder.
+pub struct TemplateBuilder<'a>(TemplateWriter<'a>);
+
+enum TemplateWriter<'a> {
+    Io {
+        writer: &'a mut io::Write,
+        error: Option<io::Error>,
+    },
+    Fmt {
+        writer: &'a mut fmt::Write,
+        error: Option<fmt::Error>,
+    },
+    Str {
+        writer: &'a mut String,
+    }
+}
 
 #[doc(hidden)]
-pub fn __new_renderer<F: FnOnce(&mut Template)>(expected_size: usize, f: F) -> Renderer<F> {
+pub fn __new_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: F) -> Renderer<F> {
     Renderer {
         renderer: f,
         expected_size: expected_size,
     }
 }
 
-impl Template {
-    /// Create a new template builder.
-    #[inline]
-    pub fn new() -> Template {
-        Template(String::new())
+impl<'a> TemplateBuilder<'a> {
+    fn new_fmt(w: &mut fmt::Write) -> TemplateBuilder {
+        TemplateBuilder(TemplateWriter::Fmt { writer: w, error: None })
     }
-    /// Create a new template builder with the given initial capacity.
-    #[inline]
-    pub fn with_capacity(capacity: usize) -> Template {
-        Template(String::with_capacity(capacity))
+    fn new_io(w: &mut io::Write) -> TemplateBuilder {
+        TemplateBuilder(TemplateWriter::Io { writer: w, error: None })
     }
-
+    fn new_str(w: &mut String) -> TemplateBuilder {
+        TemplateBuilder(TemplateWriter::Str { writer: w })
+    }
     /// Append a raw string to the template.
     #[inline]
     pub fn write_raw(&mut self, text: &str) {
-        self.0.push_str(text);
+        use TemplateWriter::*;
+        use std::fmt::Write;
+        match self.0 {
+            Io { ref mut writer, ref mut error } => {
+                if error.is_some() { return; }
+                if let Err(e) = writer.write_all(text.as_bytes()) {
+                    *error = Some(e);
+                }
+            },
+            Fmt {ref mut writer, ref mut error } => {
+                if error.is_some() { return; }
+                if let Err(e) = writer.write_str(text) {
+                    *error = Some(e);
+                }
+            },
+            Str {ref mut writer } => {
+                let _ = writer.write_str(text);
+            },
+        }
     }
-}
 
-impl std::ops::Deref for Template {
-    type Target = str;
     #[inline]
-    fn deref(&self) -> &str {
-        &self.0
+    pub fn write_fmt(&mut self, args: fmt::Arguments) {
+        use std::fmt::Write;
+        let _ = self.0.write_fmt(args);
     }
-}
 
-impl AsRef<str> for Template {
     #[inline]
-    fn as_ref(&self) -> &str {
-        &self.0
+    pub fn write_str(&mut self, text: &str) {
+        use std::fmt::Write;
+        let _ = self.0.write_str(text);
     }
 }
 
-impl From<Template> for String {
-    #[inline]
-    fn from(from: Template) -> String {
-        from.0
-    }
-}
-
-impl fmt::Write for Template {
+impl<'a> fmt::Write for TemplateWriter<'a> {
     /// Escape and write a string to the template.
     #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
-        for b in text.bytes() {
-            match b {
-                b'&' => self.0.push_str("&amp;"),
-                b'"' => self.0.push_str("&quot;"),
-                b'<' => self.0.push_str("&lt;"),
-                b'>' => self.0.push_str("&gt;"),
-                // This is safe because we're working bytewise.
-                _ => unsafe { self.0.as_mut_vec() }.push(b)
+        use TemplateWriter::*;
+        match self {
+            &mut Io { ref mut writer, ref mut error } => {
+                if error.is_some() { return Ok(()); }
+                for b in text.bytes() {
+                    if let Err(e) = match b {
+                        b'&' => writer.write_all("&amp;".as_bytes()),
+                        b'"' => writer.write_all("&quot;".as_bytes()),
+                        b'<' => writer.write_all("&lt;".as_bytes()),
+                        b'>' => writer.write_all("&gt;".as_bytes()),
+                        _ => writer.write_all(&[b] as &[u8]),
+                    } {
+                        *error = Some(e);
+                        break;
+                    }
+                }
+            },
+            &mut Fmt { ref mut writer, ref mut error } => {
+                if error.is_some() { return Ok(()); }
+                for c in text.chars() {
+                    if let Err(e) = match c {
+                        '&' => writer.write_str("&amp;"),
+                        '"' => writer.write_str("&quot;"),
+                        '<' => writer.write_str("&lt;"),
+                        '>' => writer.write_str("&gt;"),
+                        _ => writer.write_char(c),
+                    } {
+                        *error = Some(e);
+                        break;
+                    }
+                }
+            },
+            &mut Str { ref mut writer } => {
+                for b in text.bytes() {
+                    match b {
+                        b'&' => writer.push_str("&amp;"),
+                        b'"' => writer.push_str("&quot;"),
+                        b'<' => writer.push_str("&lt;"),
+                        b'>' => writer.push_str("&gt;"),
+                        _ => unsafe { writer.as_mut_vec() }.push(b),
+                    }
+                }
             }
         }
         Ok(())
