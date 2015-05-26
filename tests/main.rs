@@ -11,7 +11,7 @@ fn test_reentrant() {
 
     assert_eq!(&html! {
         p {
-            |tmpl| tmpl << html! { a(href="abcde") }.render();
+            |tmpl| try!(tmpl << html! { a(href="abcde") }.render());
         }
     }.render(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 

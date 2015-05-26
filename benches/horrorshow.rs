@@ -22,15 +22,17 @@ fn bench(b: &mut test::Bencher) {
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |mut tmpl| for i in 0..10 {
+                        |mut tmpl| { for i in 0..10 {
                             // append to the current template.
                             // store output because rust bug #25753
-                            tmpl = tmpl << html! {
+                            try!((html! {
                                 li {
                                     // format some text
                                     #{"{}", i+1 }
                                 }
-                            };
+                            }).render_into(tmpl));
+                        }
+                        Ok(())
                         }
                     }
                     // You need semi-colons for tags without children.
