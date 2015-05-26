@@ -4,10 +4,13 @@ macro_rules! html {
     ($($inner:tt)*) => {{
         #[allow(unused_imports)]
         use $crate::TemplateComponent;
-        // Stringify the template content to get a hint at how much we should allocate...
-        $crate::__new_renderer(stringify!($($inner)*).len(), |tmpl| {
+        // Define this up here to prevent rust from saying:
+        // Hey look, it's an FnOnce (this could be Fn/FnMut).
+        let f = |tmpl: &mut $crate::TemplateBuilder| -> () {
             __append_html!(tmpl, $($inner)*);
-        })
+        };
+        // Stringify the template content to get a hint at how much we should allocate...
+        $crate::__new_renderer(stringify!($($inner)*).len(), f)
     }}
 }
 

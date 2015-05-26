@@ -111,7 +111,6 @@ mod html;
 ///
 /// In a perfect world, I'd just use the Display but the string format system is REALLY slow.
 pub trait TemplateComponent {
-    #[inline]
     fn render_into<'a>(self, tmpl: &mut TemplateBuilder<'a>);
 }
 
@@ -121,7 +120,7 @@ pub struct Renderer<F> {
     expected_size: usize,
 }
 
-impl<F> Renderer<F> where Renderer<F>: TemplateComponent {
+impl<F> Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
     /// Render this template into a new String.
     pub fn render(self) -> String {
         let mut string = String::with_capacity(self.expected_size);
@@ -141,13 +140,7 @@ impl<F> Renderer<F> where Renderer<F>: TemplateComponent {
     pub fn render_into_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
         let mut tmpl = TemplateBuilder::new_fmt(writer);
         self.render_into(&mut tmpl);
-        match tmpl.0 {
-            TemplateWriter::Fmt { error, .. } => match error {
-                Some(e) => Err(e),
-                None => Ok(()),
-            },
-            _ => panic!(),
-        }
+        if let Some(e) = tmpl.0.fmt_error() { Err(e) } else { Ok(()) }
     }
 
     /// Render this template into something that implements io::Write.
@@ -158,19 +151,116 @@ impl<F> Renderer<F> where Renderer<F>: TemplateComponent {
     pub fn render_into_io(self, writer: &mut io::Write) -> Result<(), io::Error> {
         let mut tmpl = TemplateBuilder::new_io(writer);
         self.render_into(&mut tmpl);
-        match tmpl.0 {
-            TemplateWriter::Io { error, .. } => match error {
-                Some(e) => Err(e),
-                None => Ok(()),
-            },
-            _ => panic!(),
-        }
+        if let Some(e) = tmpl.0.io_error() { Err(e) } else { Ok(()) }
+    }
+}
+
+// Verbose... But I don't know of any other way to specialize this...
+
+impl<F> Renderer<F> where F: Fn(&mut TemplateBuilder) {
+    /// Render this template into a new String.
+    pub fn render(&self) -> String {
+        let mut string = String::with_capacity(self.expected_size);
+        self.render_into_string(&mut string);
+        string
+    }
+
+    /// Render this template into an existing String.
+    ///
+    /// Note: You could also use render_into_fmt but this is noticeably faster.
+    pub fn render_into_string(&self, string: &mut String) {
+        let mut tmpl = TemplateBuilder::new_str(string);
+        self.render_into(&mut tmpl);
+    }
+
+    /// Render this template into something that implements fmt::Write.
+    pub fn render_into_fmt(&self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
+        let mut tmpl = TemplateBuilder::new_fmt(writer);
+        self.render_into(&mut tmpl);
+        if let Some(e) = tmpl.0.fmt_error() { Err(e) } else { Ok(()) }
+    }
+
+    /// Render this template into something that implements io::Write.
+    ///
+    /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
+    /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
+    /// system calls.
+    pub fn render_into_io(&self, writer: &mut io::Write) -> Result<(), io::Error> {
+        let mut tmpl = TemplateBuilder::new_io(writer);
+        self.render_into(&mut tmpl);
+        if let Some(e) = tmpl.0.io_error() { Err(e) } else { Ok(()) }
+    }
+}
+
+impl<F> Renderer<F> where F: FnMut(&mut TemplateBuilder) {
+    /// Render this template into a new String.
+    pub fn render(&mut self) -> String {
+        let mut string = String::with_capacity(self.expected_size);
+        self.render_into_string(&mut string);
+        string
+    }
+
+    /// Render this template into an existing String.
+    ///
+    /// Note: You could also use render_into_fmt but this is noticeably faster.
+    pub fn render_into_string(&mut self, string: &mut String) {
+        let mut tmpl = TemplateBuilder::new_str(string);
+        self.render_into(&mut tmpl);
+    }
+
+    /// Render this template into something that implements fmt::Write.
+    /// 
+    /// Renderer also implements Display but that's about twice as slow...
+    pub fn render_into_fmt(&mut self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
+        let mut tmpl = TemplateBuilder::new_fmt(writer);
+        self.render_into(&mut tmpl);
+        if let Some(e) = tmpl.0.fmt_error() { Err(e) } else { Ok(()) }
+    }
+
+    /// Render this template into something that implements io::Write.
+    ///
+    /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
+    /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
+    /// system calls.
+    pub fn render_into_io(&mut self, writer: &mut io::Write) -> Result<(), io::Error> {
+        let mut tmpl = TemplateBuilder::new_io(writer);
+        self.render_into(&mut tmpl);
+        if let Some(e) = tmpl.0.io_error() { Err(e) } else { Ok(()) }
     }
 }
 
 impl<F> TemplateComponent for Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
     fn render_into(self, tmpl: &mut TemplateBuilder) {
         (self.renderer)(tmpl)
+    }
+}
+
+impl<'a, F> TemplateComponent for &'a mut Renderer<F> where F: FnMut(&mut TemplateBuilder) {
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        (self.renderer)(tmpl)
+    }
+}
+
+impl<'a, F> TemplateComponent for &'a Renderer<F> where F: Fn(&mut TemplateBuilder) {
+    fn render_into(self, tmpl: &mut TemplateBuilder) {
+        (self.renderer)(tmpl)
+    }
+}
+
+impl<F> fmt::Display for Renderer<F> where F: Fn(&mut TemplateBuilder) {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        struct Adapter<'a, 'b>(&'a mut fmt::Formatter<'b>) where 'b: 'a;
+        impl<'a, 'b> fmt::Write for Adapter<'a, 'b> {
+            #[inline]
+            fn write_str(&mut self, text: &str) -> fmt::Result {
+                self.0.write_str(text)
+            }
+            #[inline]
+            fn write_fmt(&mut self, args: fmt::Arguments) -> fmt::Result {
+                self.0.write_fmt(args)
+            }
+        }
+        self.render_into_fmt(&mut Adapter(f))
     }
 }
 
@@ -322,6 +412,21 @@ impl<'a> TemplateBuilder<'a> {
     pub fn write_str(&mut self, text: &str) {
         use std::fmt::Write;
         let _ = self.0.write_str(text);
+    }
+}
+
+impl<'a> TemplateWriter<'a> {
+    fn fmt_error(self) -> Option<fmt::Error> {
+        match self {
+            TemplateWriter::Fmt { error, .. } => error,
+            _ => panic!(),
+        }
+    }
+    fn io_error(self) -> Option<io::Error> {
+        match self {
+            TemplateWriter::Io { error, .. } => error,
+            _ => panic!(),
+        }
     }
 }
 
