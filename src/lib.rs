@@ -87,7 +87,7 @@
 //! * `some_tag(attr=rust_expresion,...);` -- Insert a the tag `some_tag` with the specified
 //!    attributes. The attribute values will be evaluated as rust expressions at runtime.
 //!
-//! * `some_tag { ... }` -- Insert a the tag `some_tag` and recursivly evaluate the `...`.
+//! * `some_tag { ... }` -- Insert the tag `some_tag` and recursively evaluate the `...`.
 //!
 //! * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 //!
@@ -115,13 +115,13 @@ pub trait TemplateComponent {
     fn render_into<'a>(self, tmpl: &mut TemplateBuilder<'a>);
 }
 
-/// A template renderer.
+/// A template renderer. The `html! {}` macro returns a `Renderer`.
 pub struct Renderer<F> {
     renderer: F,
     expected_size: usize,
 }
 
-impl<F> Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
+impl<F> Renderer<F> where Renderer<F>: TemplateComponent {
     /// Render this template into a new String.
     pub fn render(self) -> String {
         let mut string = String::with_capacity(self.expected_size);
@@ -131,12 +131,13 @@ impl<F> Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
 
     /// Render this template into an existing String.
     ///
-    /// Note: You could also use render_into_fmt but this is noticably faster.
+    /// Note: You could also use render_into_fmt but this is noticeably faster.
     pub fn render_into_string(self, string: &mut String) {
         let mut tmpl = TemplateBuilder::new_str(string);
         self.render_into(&mut tmpl);
     }
 
+    /// Render this template into something that implements fmt::Write.
     pub fn render_into_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
         let mut tmpl = TemplateBuilder::new_fmt(writer);
         self.render_into(&mut tmpl);
@@ -149,6 +150,11 @@ impl<F> Renderer<F> where F: FnOnce(&mut TemplateBuilder) {
         }
     }
 
+    /// Render this template into something that implements io::Write.
+    ///
+    /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
+    /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
+    /// system calls.
     pub fn render_into_io(self, writer: &mut io::Write) -> Result<(), io::Error> {
         let mut tmpl = TemplateBuilder::new_io(writer);
         self.render_into(&mut tmpl);
@@ -168,7 +174,7 @@ impl<F> TemplateComponent for Renderer<F> where F: FnOnce(&mut TemplateBuilder) 
     }
 }
 
-/// Raw content.
+/// Raw content marker.
 ///
 /// When rendered, raw content will not be escaped.
 pub struct Raw<S: AsRef<str>>(S);
@@ -226,7 +232,18 @@ impl<'a, 'b, T> std::ops::Shl<T> for &'a mut TemplateBuilder<'b> where T: Templa
     }
 }
 
-/// TemplateBuilder builder.
+/// A template builder. This is the type that gets passed to closures inside templates.
+///
+/// Example:
+///
+/// ```
+/// # #[macro_use] extern crate horrorshow;
+/// # fn main() {
+///     html! {
+///         |tmpl /*: &mut TemplateBuilder */| tmpl << "Some String";
+///     };
+/// # }
+/// ```
 pub struct TemplateBuilder<'a>(TemplateWriter<'a>);
 
 enum TemplateWriter<'a> {
@@ -243,6 +260,7 @@ enum TemplateWriter<'a> {
     }
 }
 
+/// Used by the `html! {}` macro
 #[doc(hidden)]
 pub fn __new_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: F) -> Renderer<F> {
     Renderer {
@@ -261,7 +279,8 @@ impl<'a> TemplateBuilder<'a> {
     fn new_str(w: &mut String) -> TemplateBuilder {
         TemplateBuilder(TemplateWriter::Str { writer: w })
     }
-    /// Append a raw string to the template.
+
+    /// Write a raw string to the template output.
     #[inline]
     pub fn write_raw(&mut self, text: &str) {
         use TemplateWriter::*;
@@ -285,12 +304,20 @@ impl<'a> TemplateBuilder<'a> {
         }
     }
 
+    /// Escape and write the formatted arguments to the template output.
+    ///
+    /// Example:
+    ///
+    /// ```norun
+    /// write!(tmpl, "{} + {}", 0, 1);
+    /// ```
     #[inline]
     pub fn write_fmt(&mut self, args: fmt::Arguments) {
         use std::fmt::Write;
         let _ = self.0.write_fmt(args);
     }
 
+    /// Escape and write a string to the template output.
     #[inline]
     pub fn write_str(&mut self, text: &str) {
         use std::fmt::Write;
@@ -299,7 +326,6 @@ impl<'a> TemplateBuilder<'a> {
 }
 
 impl<'a> fmt::Write for TemplateWriter<'a> {
-    /// Escape and write a string to the template.
     #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
         use TemplateWriter::*;
@@ -335,6 +361,8 @@ impl<'a> fmt::Write for TemplateWriter<'a> {
                 }
             },
             &mut Str { ref mut writer } => {
+                // TODO: Consider using a forloop. LLVM isn't optimizing this quite as well as it
+                // could 0.96x slowdown.
                 for b in text.bytes() {
                     match b {
                         b'&' => writer.push_str("&amp;"),
@@ -350,7 +378,7 @@ impl<'a> fmt::Write for TemplateWriter<'a> {
     }
 }
 
-// We shouldn't need this but without it I get the folloowing error:
+// We shouldn't need this but without it I get the following error:
 // error: unexpected token: `an interpolated tt`
 #[macro_export]
 #[doc(hidden)]
