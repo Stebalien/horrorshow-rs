@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-359' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-387' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -129,7 +129,7 @@
 <li><p><code>some_tag;</code> -- Insert a the tag <code>some_tag</code>.</p></li>
 <li><p><code>some_tag(attr=rust_expresion,...);</code> -- Insert a the tag <code>some_tag</code> with the specified
 attributes. The attribute values will be evaluated as rust expressions at runtime.</p></li>
-<li><p><code>some_tag { ... }</code> -- Insert a the tag <code>some_tag</code> and recursivly evaluate the <code>...</code>.</p></li>
+<li><p><code>some_tag { ... }</code> -- Insert the tag <code>some_tag</code> and recursively evaluate the <code>...</code>.</p></li>
 <li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result
 current position. To insert literal html, mark it as raw with the <code>raw!</code> macro.</p></li>
@@ -164,7 +164,7 @@ actually a closure so the block/expression can append to the current template th
                         <td><a class='struct' href='struct.Raw.html'
                                title='horrorshow::Raw'>Raw</a></td>
                         <td class='docblock short'>
-                             <p>Raw content.</p>
+                             <p>Raw content marker.</p>
 
                         </td>
                     </tr>
@@ -173,7 +173,7 @@ actually a closure so the block/expression can append to the current template th
                         <td><a class='struct' href='struct.Renderer.html'
                                title='horrorshow::Renderer'>Renderer</a></td>
                         <td class='docblock short'>
-                             <p>A template renderer.</p>
+                             <p>A template renderer. The <code>html! {}</code> macro returns a <code>Renderer</code>.</p>
 
                         </td>
                     </tr>
@@ -182,7 +182,7 @@ actually a closure so the block/expression can append to the current template th
                         <td><a class='struct' href='struct.TemplateBuilder.html'
                                title='horrorshow::TemplateBuilder'>TemplateBuilder</a></td>
                         <td class='docblock short'>
-                             <p>TemplateBuilder builder.</p>
+                             <p>A template builder. This is the type that gets passed to closures inside templates.</p>
 
                         </td>
                     </tr>
