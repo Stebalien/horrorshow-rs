@@ -187,7 +187,6 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
-<span id="148">148</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -198,7 +197,7 @@
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! # #[macro_use] extern crate horrorshow;</span>
 <span class='doccomment'>//! # fn main() {</span>
-<span class='doccomment'>//! use horrorshow::RenderOnce;</span>
+<span class='doccomment'>//! use horrorshow::prelude::*;</span>
 <span class='doccomment'>//! let actual = html! {</span>
 <span class='doccomment'>//!     html {</span>
 <span class='doccomment'>//!         head {</span>
@@ -234,7 +233,7 @@
 <span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!         }</span>
 <span class='doccomment'>//!     }</span>
-<span class='doccomment'>//! }.render();</span>
+<span class='doccomment'>//! }.into_string();</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let expected = &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;;</span>
 <span class='doccomment'>//! assert_eq!(expected, actual);</span>
@@ -295,26 +294,24 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Traits, traits oh-my!</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! You will likely notice that there are three(!) render traits:</span>
+<span class='doccomment'>//! You will likely notice that there are four render traits:</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! 1. `RenderOnce`</span>
 <span class='doccomment'>//! 2. `RenderMut`</span>
 <span class='doccomment'>//! 3. `Render`</span>
+<span class='doccomment'>//! 4. `RenderBox`</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! These three traits map to the three `Fn` traits and reflect the fact that some templates need</span>
+<span class='doccomment'>//! These three traits map to the four `Fn` traits and reflect the fact that some templates need</span>
 <span class='doccomment'>//! exclusive access (`RenderMut`) in order to be rendered and others might even consume their</span>
 <span class='doccomment'>//! environment (`RenderOnce`).</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! In general, just import `RenderOnce` into your environment. `RenderOnce` is implemented on</span>
-<span class='doccomment'>//! `&amp;mut T where T: RenderMut` and `&amp;T where T: Render` so you don&#39;t need the other traits</span>
-<span class='doccomment'>//! in-scope to render. As a matter of fact, having the other traits in-scope is a bad idea because</span>
-<span class='doccomment'>//! rust will have a hard time picking the right method.</span>
+<span class='doccomment'>//! In general, just import `Template` into your environment (or import the prelude).</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Error Handling</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error</span>
 <span class='doccomment'>//! occurs, template rendering will continue but no more data will be written and the original</span>
-<span class='doccomment'>//! `render_fmt`/`render_io` call will return the error when rendering terminates.</span>
+<span class='doccomment'>//! `write_to_fmt`/`write_to_io` call will return the error when rendering terminates.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! There is no way to abort template rendering other than panicing. Try to do everything that can</span>
 <span class='doccomment'>//! fail before rendering a template.</span>
@@ -328,6 +325,7 @@
     <span class='ident'>RenderOnce</span>,
     <span class='ident'>RenderMut</span>,
     <span class='ident'>Render</span>,
+    <span class='ident'>Template</span>,
     <span class='ident'>RenderBox</span>,
     <span class='ident'>Renderer</span>,
     <span class='ident'>Raw</span>,

@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-148' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-147' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -53,7 +53,7 @@
 
 <h2 id="example:" class='section-header'><a
                            href="#example:">Example:</a></h2><pre id='rust-example-rendered' class='rust '>
-<span class='kw'>use</span> <span class='ident'>horrorshow</span>::<span class='ident'>RenderOnce</span>;
+<span class='kw'>use</span> <span class='ident'>horrorshow</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 <span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>html</span><span class='macro'>!</span> {
     <span class='ident'>html</span> {
         <span class='ident'>head</span> {
@@ -89,7 +89,7 @@
             }
         }
     }
-}.<span class='ident'>render</span>();
+}.<span class='ident'>into_string</span>();
 
 <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
@@ -143,28 +143,26 @@ actually a closure so the block/expression can append to the current template th
 
 <h2 id="traits,-traits-oh-my!" class='section-header'><a
                            href="#traits,-traits-oh-my!">Traits, traits oh-my!</a></h2>
-<p>You will likely notice that there are three(!) render traits:</p>
+<p>You will likely notice that there are four render traits:</p>
 
 <ol>
 <li><code>RenderOnce</code></li>
 <li><code>RenderMut</code></li>
 <li><code>Render</code></li>
+<li><code>RenderBox</code></li>
 </ol>
 
-<p>These three traits map to the three <code>Fn</code> traits and reflect the fact that some templates need
+<p>These three traits map to the four <code>Fn</code> traits and reflect the fact that some templates need
 exclusive access (<code>RenderMut</code>) in order to be rendered and others might even consume their
 environment (<code>RenderOnce</code>).</p>
 
-<p>In general, just import <code>RenderOnce</code> into your environment. <code>RenderOnce</code> is implemented on
-<code>&amp;mut T where T: RenderMut</code> and <code>&amp;T where T: Render</code> so you don&#39;t need the other traits
-in-scope to render. As a matter of fact, having the other traits in-scope is a bad idea because
-rust will have a hard time picking the right method.</p>
+<p>In general, just import <code>Template</code> into your environment (or import the prelude).</p>
 
 <h2 id="error-handling" class='section-header'><a
                            href="#error-handling">Error Handling</a></h2>
 <p>IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error
 occurs, template rendering will continue but no more data will be written and the original
-<code>render_fmt</code>/<code>render_io</code> call will return the error when rendering terminates.</p>
+<code>write_to_fmt</code>/<code>write_to_io</code> call will return the error when rendering terminates.</p>
 
 <p>There is no way to abort template rendering other than panicing. Try to do everything that can
 fail before rendering a template.</p>
@@ -269,6 +267,14 @@ fail before rendering a template.</p>
                         <td class='docblock short'>
                              <p>Something that can be rendered once.</p>
 
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.Template.html'
+                               title='horrorshow::Template'>Template</a></td>
+                        <td class='docblock short'>
+                             
                         </td>
                     </tr>
                 </table></section>
