@@ -1,41 +1,6 @@
 use std::fmt;
-use std::io;
 
-use template_builder::{self, TemplateBuilder};
-
-pub trait Template: RenderOnce {
-    /// Render this into a new String.
-    fn into_string(self) -> String where Self: Sized {
-        let mut string = String::with_capacity(self.size_hint());
-        self.write_to_string(&mut string);
-        string
-    }
-
-    /// Render this into an existing String.
-    ///
-    /// Note: You could also use render_into_fmt but this is noticeably faster.
-    fn write_to_string(self, string: &mut String) where Self: Sized {
-        template_builder::render_string(self, string)
-    }
-
-    /// Render this into something that implements fmt::Write.
-    /// 
-    /// Renderer also implements Display but that's about twice as slow...
-    fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> where Self: Sized {
-        template_builder::render_fmt(self, writer)
-    }
-
-    /// Render this into something that implements io::Write.
-    ///
-    /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
-    /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
-    /// system calls.
-    fn write_to_io(self, writer: &mut io::Write) -> Result<(), io::Error> where Self: Sized {
-        template_builder::render_io(self, writer)
-    }
-}
-
-impl<T: RenderOnce + ?Sized> Template for T { }
+use template::{TemplateBuilder, Template};
 
 /// Something that can be rendered once.
 pub trait RenderOnce {

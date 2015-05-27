@@ -3,6 +3,58 @@ use std::fmt;
 use std::io;
 use std::ops::Shl;
 
+/// A template that can be rendered into something.
+///
+/// Don't let the single impl below fool you, these methods are available on all `Render*`'s
+/// (through impls on references and boxes).
+pub trait Template: RenderOnce + Sized {
+    /// Render this into a new String.
+    fn into_string(self) -> String {
+        let mut string = String::with_capacity(self.size_hint());
+        self.write_to_string(&mut string);
+        string
+    }
+
+    /// Render this into an existing String.
+    ///
+    /// Note: You could also use render_into_fmt but this is noticeably faster.
+    fn write_to_string(self, string: &mut String) {
+        let mut builder = TemplateBuilder(TemplateWriter::Str { writer: string });
+        self.render_once(&mut builder);
+    }
+
+    /// Render this into something that implements fmt::Write.
+    /// 
+    /// Renderer also implements Display but that's about twice as slow...
+    fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
+        let mut builder = TemplateBuilder(TemplateWriter::Fmt { writer: writer, error: None });
+        self.render_once(&mut builder);
+        match builder.0 {
+            TemplateWriter::Fmt { error: Some(e), .. } => Err(e),
+            TemplateWriter::Fmt { error: None, .. } => Ok(()),
+            _ => panic!(),
+        }
+    }
+
+    /// Render this into something that implements io::Write.
+    ///
+    /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
+    /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
+    /// system calls.
+    fn write_to_io(self, writer: &mut io::Write) -> Result<(), io::Error> {
+        let mut builder = TemplateBuilder(TemplateWriter::Io { writer: writer, error: None });
+        self.render_once(&mut builder);
+        match builder.0 {
+            TemplateWriter::Io { error: Some(e), .. } => Err(e),
+            TemplateWriter::Io { error: None, .. } => Ok(()),
+            _ => panic!(),
+        }
+    }
+}
+
+impl<T: RenderOnce + Sized> Template for T { }
+
+
 /// A template builder. This is the type that gets passed to closures inside templates.
 ///
 /// Example:
@@ -42,34 +94,6 @@ enum TemplateWriter<'a> {
     Str {
         writer: &'a mut String,
     }
-}
-
-/// Crate private
-pub fn render_fmt<R: RenderOnce>(render: R, w: &mut fmt::Write) -> fmt::Result {
-    let mut builder = TemplateBuilder(TemplateWriter::Fmt { writer: w, error: None });
-    render.render_once(&mut builder);
-    match builder.0 {
-        TemplateWriter::Fmt { error: Some(e), .. } => Err(e),
-        TemplateWriter::Fmt { error: None, .. } => Ok(()),
-        _ => panic!(),
-    }
-}
-
-/// Crate private
-pub fn render_io<R: RenderOnce>(render: R, w: &mut io::Write) -> io::Result<()> {
-    let mut builder = TemplateBuilder(TemplateWriter::Io { writer: w, error: None });
-    render.render_once(&mut builder);
-    match builder.0 {
-        TemplateWriter::Io { error: Some(e), .. } => Err(e),
-        TemplateWriter::Io { error: None, .. } => Ok(()),
-        _ => panic!(),
-    }
-}
-
-/// Crate private
-pub fn render_string<R: RenderOnce>(render: R, w: &mut String) {
-    let mut builder = TemplateBuilder(TemplateWriter::Str { writer: w });
-    render.render_once(&mut builder);
 }
 
 impl<'a> TemplateBuilder<'a> {

@@ -128,14 +128,16 @@
 #[macro_use]
 mod macros;
 
-mod template_builder;
-pub use template_builder::TemplateBuilder;
+mod template;
+pub use template::{
+    TemplateBuilder,
+    Template,
+};
 mod render;
 pub use render::{
     RenderOnce,
     RenderMut,
     Render,
-    Template,
     RenderBox,
     Renderer,
     Raw,
