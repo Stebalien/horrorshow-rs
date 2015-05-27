@@ -141,13 +141,20 @@ impl<'a> fmt::Write for TemplateWriter<'a> {
             },
             &mut Fmt { ref mut writer, ref mut error } => {
                 if error.is_some() { return Ok(()); }
+                let mut s = String::with_capacity(4);
                 for c in text.chars() {
                     if let Err(e) = match c {
                         '&' => writer.write_str("&amp;"),
                         '"' => writer.write_str("&quot;"),
                         '<' => writer.write_str("&lt;"),
                         '>' => writer.write_str("&gt;"),
-                        _ => writer.write_char(c),
+                        _ => {
+                            // TODO: Use fmt::Write::write_char once beta stabalizes. This is very slow!
+                            s.push(c);
+                            let r = writer.write_str(&s);
+                            s.clear();
+                            r
+                        }
                     } {
                         *error = Some(e);
                         break;
