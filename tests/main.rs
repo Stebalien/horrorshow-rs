@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate horrorshow;
 
+use horrorshow::RenderOnce;
+
 #[test]
 fn test_reentrant() {
     assert_eq!(&html! {

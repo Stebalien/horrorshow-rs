@@ -4,6 +4,8 @@ extern crate test;
 #[macro_use]
 extern crate horrorshow;
 
+use horrorshow::RenderOnce;
+
 #[bench]
 fn bench(b: &mut test::Bencher) {
     b.iter(|| {

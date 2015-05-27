@@ -2,8 +2,6 @@
 #[macro_export]
 macro_rules! html {
     ($($inner:tt)*) => {{
-        #[allow(unused_imports)]
-        use $crate::TemplateComponent;
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
         let f = |tmpl: &mut $crate::TemplateBuilder| -> () {
@@ -28,15 +26,15 @@ macro_rules! stringify_compressed {
 #[macro_export]
 macro_rules! __append_html {
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {{
-        ({$($code)*}).render_into($tmpl);
+        $crate::RenderOnce::render_tmpl({$($code)*}, $tmpl);
         __append_html!($tmpl, $($next)*);
     }};
     ($tmpl:ident, : $code:expr; $($next:tt)* ) => {{
-        (($code)).render_into($tmpl);
+        $crate::RenderOnce::render_tmpl($code, $tmpl);
         __append_html!($tmpl, $($next)*);
     }};
     ($tmpl:ident, : $code:expr ) => {{
-        (($code)).render_into($tmpl);
+        $crate::RenderOnce::render_tmpl($code, $tmpl);
     }};
     ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {{
         (|$var: &mut $crate::TemplateBuilder| {
