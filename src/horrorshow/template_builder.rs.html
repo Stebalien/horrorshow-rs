@@ -214,6 +214,13 @@
 <span id="172">172</span>
 <span id="173">173</span>
 <span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>render</span>::<span class='ident'>RenderOnce</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
@@ -358,13 +365,20 @@
             },
             <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Fmt</span> { <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>writer</span>, <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>error</span> } <span class='op'>=&gt;</span> {
                 <span class='kw'>if</span> <span class='ident'>error</span>.<span class='ident'>is_some</span>() { <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(()); }
+                <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>with_capacity</span>(<span class='number'>4</span>);
                 <span class='kw'>for</span> <span class='ident'>c</span> <span class='kw'>in</span> <span class='ident'>text</span>.<span class='ident'>chars</span>() {
                     <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>c</span> {
                         <span class='string'>&#39;&amp;&#39;</span> <span class='op'>=&gt;</span> <span class='ident'>writer</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;&amp;amp;&quot;</span>),
                         <span class='string'>&#39;&quot;&#39;</span> <span class='op'>=&gt;</span> <span class='ident'>writer</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;&amp;quot;&quot;</span>),
                         <span class='string'>&#39;&lt;&#39;</span> <span class='op'>=&gt;</span> <span class='ident'>writer</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;&amp;lt;&quot;</span>),
                         <span class='string'>&#39;&gt;&#39;</span> <span class='op'>=&gt;</span> <span class='ident'>writer</span>.<span class='ident'>write_str</span>(<span class='string'>&quot;&amp;gt;&quot;</span>),
-                        _ <span class='op'>=&gt;</span> <span class='ident'>writer</span>.<span class='ident'>write_char</span>(<span class='ident'>c</span>),
+                        _ <span class='op'>=&gt;</span> {
+                            <span class='comment'>// TODO: Use fmt::Write::write_char once beta stabalizes. This is very slow!</span>
+                            <span class='ident'>s</span>.<span class='ident'>push</span>(<span class='ident'>c</span>);
+                            <span class='kw'>let</span> <span class='ident'>r</span> <span class='op'>=</span> <span class='ident'>writer</span>.<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>s</span>);
+                            <span class='ident'>s</span>.<span class='ident'>clear</span>();
+                            <span class='ident'>r</span>
+                        }
                     } {
                         <span class='op'>*</span><span class='ident'>error</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>e</span>);
                         <span class='kw'>break</span>;
