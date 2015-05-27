@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-1470' class='srclink' href='../src/horrorshow/macros.rs.html#17-27' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-1470' class='srclink' href='../src/horrorshow/macros.rs.html#52-62' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>box_html</span> {
     ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
@@ -59,7 +59,37 @@
     }}
 }
 </pre>
-<div class='docblock'><p>Crate a new html template</p>
+<div class='docblock'><p>Crate a new owned html template.</p>
+
+<p>This template will be boxed and will own it&#39;s environment. If you need to return a template
+from a function, use this.</p>
+
+<p>Example:</p>
+<pre id='rust-example-rendered' class='rust '>
+ 
+<span class='kw'>fn</span> <span class='ident'>post</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>title</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>horrorshow</span>::<span class='ident'>RenderBox</span> <span class='op'>+</span> <span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
+    <span class='macro'>box_html</span><span class='macro'>!</span> {
+        <span class='ident'>article</span> {
+            <span class='ident'>title</span> { <span class='ident'>h1</span> : <span class='ident'>title</span> }
+            <span class='ident'>p</span> : <span class='string'>&quot;This is one paragraph.&quot;</span>;
+            <span class='ident'>p</span> : <span class='string'>&quot;This is a second.&quot;</span>;
+        }
+    }
+}
+<span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro'>html</span><span class='macro'>!</span> {
+    <span class='ident'>html</span> {
+        <span class='ident'>body</span> {
+            : <span class='ident'>post</span>(<span class='string'>&quot;First Post&quot;</span>);
+            <span class='op'>|</span><span class='ident'>t</span><span class='op'>|</span> (<span class='number'>0</span>..<span class='number'>10</span>).<span class='ident'>fold</span>(<span class='ident'>t</span>, <span class='op'>|</span><span class='ident'>t</span>, <span class='ident'>i</span><span class='op'>|</span> {
+                <span class='comment'>// Waiting for non-lexical borrows!!!!</span>
+                <span class='kw'>let</span> <span class='ident'>tmp</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Spam post {}&quot;</span>, <span class='ident'>i</span>);
+                <span class='kw'>let</span> <span class='ident'>post</span> <span class='op'>=</span> <span class='ident'>post</span>(<span class='kw-2'>&amp;</span><span class='ident'>tmp</span>);
+                <span class='ident'>t</span> <span class='op'>&lt;&lt;</span> <span class='ident'>post</span>
+            })
+        }
+    }
+});
+</pre>
 </div></section>
     <section id='search' class="content hidden"></section>
 
