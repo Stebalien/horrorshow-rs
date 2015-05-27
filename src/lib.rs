@@ -134,9 +134,7 @@ use std::io;
 mod html;
 
 
-/// A component that can be appended to a template.
-///
-/// RenderOnce's can only be rendered once.
+/// Something that can be rendered once.
 pub trait RenderOnce: Sized {
     /// Render this into a new String.
     fn render(self) -> String {
@@ -180,9 +178,7 @@ pub trait RenderOnce: Sized {
     fn size_hint<'a>(&self) -> usize { 0 }
 }
 
-/// A component that can be appended to a template.
-///
-/// RenderMut's need a mutable receiver to be rendered.
+/// Something that can be rendered by mutable reference.
 pub trait RenderMut: RenderOnce {
     /// Render this into a new String.
     fn render(&mut self) -> String {
@@ -223,7 +219,7 @@ pub trait RenderMut: RenderOnce {
     fn render_tmpl<'a>(&mut self, tmpl: &mut TemplateBuilder<'a>);
 }
 
-/// A component that can be appended to a template.
+/// Something that can be rendered by reference.
 pub trait Render: RenderMut {
     /// Render this into a new String.
     fn render(&self) -> String {
