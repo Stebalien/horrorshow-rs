@@ -54,15 +54,15 @@ macro_rules! __horrorshow_block_identity {
 #[macro_export]
 macro_rules! __append_html {
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {{
-        $crate::RenderOnce::render_tmpl({$($code)*}, $tmpl);
+        $crate::RenderOnce::render_once({$($code)*}, $tmpl);
         __append_html!($tmpl, $($next)*);
     }};
     ($tmpl:ident, : $code:expr; $($next:tt)* ) => {{
-        $crate::RenderOnce::render_tmpl($code, $tmpl);
+        $crate::RenderOnce::render_once($code, $tmpl);
         __append_html!($tmpl, $($next)*);
     }};
     ($tmpl:ident, : $code:expr ) => {{
-        $crate::RenderOnce::render_tmpl($code, $tmpl);
+        $crate::RenderOnce::render_once($code, $tmpl);
     }};
     ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {{
         (|$var: &mut $crate::TemplateBuilder| {

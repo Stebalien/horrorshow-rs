@@ -1,27 +1,27 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::RenderOnce;
+use horrorshow::Template;
 
 #[test]
 fn test_reentrant() {
     assert_eq!(&html! {
         p {
-            #{"{}", html! { a(href="abcde") }.render()}
+            #{"{}", html! { a(href="abcde") }.into_string()}
         }
-    }.render(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
+    }.into_string(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
     assert_eq!(&html! {
         p {
-            |tmpl| tmpl << (html! { a(href="abcde") }).render();
+            |tmpl| tmpl << (html! { a(href="abcde") }).into_string();
         }
-    }.render(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
+    }.into_string(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
     assert_eq!(&html! {
         p {
-            : raw!(html! { a(href="abcde") }.render());
+            : raw!(html! { a(href="abcde") }.into_string());
         }
-    }.render(), "<p><a href=\"abcde\" /></p>");
+    }.into_string(), "<p><a href=\"abcde\" /></p>");
 }
 
 #[test]
@@ -30,17 +30,28 @@ fn test_dash() {
         my_tag {
             inner(data-test="abcde");
         }
-    }.render(), "<my_tag><inner data-test=\"abcde\" /></my_tag>");
+    }.into_string(), "<my_tag><inner data-test=\"abcde\" /></my_tag>");
 }
 
 
 #[test]
-fn test_render_by_ref() {
+fn test_into_string_by_ref() {
     let r = html! {
         |tmpl| tmpl << "test";
     };
-    assert_eq!((&r).render(), "test");
-    assert_eq!((&r).render(), "test");
+    assert_eq!((&r).into_string(), "test");
+    assert_eq!((&r).into_string(), "test");
+}
+
+#[test]
+fn test_enbed_twice() {
+    let r = html! {
+        |tmpl| {
+            let sub = html! { : "abcde" };
+            tmpl << &sub << &sub;
+        }
+    };
+    assert_eq!(r.into_string(), "abcdeabcde");
 }
 
 #[test]

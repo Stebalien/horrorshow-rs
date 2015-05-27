@@ -7,7 +7,7 @@
 //! ```
 //! # #[macro_use] extern crate horrorshow;
 //! # fn main() {
-//! use horrorshow::RenderOnce;
+//! use horrorshow::prelude::*;
 //! let actual = html! {
 //!     html {
 //!         head {
@@ -43,7 +43,7 @@
 //!             }
 //!         }
 //!     }
-//! }.render();
+//! }.into_string();
 //!
 //! let expected = "<html><head><title>Hello world!</title></head><body><h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1><p>Let's <i>count</i> to 10!</p><ol id=\"count\"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ol><br /><br /><p>Easy!</p></body></html>";
 //! assert_eq!(expected, actual);
@@ -104,26 +104,24 @@
 //!
 //! ## Traits, traits oh-my!
 //!
-//! You will likely notice that there are three(!) render traits:
+//! You will likely notice that there are four render traits:
 //!
 //! 1. `RenderOnce`
 //! 2. `RenderMut`
 //! 3. `Render`
+//! 4. `RenderBox`
 //!
-//! These three traits map to the three `Fn` traits and reflect the fact that some templates need
+//! These three traits map to the four `Fn` traits and reflect the fact that some templates need
 //! exclusive access (`RenderMut`) in order to be rendered and others might even consume their
 //! environment (`RenderOnce`).
 //!
-//! In general, just import `RenderOnce` into your environment. `RenderOnce` is implemented on
-//! `&mut T where T: RenderMut` and `&T where T: Render` so you don't need the other traits
-//! in-scope to render. As a matter of fact, having the other traits in-scope is a bad idea because
-//! rust will have a hard time picking the right method.
+//! In general, just import `Template` into your environment (or import the prelude).
 //!
 //! ## Error Handling
 //!
 //! IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error
 //! occurs, template rendering will continue but no more data will be written and the original
-//! `render_fmt`/`render_io` call will return the error when rendering terminates.
+//! `write_to_fmt`/`write_to_io` call will return the error when rendering terminates.
 //!
 //! There is no way to abort template rendering other than panicing. Try to do everything that can
 //! fail before rendering a template.
@@ -137,6 +135,7 @@ pub use render::{
     RenderOnce,
     RenderMut,
     Render,
+    Template,
     RenderBox,
     Renderer,
     Raw,

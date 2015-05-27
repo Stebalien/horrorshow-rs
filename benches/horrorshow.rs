@@ -4,7 +4,7 @@ extern crate test;
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::RenderOnce;
+use horrorshow::Template;
 
 #[bench]
 fn bench(b: &mut test::Bencher) {
@@ -40,6 +40,6 @@ fn bench(b: &mut test::Bencher) {
                     p : "Easy!"
                 }
             }
-        }.render());
+        }.into_string());
     });
 }

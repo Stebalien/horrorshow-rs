@@ -1,4 +1,4 @@
-use render::{Render, RenderMut, RenderOnce};
+use render::RenderOnce;
 use std::fmt;
 use std::io;
 use std::ops::Shl;
@@ -25,7 +25,7 @@ impl<'a, 'b, T> Shl<T> for &'a mut TemplateBuilder<'b> where T: RenderOnce {
     /// Instead, no more data will be written to the template and horrorshow abort template
     /// rendering (return an error) when it re-gains control.
     fn shl(self, component: T) -> &'a mut TemplateBuilder<'b> {
-        component.render_tmpl(self);
+        component.render_once(self);
         self
     }
 }
@@ -44,9 +44,10 @@ enum TemplateWriter<'a> {
     }
 }
 
+/// Crate private
 pub fn render_fmt<R: RenderOnce>(render: R, w: &mut fmt::Write) -> fmt::Result {
     let mut builder = TemplateBuilder(TemplateWriter::Fmt { writer: w, error: None });
-    render.render_tmpl(&mut builder);
+    render.render_once(&mut builder);
     match builder.0 {
         TemplateWriter::Fmt { error: Some(e), .. } => Err(e),
         TemplateWriter::Fmt { error: None, .. } => Ok(()),
@@ -54,9 +55,10 @@ pub fn render_fmt<R: RenderOnce>(render: R, w: &mut fmt::Write) -> fmt::Result {
     }
 }
 
+/// Crate private
 pub fn render_io<R: RenderOnce>(render: R, w: &mut io::Write) -> io::Result<()> {
     let mut builder = TemplateBuilder(TemplateWriter::Io { writer: w, error: None });
-    render.render_tmpl(&mut builder);
+    render.render_once(&mut builder);
     match builder.0 {
         TemplateWriter::Io { error: Some(e), .. } => Err(e),
         TemplateWriter::Io { error: None, .. } => Ok(()),
@@ -64,9 +66,10 @@ pub fn render_io<R: RenderOnce>(render: R, w: &mut io::Write) -> io::Result<()> 
     }
 }
 
+/// Crate private
 pub fn render_string<R: RenderOnce>(render: R, w: &mut String) {
     let mut builder = TemplateBuilder(TemplateWriter::Str { writer: w });
-    render.render_tmpl(&mut builder);
+    render.render_once(&mut builder);
 }
 
 impl<'a> TemplateBuilder<'a> {

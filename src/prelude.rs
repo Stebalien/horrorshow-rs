@@ -1,1 +1,1 @@
-pub use ::RenderOnce;
+pub use ::Template;
