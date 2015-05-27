@@ -816,7 +816,7 @@
     <span class='kw'>fn</span> <span class='ident'>size_hint</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { <span class='number'>0</span> }
 }
 
-<span class='doccomment'>/// Something can be rendered by mutable reference.</span>
+<span class='doccomment'>/// Something that can be rendered by mutable reference.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>RenderMut</span>: <span class='ident'>RenderOnce</span> {
     <span class='doccomment'>/// Render this into a new String.</span>
     <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
