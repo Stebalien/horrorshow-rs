@@ -20,6 +20,20 @@ macro_rules! stringify_compressed {
     };
 }
 
+/// Mark a string as a raw. The string will not be rendered.
+#[macro_export]
+macro_rules! raw {
+    ($e:expr) => { $crate::Raw::new($e) }
+}
+
+// We shouldn't need this but without it I get the following error:
+// error: unexpected token: `an interpolated tt`
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __horrorshow_block_identity {
+    ($b:block) => { $b };
+}
+
 /// Append html to the current template.
 /// Don't call this manually.
 #[doc(hidden)]
