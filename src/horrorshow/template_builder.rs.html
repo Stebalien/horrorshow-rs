@@ -211,9 +211,6 @@
 <span id="169">169</span>
 <span id="170">170</span>
 <span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>render</span>::{<span class='ident'>Render</span>, <span class='ident'>RenderMut</span>, <span class='ident'>RenderOnce</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
@@ -261,19 +258,9 @@
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new_fmt</span>(<span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='ident'>TemplateBuilder</span> {
-    <span class='ident'>TemplateBuilder</span>(<span class='ident'>TemplateWriter</span>::<span class='ident'>Fmt</span> { <span class='ident'>writer</span>: <span class='ident'>w</span>, <span class='ident'>error</span>: <span class='prelude-val'>None</span> })
-}
-
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new_io</span>(<span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>io</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='ident'>TemplateBuilder</span> {
-    <span class='ident'>TemplateBuilder</span>(<span class='ident'>TemplateWriter</span>::<span class='ident'>Io</span> { <span class='ident'>writer</span>: <span class='ident'>w</span>, <span class='ident'>error</span>: <span class='prelude-val'>None</span> })
-}
-
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new_string</span>(<span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='ident'>TemplateBuilder</span> {
-    <span class='ident'>TemplateBuilder</span>(<span class='ident'>TemplateWriter</span>::<span class='ident'>Str</span> { <span class='ident'>writer</span>: <span class='ident'>w</span> })
-}
-
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>fmt_err</span>(<span class='ident'>builder</span>: <span class='ident'>TemplateBuilder</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>render_fmt</span><span class='op'>&lt;</span><span class='ident'>R</span>: <span class='ident'>RenderOnce</span><span class='op'>&gt;</span>(<span class='ident'>render</span>: <span class='ident'>R</span>, <span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>builder</span> <span class='op'>=</span> <span class='ident'>TemplateBuilder</span>(<span class='ident'>TemplateWriter</span>::<span class='ident'>Fmt</span> { <span class='ident'>writer</span>: <span class='ident'>w</span>, <span class='ident'>error</span>: <span class='prelude-val'>None</span> });
+    <span class='ident'>render</span>.<span class='ident'>render_tmpl</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>builder</span>);
     <span class='kw'>match</span> <span class='ident'>builder</span>.<span class='number'>0</span> {
         <span class='ident'>TemplateWriter</span>::<span class='ident'>Fmt</span> { <span class='ident'>error</span>: <span class='prelude-val'>Some</span>(<span class='ident'>e</span>), .. } <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>),
         <span class='ident'>TemplateWriter</span>::<span class='ident'>Fmt</span> { <span class='ident'>error</span>: <span class='prelude-val'>None</span>, .. } <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(()),
@@ -281,12 +268,19 @@
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>io_err</span>(<span class='ident'>builder</span>: <span class='ident'>TemplateBuilder</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>render_io</span><span class='op'>&lt;</span><span class='ident'>R</span>: <span class='ident'>RenderOnce</span><span class='op'>&gt;</span>(<span class='ident'>render</span>: <span class='ident'>R</span>, <span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>io</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>builder</span> <span class='op'>=</span> <span class='ident'>TemplateBuilder</span>(<span class='ident'>TemplateWriter</span>::<span class='ident'>Io</span> { <span class='ident'>writer</span>: <span class='ident'>w</span>, <span class='ident'>error</span>: <span class='prelude-val'>None</span> });
+    <span class='ident'>render</span>.<span class='ident'>render_tmpl</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>builder</span>);
     <span class='kw'>match</span> <span class='ident'>builder</span>.<span class='number'>0</span> {
         <span class='ident'>TemplateWriter</span>::<span class='ident'>Io</span> { <span class='ident'>error</span>: <span class='prelude-val'>Some</span>(<span class='ident'>e</span>), .. } <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>e</span>),
         <span class='ident'>TemplateWriter</span>::<span class='ident'>Io</span> { <span class='ident'>error</span>: <span class='prelude-val'>None</span>, .. } <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(()),
         _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(),
     }
+}
+
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>render_string</span><span class='op'>&lt;</span><span class='ident'>R</span>: <span class='ident'>RenderOnce</span><span class='op'>&gt;</span>(<span class='ident'>render</span>: <span class='ident'>R</span>, <span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>String</span>) {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>builder</span> <span class='op'>=</span> <span class='ident'>TemplateBuilder</span>(<span class='ident'>TemplateWriter</span>::<span class='ident'>Str</span> { <span class='ident'>writer</span>: <span class='ident'>w</span> });
+    <span class='ident'>render</span>.<span class='ident'>render_tmpl</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>builder</span>);
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>TemplateBuilder</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
