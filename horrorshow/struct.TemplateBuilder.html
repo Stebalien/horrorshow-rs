@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-787' class='srclink' href='../src/horrorshow/lib.rs.html#359' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-945' class='srclink' href='../src/horrorshow/lib.rs.html#444' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct TemplateBuilder&lt;'a&gt;(_);</pre><div class='docblock'><p>A template builder. This is the type that gets passed to closures inside templates.</p>
 
 <p>Example:</p>
@@ -65,7 +65,7 @@
 </code></pre>
 </div><h4 id='method.write_str' class='method'><code>fn <a href='#method.write_str' class='fnname'>write_str</a>(&amp;mut self, text: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></h4>
 <div class='docblock'><p>Escape and write a string to the template output.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'a, 'b, T&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Shl.html' title='core::ops::Shl'>Shl</a>&lt;T&gt; for &amp;'a mut <a class='struct' href='../horrorshow/struct.TemplateBuilder.html' title='horrorshow::TemplateBuilder'>TemplateBuilder</a>&lt;'b&gt; <span class='where'>where T: <a class='trait' href='../horrorshow/trait.TemplateComponent.html' title='horrorshow::TemplateComponent'>TemplateComponent</a></span></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><code>type Output = &amp;'a mut <a class='struct' href='../horrorshow/struct.TemplateBuilder.html' title='horrorshow::TemplateBuilder'>TemplateBuilder</a>&lt;'b&gt;</code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;'a, 'b, T&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Shl.html' title='core::ops::Shl'>Shl</a>&lt;T&gt; for &amp;'a mut <a class='struct' href='../horrorshow/struct.TemplateBuilder.html' title='horrorshow::TemplateBuilder'>TemplateBuilder</a>&lt;'b&gt; <span class='where'>where T: <a class='trait' href='../horrorshow/trait.RenderOnce.html' title='horrorshow::RenderOnce'>RenderOnce</a></span></code></h3><div class='impl-items'><h4 id='assoc_type.Output' class='type'><code>type Output = &amp;'a mut <a class='struct' href='../horrorshow/struct.TemplateBuilder.html' title='horrorshow::TemplateBuilder'>TemplateBuilder</a>&lt;'b&gt;</code></h4>
 <h4 id='method.shl' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/ops/trait.Shl.html#method.shl' class='fnname'>shl</a>(self, component: T) -&gt; &amp;'a mut <a class='struct' href='../horrorshow/struct.TemplateBuilder.html' title='horrorshow::TemplateBuilder'>TemplateBuilder</a>&lt;'b&gt;</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>

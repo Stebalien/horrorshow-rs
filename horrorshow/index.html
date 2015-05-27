@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-514' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-599' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -53,6 +53,7 @@
 
 <h2 id="example:" class='section-header'><a
                            href="#example:">Example:</a></h2><pre id='rust-example-rendered' class='rust '>
+<span class='kw'>use</span> <span class='ident'>horrorshow</span>::<span class='ident'>RenderOnce</span>;
 <span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>html</span><span class='macro'>!</span> {
     <span class='ident'>html</span> {
         <span class='ident'>head</span> {
@@ -139,6 +140,34 @@ result at the current position.</p></li>
 actually a closure so the block/expression can append to the current template through <code>tmpl</code>
 (of type <code>&amp;mut TemplateBuilder</code>).</p></li>
 </ul>
+
+<h2 id="traits,-traits-oh-my!" class='section-header'><a
+                           href="#traits,-traits-oh-my!">Traits, traits oh-my!</a></h2>
+<p>You will likely notice that there are three(!) render traits:</p>
+
+<ol>
+<li><code>RenderOnce</code></li>
+<li><code>RenderMut</code></li>
+<li><code>Render</code></li>
+</ol>
+
+<p>These three traits map to the three <code>Fn</code> traits and reflect the fact that some templates need
+exclusive access (<code>RenderMut</code>) in order to be rendered and others might even consume their
+environment (<code>RenderOnce</code>).</p>
+
+<p>In general, just import <code>RenderOnce</code> into your environment. <code>RenderOnce</code> is implemented on
+<code>&amp;mut T where T: RenderMut</code> and <code>&amp;T where T: Render</code> so you don&#39;t need the other traits
+in-scope to render. As a matter of fact, having the other traits in-scope is a bad idea because
+rust will have a hard time picking the right method.</p>
+
+<h2 id="error-handling" class='section-header'><a
+                           href="#error-handling">Error Handling</a></h2>
+<p>IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error
+occurs, template rendering will continue but no more data will be written and the original
+<code>render_fmt</code>/<code>render_io</code> call will return the error when rendering terminates.</p>
+
+<p>There is no way to abort template rendering other than panicing. Try to do everything that can
+fail before rendering a template.</p>
 </div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                     <tr class=' module-item'>
@@ -189,8 +218,26 @@ actually a closure so the block/expression can append to the current template th
                 </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='trait' href='trait.TemplateComponent.html'
-                               title='horrorshow::TemplateComponent'>TemplateComponent</a></td>
+                        <td><a class='trait' href='trait.Render.html'
+                               title='horrorshow::Render'>Render</a></td>
+                        <td class='docblock short'>
+                             <p>A component that can be appended to a template.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.RenderMut.html'
+                               title='horrorshow::RenderMut'>RenderMut</a></td>
+                        <td class='docblock short'>
+                             <p>A component that can be appended to a template.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='trait' href='trait.RenderOnce.html'
+                               title='horrorshow::RenderOnce'>RenderOnce</a></td>
                         <td class='docblock short'>
                              <p>A component that can be appended to a template.</p>
 
