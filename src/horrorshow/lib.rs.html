@@ -635,10 +635,6 @@
 <span id="593">593</span>
 <span id="594">594</span>
 <span id="595">595</span>
-<span id="596">596</span>
-<span id="597">597</span>
-<span id="598">598</span>
-<span id="599">599</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -776,9 +772,7 @@
 <span class='kw'>mod</span> <span class='ident'>html</span>;
 
 
-<span class='doccomment'>/// A component that can be appended to a template.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// RenderOnce&#39;s can only be rendered once.</span>
+<span class='doccomment'>/// Something that can be rendered once.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>RenderOnce</span>: <span class='ident'>Sized</span> {
     <span class='doccomment'>/// Render this into a new String.</span>
     <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
@@ -822,9 +816,7 @@
     <span class='kw'>fn</span> <span class='ident'>size_hint</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { <span class='number'>0</span> }
 }
 
-<span class='doccomment'>/// A component that can be appended to a template.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// RenderMut&#39;s need a mutable receiver to be rendered.</span>
+<span class='doccomment'>/// Something can be rendered by mutable reference.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>RenderMut</span>: <span class='ident'>RenderOnce</span> {
     <span class='doccomment'>/// Render this into a new String.</span>
     <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
@@ -865,7 +857,7 @@
     <span class='kw'>fn</span> <span class='ident'>render_tmpl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>);
 }
 
-<span class='doccomment'>/// A component that can be appended to a template.</span>
+<span class='doccomment'>/// Something that can be rendered by reference.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Render</span>: <span class='ident'>RenderMut</span> {
     <span class='doccomment'>/// Render this into a new String.</span>
     <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
