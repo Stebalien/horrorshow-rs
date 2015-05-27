@@ -1,4 +1,4 @@
-use render::RenderOnce;
+use render::{Render, RenderMut, RenderOnce};
 use std::fmt;
 use std::io;
 use std::ops::Shl;
@@ -44,7 +44,7 @@ enum TemplateWriter<'a> {
     }
 }
 
-pub fn render_fmt<T: RenderOnce>(render: T, w: &mut fmt::Write) -> fmt::Result {
+pub fn render_fmt<R: RenderOnce>(render: R, w: &mut fmt::Write) -> fmt::Result {
     let mut builder = TemplateBuilder(TemplateWriter::Fmt { writer: w, error: None });
     render.render_tmpl(&mut builder);
     match builder.0 {
@@ -54,7 +54,7 @@ pub fn render_fmt<T: RenderOnce>(render: T, w: &mut fmt::Write) -> fmt::Result {
     }
 }
 
-pub fn render_io<T: RenderOnce>(render: T, w: &mut io::Write) -> io::Result<()> {
+pub fn render_io<R: RenderOnce>(render: R, w: &mut io::Write) -> io::Result<()> {
     let mut builder = TemplateBuilder(TemplateWriter::Io { writer: w, error: None });
     render.render_tmpl(&mut builder);
     match builder.0 {
@@ -64,7 +64,7 @@ pub fn render_io<T: RenderOnce>(render: T, w: &mut io::Write) -> io::Result<()> 
     }
 }
 
-pub fn render_string<T: RenderOnce>(render: T, w: &mut String) {
+pub fn render_string<R: RenderOnce>(render: R, w: &mut String) {
     let mut builder = TemplateBuilder(TemplateWriter::Str { writer: w });
     render.render_tmpl(&mut builder);
 }

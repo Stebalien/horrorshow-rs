@@ -4,9 +4,9 @@ use std::io;
 use template_builder::{self, TemplateBuilder};
 
 /// Something that can be rendered once.
-pub trait RenderOnce: Sized {
+pub trait RenderOnce {
     /// Render this into a new String.
-    fn render(self) -> String {
+    fn render(self) -> String where Self: Sized {
         let mut string = String::with_capacity(self.size_hint());
         self.render_string(&mut string);
         string
@@ -15,14 +15,14 @@ pub trait RenderOnce: Sized {
     /// Render this into an existing String.
     ///
     /// Note: You could also use render_into_fmt but this is noticeably faster.
-    fn render_string(self, string: &mut String) {
+    fn render_string(self, string: &mut String) where Self: Sized {
         template_builder::render_string(self, string)
     }
 
     /// Render this into something that implements fmt::Write.
     /// 
     /// Renderer also implements Display but that's about twice as slow...
-    fn render_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
+    fn render_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> where Self: Sized {
         template_builder::render_fmt(self, writer)
     }
 
@@ -31,12 +31,12 @@ pub trait RenderOnce: Sized {
     /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
     /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
     /// system calls.
-    fn render_io(self, writer: &mut io::Write) -> Result<(), io::Error> {
+    fn render_io(self, writer: &mut io::Write) -> Result<(), io::Error> where Self: Sized {
         template_builder::render_io(self, writer)
     }
 
     /// Render this into a template builder.
-    fn render_tmpl<'a>(self, tmpl: &mut TemplateBuilder<'a>);
+    fn render_tmpl<'a>(self, tmpl: &mut TemplateBuilder<'a>) where Self: Sized;
 
     /// Yields a hint at how many bytes this component use.
     fn size_hint<'a>(&self) -> usize { 0 }
@@ -185,7 +185,7 @@ impl<S> Raw<S> where S: AsRef<str> {
     }
 }
 
-impl<'a, T> RenderOnce for &'a mut T where T: RenderMut {
+impl<'a, T: ?Sized> RenderOnce for &'a mut T where T: RenderMut {
     fn render_tmpl(self, tmpl: &mut TemplateBuilder) {
         RenderMut::render_tmpl(self, tmpl)
     }
@@ -194,7 +194,7 @@ impl<'a, T> RenderOnce for &'a mut T where T: RenderMut {
     }
 }
 
-impl<'a, T> RenderOnce for &'a T where T: Render {
+impl<'a, T: ?Sized> RenderOnce for &'a T where T: Render {
     fn render_tmpl(self, tmpl: &mut TemplateBuilder) {
         Render::render_tmpl(self, tmpl)
     }
