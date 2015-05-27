@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["TemplateBuilder","A template builder. This is the type that gets passed to closures inside templates."]]});
