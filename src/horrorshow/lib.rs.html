@@ -187,6 +187,8 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -318,14 +320,16 @@
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>mod</span> <span class='ident'>macros</span>;
 
-<span class='kw'>mod</span> <span class='ident'>template_builder</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template_builder</span>::<span class='ident'>TemplateBuilder</span>;
+<span class='kw'>mod</span> <span class='ident'>template</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template</span>::{
+    <span class='ident'>TemplateBuilder</span>,
+    <span class='ident'>Template</span>,
+};
 <span class='kw'>mod</span> <span class='ident'>render</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>render</span>::{
     <span class='ident'>RenderOnce</span>,
     <span class='ident'>RenderMut</span>,
     <span class='ident'>Render</span>,
-    <span class='ident'>Template</span>,
     <span class='ident'>RenderBox</span>,
     <span class='ident'>Renderer</span>,
     <span class='ident'>Raw</span>,

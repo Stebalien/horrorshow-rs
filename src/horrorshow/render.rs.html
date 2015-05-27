@@ -283,80 +283,10 @@
 <span id="241">241</span>
 <span id="242">242</span>
 <span id="243">243</span>
-<span id="244">244</span>
-<span id="245">245</span>
-<span id="246">246</span>
-<span id="247">247</span>
-<span id="248">248</span>
-<span id="249">249</span>
-<span id="250">250</span>
-<span id="251">251</span>
-<span id="252">252</span>
-<span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
-<span id="259">259</span>
-<span id="260">260</span>
-<span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-<span id="266">266</span>
-<span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
 
-<span class='kw'>use</span> <span class='ident'>template_builder</span>::{<span class='self'>self</span>, <span class='ident'>TemplateBuilder</span>};
-
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Template</span>: <span class='ident'>RenderOnce</span> {
-    <span class='doccomment'>/// Render this into a new String.</span>
-    <span class='kw'>fn</span> <span class='ident'>into_string</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> <span class='kw'>where</span> <span class='kw'>Self</span>: <span class='ident'>Sized</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>string</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>with_capacity</span>(<span class='self'>self</span>.<span class='ident'>size_hint</span>());
-        <span class='self'>self</span>.<span class='ident'>write_to_string</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>string</span>);
-        <span class='ident'>string</span>
-    }
-
-    <span class='doccomment'>/// Render this into an existing String.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Note: You could also use render_into_fmt but this is noticeably faster.</span>
-    <span class='kw'>fn</span> <span class='ident'>write_to_string</span>(<span class='self'>self</span>, <span class='ident'>string</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>String</span>) <span class='kw'>where</span> <span class='kw'>Self</span>: <span class='ident'>Sized</span> {
-        <span class='ident'>template_builder</span>::<span class='ident'>render_string</span>(<span class='self'>self</span>, <span class='ident'>string</span>)
-    }
-
-    <span class='doccomment'>/// Render this into something that implements fmt::Write.</span>
-    <span class='doccomment'>/// </span>
-    <span class='doccomment'>/// Renderer also implements Display but that&#39;s about twice as slow...</span>
-    <span class='kw'>fn</span> <span class='ident'>write_to_fmt</span>(<span class='self'>self</span>, <span class='ident'>writer</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>fmt</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='kw'>Self</span>: <span class='ident'>Sized</span> {
-        <span class='ident'>template_builder</span>::<span class='ident'>render_fmt</span>(<span class='self'>self</span>, <span class='ident'>writer</span>)
-    }
-
-    <span class='doccomment'>/// Render this into something that implements io::Write.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Note: If you&#39;re writing directly to a file/socket etc., you should *seriously* consider</span>
-    <span class='doccomment'>/// wrapping your writer in a BufWriter. Otherwise, you&#39;ll end up making quite a few unnecessary</span>
-    <span class='doccomment'>/// system calls.</span>
-    <span class='kw'>fn</span> <span class='ident'>write_to_io</span>(<span class='self'>self</span>, <span class='ident'>writer</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>io</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>io</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='kw'>Self</span>: <span class='ident'>Sized</span> {
-        <span class='ident'>template_builder</span>::<span class='ident'>render_io</span>(<span class='self'>self</span>, <span class='ident'>writer</span>)
-    }
-}
-
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>RenderOnce</span> <span class='op'>+</span> ?<span class='ident'>Sized</span><span class='op'>&gt;</span> <span class='ident'>Template</span> <span class='kw'>for</span> <span class='ident'>T</span> { }
+<span class='kw'>use</span> <span class='ident'>template</span>::{<span class='ident'>TemplateBuilder</span>, <span class='ident'>Template</span>};
 
 <span class='doccomment'>/// Something that can be rendered once.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>RenderOnce</span> {
