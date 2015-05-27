@@ -2,5 +2,6 @@ language: rust
 rust:
   - nightly
   - beta
+  - stable
 before_script:
   - ./travis_setup.sh
