@@ -137,9 +137,11 @@ pub use render::{
     RenderOnce,
     RenderMut,
     Render,
+    RenderBox,
     Renderer,
     Raw,
     __new_renderer,
+    __new_boxed_renderer,
 };
 
 /// Traits that should always be imported.

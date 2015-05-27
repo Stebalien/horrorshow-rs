@@ -42,6 +42,58 @@ pub trait RenderOnce {
     fn size_hint<'a>(&self) -> usize { 0 }
 }
 
+/// Something that can be rendered once out of a box.
+pub trait RenderBox {
+    /// Do not call. Called by RenderOnce impl on Box<RenderBox>
+    #[doc(hidden)]
+    fn boxed_render_tmpl<'a>(self: Box<Self>, tmpl: &mut TemplateBuilder<'a>);
+
+    /// Do not call. Called by RenderOnce impl on Box<RenderBox>
+    #[doc(hidden)]
+    fn boxed_size_hint(&self) -> usize;
+}
+
+impl<T> RenderBox for T where T: RenderOnce {
+    fn boxed_render_tmpl<'a>(self: Box<T>, tmpl: &mut TemplateBuilder<'a>) {
+        (*self).render_tmpl(tmpl);
+    }
+
+    #[doc(hidden)]
+    fn boxed_size_hint(&self) -> usize {
+        RenderOnce::size_hint(self)
+    }
+}
+
+impl<'b> RenderOnce for Box<RenderBox + 'b> {
+    fn render_tmpl<'a>(self, tmpl: &mut TemplateBuilder<'a>) {
+        RenderBox::boxed_render_tmpl(self, tmpl);
+    }
+
+    fn size_hint(&self) -> usize {
+        RenderBox::boxed_size_hint(self)
+    }
+}
+
+impl<'b> RenderOnce for Box<Render + 'b> {
+    fn render_tmpl<'a>(self, tmpl: &mut TemplateBuilder<'a>) {
+        Render::render_tmpl(&*self, tmpl);
+    }
+
+    fn size_hint(&self) -> usize { 
+        Render::size_hint(&**self)
+    }
+}
+
+impl<'b> RenderOnce for Box<RenderMut + 'b> {
+    fn render_tmpl<'a>(mut self, tmpl: &mut TemplateBuilder<'a>) {
+        RenderMut::render_tmpl(&mut *self, tmpl);
+    }
+
+    fn size_hint(&self) -> usize { 
+        RenderMut::size_hint(&**self)
+    }
+}
+
 /// Something that can be rendered by mutable reference.
 pub trait RenderMut: RenderOnce {
     /// Render this into a new String.
@@ -169,6 +221,15 @@ pub fn __new_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: 
         renderer: f,
         expected_size: expected_size,
     }
+}
+
+/// Used by the `html! {}` macro
+#[doc(hidden)]
+pub fn __new_boxed_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: F) -> Box<Renderer<F>> {
+    Box::new(Renderer {
+        renderer: f,
+        expected_size: expected_size,
+    })
 }
 
 // }}}

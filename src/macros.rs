@@ -12,6 +12,20 @@ macro_rules! html {
     }}
 }
 
+/// Crate a new html template
+#[macro_export]
+macro_rules! box_html {
+    ($($inner:tt)*) => {{
+        // Define this up here to prevent rust from saying:
+        // Hey look, it's an FnOnce (this could be Fn/FnMut).
+        let f = move |tmpl: &mut $crate::TemplateBuilder| -> () {
+            __append_html!(tmpl, $($inner)*);
+        };
+        // Stringify the template content to get a hint at how much we should allocate...
+        $crate::__new_boxed_renderer(stringify!($($inner)*).len(), f)
+    }}
+}
+
 #[doc(hidden)]
 #[macro_export]
 macro_rules! stringify_compressed {
