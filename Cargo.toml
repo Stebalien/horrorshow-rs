@@ -4,6 +4,11 @@ description = "a templating library written in rust macros"
 version = "0.3.0"
 authors = ["Steven Allen <steven@stebalien.com>"]
 
+documentation = "https://stebalien.github.io/horrorshow-rs/horrorshow/"
+repository = "https://github.com/Stebalien/horrorshow-rs"
+keywords = ["html", "template"]
+license = "MIT/Apache-2.0"
+
 [dev-dependencies]
 maud = "*"
 maud_macros = "*"
