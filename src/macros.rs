@@ -88,31 +88,31 @@ macro_rules! __horrorshow_block_identity {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __append_attrs {
-    ($tmpl:ident, $($($attr:ident)-+):+ = #{$($fmt_value:tt)+}, $($rest:tt)+) => {{
+    ($tmpl:ident, $($($attr:ident)-+):+ = #{$($fmt_value:tt)+}, $($rest:tt)+) => {
         __append_attrs!($tmpl, $($($attr)-+):+ = #{$($fmt_value)+});
         __append_attrs!($tmpl, $($rest)+);
-    }};
-    ($tmpl:ident, $($($attr:ident)-+):+ = #{$($fmt:tt)+}) => {{
+    };
+    ($tmpl:ident, $($($attr:ident)-+):+ = #{$($fmt:tt)+}) => {
         $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+), "=\""));
         write!($tmpl, $($fmt)*);
         $tmpl.write_raw("\"");
-    }};
-    ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr, $($rest:tt)+) => {{
+    };
+    ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr, $($rest:tt)+) => {
         __append_attrs!($tmpl, $($($attr)-+):+ = $value);
         __append_attrs!($tmpl, $($rest)+);
-    }};
-    ($tmpl:ident, $($($attr:ident)-+):+, $($rest:tt)+) => {{
+    };
+    ($tmpl:ident, $($($attr:ident)-+):+, $($rest:tt)+) => {
         __append_attrs!($tmpl, $($($attr)-+):+);
         __append_attrs!($tmpl, $($rest)+);
-    }};
-    ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr) => {{
+    };
+    ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr) => {
         $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+), "=\""));
         $crate::RenderOnce::render_once($value, $tmpl);
         $tmpl.write_raw("\"");
-    }};
-    ($tmpl:ident, $($($attr:ident)-+):+) => {{
+    };
+    ($tmpl:ident, $($($attr:ident)-+):+) => {
         $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+)));
-    }};
+    };
 
 }
 
@@ -121,101 +121,101 @@ macro_rules! __append_attrs {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __append_html {
-    ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {{
+    ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {
         $crate::RenderOnce::render_once({$($code)*}, $tmpl);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, : $code:expr; $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, : $code:expr; $($next:tt)* ) => {
         $crate::RenderOnce::render_once($code, $tmpl);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, : $code:expr ) => {{
+    };
+    ($tmpl:ident, : $code:expr ) => {
         $crate::RenderOnce::render_once($code, $tmpl);
-    }};
-    ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {{
+    };
+    ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {
         (|$var: &mut $crate::TemplateBuilder| {
             __horrorshow_block_identity!({$($code)*})
         })($tmpl);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, |mut $var:ident| {$($code:tt)*} $($next:tt)*) => {{
+    };
+    ($tmpl:ident, |mut $var:ident| {$($code:tt)*} $($next:tt)*) => {
         (|mut $var: &mut $crate::TemplateBuilder| {
             __horrorshow_block_identity!({$($code)*})
         })($tmpl);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, |$var:ident| $code:stmt; $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, |$var:ident| $code:stmt; $($next:tt)* ) => {
         (|$var: &mut $crate::TemplateBuilder| {
             $code;
         })($tmpl);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, |mut $var:ident| $code:stmt; $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, |mut $var:ident| $code:stmt; $($next:tt)* ) => {
         (|mut $var: &mut $crate::TemplateBuilder| {
             $code;
         })($tmpl);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, |$var:ident| $code:stmt ) => {{
+    };
+    ($tmpl:ident, |$var:ident| $code:stmt ) => {
         (|$var: &mut $crate::TemplateBuilder| {
             $code;
         })($tmpl);
-    }};
-    ($tmpl:ident, |mut $var:ident| $code:stmt ) => {{
+    };
+    ($tmpl:ident, |mut $var:ident| $code:stmt ) => {
         (|mut $var: &mut $crate::TemplateBuilder| {
             $code;
         })($tmpl);
-    }};
-    ($tmpl:ident, #{$($tok:tt)+} $($next:tt)*) => {{
+    };
+    ($tmpl:ident, #{$($tok:tt)+} $($next:tt)*) => {
         write!($tmpl, $($tok)+);
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, $tag:ident($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, $tag:ident($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
         __append_attrs!($tmpl, $($attrs)+);
         $tmpl.write_raw(">");
         __append_html!($tmpl, $($children)*);
         $tmpl.write_raw(concat!("</", stringify!($tag), ">"));
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr; $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr; $($next:tt)* ) => {
         __append_html!($tmpl, $tag($($attr)+) { : $e; } $($next)* );
-    }};
-    ($tmpl:ident, $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next)* ) => {{
+    };
+    ($tmpl:ident, $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next)* ) => {
         __append_html!($tmpl, $tag($($attr)+) { : {$($code)*} } $($next)* );
-    }};
-    ($tmpl:ident, $tag:ident($($attrs:tt)+); $($next:tt)*) => {{
+    };
+    ($tmpl:ident, $tag:ident($($attrs:tt)+); $($next:tt)*) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
         __append_attrs!($tmpl, $($attrs)+);
         $tmpl.write_raw(" />");
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, $tag:ident($($attrs:tt)+)) => {{
+    };
+    ($tmpl:ident, $tag:ident($($attrs:tt)+)) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
         __append_attrs!($tmpl, $($attrs)+);
         $tmpl.write_raw(" />");
-    }};
-    ($tmpl:ident, $tag:ident { $($children:tt)* } $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, $tag:ident { $($children:tt)* } $($next:tt)* ) => {
         $tmpl.write_raw(concat!("<", stringify!($tag), ">"));
         __append_html!($tmpl, $($children)*);
         $tmpl.write_raw(concat!("</", stringify!($tag), ">"));
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, $tag:ident : $e:expr; $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, $tag:ident : $e:expr; $($next:tt)* ) => {
         __append_html!($tmpl, $tag { : $e; } $($next)* );
-    }};
-    ($tmpl:ident, $tag:ident : {$($code:tt)*} $($next:tt)* ) => {{
+    };
+    ($tmpl:ident, $tag:ident : {$($code:tt)*} $($next:tt)* ) => {
         __append_html!($tmpl, $tag { : {$($code)*} } $($next)* );
-    }};
-    ($tmpl:ident, $tag:ident; $($next:tt)*) => {{
+    };
+    ($tmpl:ident, $tag:ident; $($next:tt)*) => {
         $tmpl.write_raw(concat!("<", stringify!($tag), " />"));
         __append_html!($tmpl, $($next)*);
-    }};
-    ($tmpl:ident, $tag:ident : $e:expr) => {{
+    };
+    ($tmpl:ident, $tag:ident : $e:expr) => {
         __append_html!($tmpl, $tag { : $e; });
-    }};
-    ($tmpl:ident, $tag:ident) => {{
+    };
+    ($tmpl:ident, $tag:ident) => {
         $tmpl.write_raw(concat!("<", stringify!($tag), "/>"));
-    }};
+    };
     ($tmpl:ident,) => {};
 }
