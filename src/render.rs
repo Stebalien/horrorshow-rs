@@ -32,33 +32,66 @@ impl<T> RenderBox for T where T: RenderOnce {
     }
 }
 
+// Box<RenderBox>
+
 impl<'b> RenderOnce for Box<RenderBox + 'b> {
+    #[inline]
     fn render_once<'a>(self, tmpl: &mut TemplateBuilder<'a>) {
         RenderBox::render_box(self, tmpl);
     }
 
+    #[inline]
     fn size_hint(&self) -> usize {
         RenderBox::size_hint_box(self)
     }
 }
 
+// Box<RenderMut>
+
+impl<'b> RenderOnce for Box<RenderMut + 'b> {
+    #[inline]
+    fn render_once<'a>(mut self, tmpl: &mut TemplateBuilder<'a>) {
+        RenderMut::render_mut(&mut *self, tmpl);
+    }
+
+    #[inline]
+    fn size_hint(&self) -> usize { 
+        RenderMut::size_hint(&**self)
+    }
+}
+
+impl<'b> RenderMut for Box<RenderMut + 'b> {
+    #[inline]
+    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuilder<'a>) {
+        RenderMut::render_mut(&mut *self, tmpl);
+    }
+}
+
+// Box<Render>
+
 impl<'b> RenderOnce for Box<Render + 'b> {
+    #[inline]
     fn render_once<'a>(self, tmpl: &mut TemplateBuilder<'a>) {
         Render::render(&*self, tmpl);
     }
 
+    #[inline]
     fn size_hint(&self) -> usize { 
         Render::size_hint(&**self)
     }
 }
 
-impl<'b> RenderOnce for Box<RenderMut + 'b> {
-    fn render_once<'a>(mut self, tmpl: &mut TemplateBuilder<'a>) {
-        RenderMut::render_mut(&mut *self, tmpl);
+impl<'b> RenderMut for Box<Render + 'b> {
+    #[inline]
+    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuilder<'a>) {
+        Render::render(&*self, tmpl);
     }
+}
 
-    fn size_hint(&self) -> usize { 
-        RenderMut::size_hint(&**self)
+impl<'b> Render for Box<Render + 'b> {
+    #[inline]
+    fn render<'a>(&self, tmpl: &mut TemplateBuilder<'a>) {
+        Render::render(&*self, tmpl);
     }
 }
 
