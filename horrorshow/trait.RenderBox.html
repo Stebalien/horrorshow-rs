@@ -45,8 +45,13 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-802' class='srclink' href='../src/horrorshow/render.rs.html#50-58' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-802' class='srclink' href='../src/horrorshow/render.rs.html#55-63' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait RenderBox { }</pre><div class='docblock'><p>Something that can be rendered once out of a box.</p>
+
+<p>This should only ever be used in the form <code>Box&lt;RenderBox&gt;</code> by casting <code>Box&lt;RenderOnce&gt;</code> to
+<code>Box&lt;RenderBox&gt;</code>. This trait has methods but I&#39;ve hidden them because you should never call
+them directly.  Instead, you should call the <code>RenderOnce</code> methods implemented on
+<code>Box&lt;RenderBox&gt;</code>.</p>
 </div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
