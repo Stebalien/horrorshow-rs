@@ -7,8 +7,8 @@ pub trait RenderOnce {
     /// Render this into a template builder.
     fn render_once<'a>(self, tmpl: &mut TemplateBuilder<'a>) where Self: Sized;
 
-    /// Yields a hint at how many bytes this component use.
-    fn size_hint<'a>(&self) -> usize { 0 }
+    /// Returns a (very) rough estimate of how many bytes this Render will use.
+    fn size_hint(&self) -> usize { 0 }
 }
 
 /// Something that can be rendered once out of a box.
