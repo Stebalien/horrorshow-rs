@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-1964' class='srclink' href='../src/horrorshow/macros.rs.html#52-62' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-1966' class='srclink' href='../src/horrorshow/macros.rs.html#52-62' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>box_html</span> {
     ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
@@ -66,7 +66,7 @@ from a function, use this.</p>
 
 <p>Example:</p>
 <pre id='rust-example-rendered' class='rust '>
- 
+
 <span class='kw'>fn</span> <span class='ident'>post</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>title</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>horrorshow</span>::<span class='ident'>RenderBox</span> <span class='op'>+</span> <span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
     <span class='macro'>box_html</span><span class='macro'>!</span> {
         <span class='ident'>article</span> {

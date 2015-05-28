@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-152' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-136' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -91,36 +91,32 @@
     }
 }.<span class='ident'>into_string</span>();
 
-<span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;
+<span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;\
+&lt;html&gt;\
+  &lt;head&gt;\
+    &lt;title&gt;Hello world!&lt;/title&gt;\
+  &lt;/head&gt;\
+  &lt;body&gt;\
+    &lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;\
+    &lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;\
+    &lt;ol id=\&quot;count\&quot;&gt;\
+      &lt;li&gt;1&lt;/li&gt;\
+      &lt;li&gt;2&lt;/li&gt;\
+      &lt;li&gt;3&lt;/li&gt;\
+      &lt;li&gt;4&lt;/li&gt;\
+      &lt;li&gt;5&lt;/li&gt;\
+      &lt;li&gt;6&lt;/li&gt;\
+      &lt;li&gt;7&lt;/li&gt;\
+      &lt;li&gt;8&lt;/li&gt;\
+      &lt;li&gt;9&lt;/li&gt;\
+      &lt;li&gt;10&lt;/li&gt;\
+    &lt;/ol&gt;\
+    &lt;br /&gt;&lt;br /&gt;\
+    &lt;p&gt;Easy!&lt;/p&gt;\
+  &lt;/body&gt;\
+&lt;/html&gt;&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
 </pre>
-
-<p>Or cleaned up:</p>
-
-<pre><code class="language-html">&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;Hello world!&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;h1 id=&quot;heading&quot;&gt;Hello!&lt;/h1&gt;
-    &lt;p&gt;Let&#39;s count to 10!&lt;/p&gt;
-    &lt;ol id=&quot;count&quot;&gt;
-      &lt;li&gt;1&lt;/li&gt;
-      &lt;li&gt;2&lt;/li&gt;
-      &lt;li&gt;3&lt;/li&gt;
-      &lt;li&gt;4&lt;/li&gt;
-      &lt;li&gt;5&lt;/li&gt;
-      &lt;li&gt;6&lt;/li&gt;
-      &lt;li&gt;7&lt;/li&gt;
-      &lt;li&gt;8&lt;/li&gt;
-      &lt;li&gt;9&lt;/li&gt;
-      &lt;li&gt;10&lt;/li&gt;
-    &lt;/ol&gt;
-    &lt;br /&gt;&lt;br /&gt;
-    &lt;p&gt;Easy!&lt;/p&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
 
 <h2 id="usage" class='section-header'><a
                            href="#usage">Usage</a></h2>
@@ -134,8 +130,8 @@ attributes. The attribute values will be evaluated as rust expressions at runtim
 <li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result
 current position. To insert literal html, mark it as raw with the <code>raw!</code> macro.</p></li>
-<li><p><code>#{&quot;format_str&quot;, rust_expressions... }</code> -- Format the arguments according to <code>format_str</code> and insert the
-result at the current position.</p></li>
+<li><p><code>#{&quot;format_str&quot;, rust_expressions... }</code> -- Format the arguments according to <code>format_str</code> and
+insert the result at the current position.</p></li>
 <li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
 actually a closure so the block/expression can append to the current template through <code>tmpl</code>
 (of type <code>&amp;mut TemplateBuilder</code>).</p></li>

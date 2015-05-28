@@ -240,6 +240,8 @@
 <span id="198">198</span>
 <span id="199">199</span>
 <span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
 </pre><pre class='rust '>
 <span class='doccomment'>/// Crate a new html template</span>
 <span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
@@ -265,7 +267,7 @@
 <span class='doccomment'>/// ```rust</span>
 <span class='doccomment'>/// # #[macro_use]</span>
 <span class='doccomment'>/// # extern crate horrorshow;</span>
-<span class='doccomment'>/// </span>
+<span class='doccomment'>///</span>
 <span class='doccomment'>/// # fn main() {</span>
 <span class='doccomment'>/// fn post&lt;&#39;a&gt;(title: &amp;&#39;a str) -&gt; Box&lt;horrorshow::RenderBox + &#39;a&gt; {</span>
 <span class='doccomment'>///     box_html! {</span>
@@ -380,7 +382,9 @@
         <span class='macro'>write</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tok</span>)<span class='op'>+</span>);
         <span class='macro'>__append_html</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>)<span class='op'>*</span>);
     }};
-    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>:<span class='ident'>ident</span>($($($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>:<span class='ident'>ident</span>)<span class='op'>-</span><span class='op'>+</span>):<span class='op'>+</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>:<span class='ident'>expr</span>),<span class='op'>+</span>) { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>children</span>:<span class='ident'>tt</span>)<span class='op'>*</span> } $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>:<span class='ident'>ident</span>($($($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>:<span class='ident'>ident</span>)<span class='op'>-</span><span class='op'>+</span>):<span class='op'>+</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>value</span>:<span class='ident'>expr</span>),<span class='op'>+</span>) {
+        $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>children</span>:<span class='ident'>tt</span>)<span class='op'>*</span>
+    } $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>next</span>:<span class='ident'>tt</span>)<span class='op'>*</span> ) <span class='op'>=&gt;</span> {{
         <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_raw</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot;&lt;&quot;</span>, <span class='macro'>stringify</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tag</span>)));
         $(
             <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>.<span class='ident'>write_raw</span>(<span class='macro'>concat</span><span class='macro'>!</span>(<span class='string'>&quot; &quot;</span>, <span class='macro'>stringify_compressed</span><span class='macro'>!</span>($($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>attr</span>)<span class='op'>-</span><span class='op'>+</span>):<span class='op'>+</span>), <span class='string'>&quot;=\&quot;&quot;</span>));

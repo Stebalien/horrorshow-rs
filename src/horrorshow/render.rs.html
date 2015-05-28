@@ -341,6 +341,9 @@
 <span id="299">299</span>
 <span id="300">300</span>
 <span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Deref</span>;
@@ -369,7 +372,7 @@
     <span class='kw'>fn</span> <span class='ident'>render</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>);
 }
 
-<span class='comment'>// RenderOnce is the trait we really care about. </span>
+<span class='comment'>// RenderOnce is the trait we really care about.</span>
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span>: ?<span class='ident'>Sized</span><span class='op'>&gt;</span> <span class='ident'>RenderOnce</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>T</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>RenderMut</span> {
     <span class='kw'>fn</span> <span class='ident'>render_once</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
@@ -441,7 +444,7 @@
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { 
+    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
         <span class='ident'>RenderMut</span>::<span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='op'>*</span><span class='self'>self</span>)
     }
 }
@@ -462,7 +465,7 @@
     }
 
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { 
+    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
         <span class='ident'>Render</span>::<span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='op'>*</span><span class='self'>self</span>)
     }
 }
@@ -531,7 +534,9 @@
 
 <span class='doccomment'>/// Used by the `html! {}` macro</span>
 <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__new_renderer</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>)<span class='op'>&gt;</span>(<span class='ident'>expected_size</span>: <span class='ident'>usize</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__new_renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='ident'>expected_size</span>: <span class='ident'>usize</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>
+    <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>)
+{
     <span class='ident'>Renderer</span> {
         <span class='ident'>renderer</span>: <span class='ident'>f</span>,
         <span class='ident'>expected_size</span>: <span class='ident'>expected_size</span>,
@@ -540,7 +545,9 @@
 
 <span class='doccomment'>/// Used by the `html! {}` macro</span>
 <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__new_boxed_renderer</span><span class='op'>&lt;</span><span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>)<span class='op'>&gt;</span>(<span class='ident'>expected_size</span>: <span class='ident'>usize</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;&gt;</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>__new_boxed_renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='ident'>expected_size</span>: <span class='ident'>usize</span>, <span class='ident'>f</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Renderer</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;&gt;</span>
+    <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>)
+{
     <span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>Renderer</span> {
         <span class='ident'>renderer</span>: <span class='ident'>f</span>,
         <span class='ident'>expected_size</span>: <span class='ident'>expected_size</span>,
@@ -642,7 +649,6 @@
         <span class='ident'>tmpl</span>.<span class='ident'>write_str</span>(<span class='self'>self</span>)
     }
 }
-
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

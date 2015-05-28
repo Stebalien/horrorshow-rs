@@ -176,22 +176,6 @@
 <span id="134">134</span>
 <span id="135">135</span>
 <span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -240,38 +224,33 @@
 <span class='doccomment'>//!     }</span>
 <span class='doccomment'>//! }.into_string();</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! let expected = &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello world!&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;&lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;&lt;ol id=\&quot;count\&quot;&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;li&gt;5&lt;/li&gt;&lt;li&gt;6&lt;/li&gt;&lt;li&gt;7&lt;/li&gt;&lt;li&gt;8&lt;/li&gt;&lt;li&gt;9&lt;/li&gt;&lt;li&gt;10&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Easy!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;;</span>
+<span class='doccomment'>//! let expected = &quot;\</span>
+<span class='doccomment'>//! &lt;html&gt;\</span>
+<span class='doccomment'>//!   &lt;head&gt;\</span>
+<span class='doccomment'>//!     &lt;title&gt;Hello world!&lt;/title&gt;\</span>
+<span class='doccomment'>//!   &lt;/head&gt;\</span>
+<span class='doccomment'>//!   &lt;body&gt;\</span>
+<span class='doccomment'>//!     &lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;\</span>
+<span class='doccomment'>//!     &lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;\</span>
+<span class='doccomment'>//!     &lt;ol id=\&quot;count\&quot;&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;1&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;2&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;3&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;4&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;5&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;6&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;7&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;8&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;9&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li&gt;10&lt;/li&gt;\</span>
+<span class='doccomment'>//!     &lt;/ol&gt;\</span>
+<span class='doccomment'>//!     &lt;br /&gt;&lt;br /&gt;\</span>
+<span class='doccomment'>//!     &lt;p&gt;Easy!&lt;/p&gt;\</span>
+<span class='doccomment'>//!   &lt;/body&gt;\</span>
+<span class='doccomment'>//! &lt;/html&gt;&quot;;</span>
 <span class='doccomment'>//! assert_eq!(expected, actual);</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! # }</span>
-<span class='doccomment'>//! ```</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! Or cleaned up:</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! ```html</span>
-<span class='doccomment'>//! &lt;html&gt;</span>
-<span class='doccomment'>//!   &lt;head&gt;</span>
-<span class='doccomment'>//!     &lt;title&gt;Hello world!&lt;/title&gt;</span>
-<span class='doccomment'>//!   &lt;/head&gt;</span>
-<span class='doccomment'>//!   &lt;body&gt;</span>
-<span class='doccomment'>//!     &lt;h1 id=&quot;heading&quot;&gt;Hello!&lt;/h1&gt;</span>
-<span class='doccomment'>//!     &lt;p&gt;Let&#39;s count to 10!&lt;/p&gt;</span>
-<span class='doccomment'>//!     &lt;ol id=&quot;count&quot;&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;1&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;2&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;3&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;4&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;5&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;6&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;7&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;8&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;9&lt;/li&gt;</span>
-<span class='doccomment'>//!       &lt;li&gt;10&lt;/li&gt;</span>
-<span class='doccomment'>//!     &lt;/ol&gt;</span>
-<span class='doccomment'>//!     &lt;br /&gt;&lt;br /&gt;</span>
-<span class='doccomment'>//!     &lt;p&gt;Easy!&lt;/p&gt;</span>
-<span class='doccomment'>//!   &lt;/body&gt;</span>
-<span class='doccomment'>//! &lt;/html&gt;</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Usage</span>
@@ -290,8 +269,8 @@
 <span class='doccomment'>//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result</span>
 <span class='doccomment'>//! current position. To insert literal html, mark it as raw with the `raw!` macro.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! * `#{&quot;format_str&quot;, rust_expressions... }` -- Format the arguments according to `format_str` and insert the</span>
-<span class='doccomment'>//! result at the current position.</span>
+<span class='doccomment'>//! * `#{&quot;format_str&quot;, rust_expressions... }` -- Format the arguments according to `format_str` and</span>
+<span class='doccomment'>//! insert the result at the current position.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is</span>
 <span class='doccomment'>//! actually a closure so the block/expression can append to the current template through `tmpl`</span>
@@ -327,21 +306,10 @@
 <span class='kw'>mod</span> <span class='ident'>ops</span>;
 
 <span class='kw'>mod</span> <span class='ident'>template</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template</span>::{
-    <span class='ident'>TemplateBuilder</span>,
-    <span class='ident'>Template</span>,
-};
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template</span>::{<span class='ident'>TemplateBuilder</span>, <span class='ident'>Template</span>};
 <span class='kw'>mod</span> <span class='ident'>render</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>render</span>::{
-    <span class='ident'>RenderOnce</span>,
-    <span class='ident'>RenderMut</span>,
-    <span class='ident'>Render</span>,
-    <span class='ident'>RenderBox</span>,
-    <span class='ident'>Renderer</span>,
-    <span class='ident'>Raw</span>,
-    <span class='ident'>__new_renderer</span>,
-    <span class='ident'>__new_boxed_renderer</span>,
-};
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>render</span>::{<span class='ident'>RenderOnce</span>, <span class='ident'>RenderMut</span>, <span class='ident'>Render</span>, <span class='ident'>RenderBox</span>, <span class='ident'>Renderer</span>, <span class='ident'>Raw</span>,
+                 <span class='ident'>__new_renderer</span>, <span class='ident'>__new_boxed_renderer</span>};
 
 <span class='doccomment'>/// Traits that should always be imported.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>prelude</span>;
