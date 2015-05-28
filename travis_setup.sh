@@ -1,4 +1,4 @@
+awk '!(/# target: / && !/\<'$TRAVIS_RUST_VERSION'\>/) { print($0); }' Cargo.toml | sponge Cargo.toml
 if [ ! "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-    cp Cargo-stable.toml Cargo.toml
     rm -r benches
 fi
