@@ -1,4 +1,5 @@
 use std::fmt;
+use std::ops::Deref;
 
 use template::{TemplateBuilder, Template};
 
@@ -207,7 +208,17 @@ pub fn __new_boxed_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usiz
 /// Raw content marker.
 ///
 /// When rendered, raw content will not be escaped.
+#[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
 pub struct Raw<S: AsRef<str>>(S);
+
+impl<S> Deref for Raw<S> where S: AsRef<str> {
+    type Target = S;
+    fn deref(&self) -> &S {
+        &self.0
+    }
+}
+
+// No DerefMut for safety. Once you mark something as Raw, don't change it.
 
 impl<S> Raw<S> where S: AsRef<str> {
     /// Mark as raw.
