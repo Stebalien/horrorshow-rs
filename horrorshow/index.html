@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-136' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-141' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -125,7 +125,10 @@
 <ul>
 <li><p><code>some_tag;</code> -- Insert a the tag <code>some_tag</code>.</p></li>
 <li><p><code>some_tag(attr=rust_expresion,...);</code> -- Insert a the tag <code>some_tag</code> with the specified
-attributes. The attribute values will be evaluated as rust expressions at runtime.</p></li>
+attributes. The attribute values will be evaluated as rust expressions at runtime and they
+must implement RenderOnce (already implemented on &amp;str, String, other templates, etc.).</p></li>
+<li><p><code>some_tag(attr,...);</code> -- You can also omit the value.</p></li>
+<li><p><code>some_tag(attr=#{&quot;{}&quot;, 1},...);</code> -- You can also use format strings.</p></li>
 <li><p><code>some_tag { ... }</code> -- Insert the tag <code>some_tag</code> and recursively evaluate the <code>...</code>.</p></li>
 <li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result

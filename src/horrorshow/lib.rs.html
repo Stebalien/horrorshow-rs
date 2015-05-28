@@ -176,6 +176,11 @@
 <span id="134">134</span>
 <span id="135">135</span>
 <span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -260,7 +265,12 @@
 <span class='doccomment'>//! * `some_tag;` -- Insert a the tag `some_tag`.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag(attr=rust_expresion,...);` -- Insert a the tag `some_tag` with the specified</span>
-<span class='doccomment'>//!    attributes. The attribute values will be evaluated as rust expressions at runtime.</span>
+<span class='doccomment'>//!    attributes. The attribute values will be evaluated as rust expressions at runtime and they</span>
+<span class='doccomment'>//!    must implement RenderOnce (already implemented on &amp;str, String, other templates, etc.).</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * `some_tag(attr,...);` -- You can also omit the value.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * `some_tag(attr=#{&quot;{}&quot;, 1},...);` -- You can also use format strings.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag { ... }` -- Insert the tag `some_tag` and recursively evaluate the `...`.</span>
 <span class='doccomment'>//!</span>
