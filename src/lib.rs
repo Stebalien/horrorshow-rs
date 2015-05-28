@@ -128,6 +128,9 @@
 #[macro_use]
 mod macros;
 
+#[cfg(feature = "ops")]
+mod ops;
+
 mod template;
 pub use template::{
     TemplateBuilder,

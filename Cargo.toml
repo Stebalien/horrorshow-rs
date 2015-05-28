@@ -12,3 +12,7 @@ license = "MIT/Apache-2.0"
 [dev-dependencies]
 maud = "*"
 maud_macros = "*"
+
+[features]
+default = ["ops"]
+ops = []
