@@ -2,6 +2,7 @@ use std::fmt;
 
 use template::{TemplateBuilder, Template};
 
+
 /// Something that can be rendered once.
 pub trait RenderOnce {
     /// Render this into a template builder.
@@ -10,6 +11,40 @@ pub trait RenderOnce {
     /// Returns a (very) rough estimate of how many bytes this Render will use.
     fn size_hint(&self) -> usize { 0 }
 }
+
+/// Something that can be rendered by mutable reference.
+pub trait RenderMut: RenderOnce {
+    /// Render this into a template builder.
+    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuilder<'a>);
+}
+
+/// Something that can be rendered by reference.
+pub trait Render: RenderMut {
+    /// Render this into a template builder.
+    fn render<'a>(&self, tmpl: &mut TemplateBuilder<'a>);
+}
+
+// RenderOnce is the trait we really care about. 
+
+impl<'a, T: ?Sized> RenderOnce for &'a mut T where T: RenderMut {
+    fn render_once(self, tmpl: &mut TemplateBuilder) {
+        RenderMut::render_mut(self, tmpl)
+    }
+    fn size_hint(&self) -> usize {
+        (**self).size_hint()
+    }
+}
+
+impl<'a, T: ?Sized> RenderOnce for &'a T where T: Render {
+    fn render_once(self, tmpl: &mut TemplateBuilder) {
+        Render::render(self, tmpl)
+    }
+    fn size_hint(&self) -> usize {
+        (**self).size_hint()
+    }
+}
+
+// Box Stuff
 
 /// Something that can be rendered once out of a box.
 pub trait RenderBox {
@@ -21,6 +56,7 @@ pub trait RenderBox {
     #[doc(hidden)]
     fn size_hint_box(&self) -> usize;
 }
+
 
 impl<T> RenderBox for T where T: RenderOnce {
     fn render_box<'a>(self: Box<T>, tmpl: &mut TemplateBuilder<'a>) {
@@ -93,18 +129,6 @@ impl<'b> Render for Box<Render + 'b> {
     fn render<'a>(&self, tmpl: &mut TemplateBuilder<'a>) {
         Render::render(&*self, tmpl);
     }
-}
-
-/// Something that can be rendered by mutable reference.
-pub trait RenderMut: RenderOnce {
-    /// Render this into a template builder.
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuilder<'a>);
-}
-
-/// Something that can be rendered by reference.
-pub trait Render: RenderMut {
-    /// Render this into a template builder.
-    fn render<'a>(&self, tmpl: &mut TemplateBuilder<'a>);
 }
 
 // {{{ Renderer
@@ -184,24 +208,6 @@ impl<S> Raw<S> where S: AsRef<str> {
     /// Mark as raw.
     pub fn new(content: S) -> Raw<S> {
         Raw(content)
-    }
-}
-
-impl<'a, T: ?Sized> RenderOnce for &'a mut T where T: RenderMut {
-    fn render_once(self, tmpl: &mut TemplateBuilder) {
-        RenderMut::render_mut(self, tmpl)
-    }
-    fn size_hint(&self) -> usize {
-        (**self).size_hint()
-    }
-}
-
-impl<'a, T: ?Sized> RenderOnce for &'a T where T: Render {
-    fn render_once(self, tmpl: &mut TemplateBuilder) {
-        Render::render(self, tmpl)
-    }
-    fn size_hint(&self) -> usize {
-        (**self).size_hint()
     }
 }
 
