@@ -296,8 +296,8 @@
     <span class='doccomment'>/// Render this into a template builder.</span>
     <span class='kw'>fn</span> <span class='ident'>render_once</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>) <span class='kw'>where</span> <span class='kw'>Self</span>: <span class='ident'>Sized</span>;
 
-    <span class='doccomment'>/// Yields a hint at how many bytes this component use.</span>
-    <span class='kw'>fn</span> <span class='ident'>size_hint</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { <span class='number'>0</span> }
+    <span class='doccomment'>/// Returns a (very) rough estimate of how many bytes this Render will use.</span>
+    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> { <span class='number'>0</span> }
 }
 
 <span class='doccomment'>/// Something that can be rendered once out of a box.</span>
