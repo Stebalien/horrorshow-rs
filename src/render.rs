@@ -25,7 +25,7 @@ pub trait Render: RenderMut {
     fn render<'a>(&self, tmpl: &mut TemplateBuilder<'a>);
 }
 
-// RenderOnce is the trait we really care about. 
+// RenderOnce is the trait we really care about.
 
 impl<'a, T: ?Sized> RenderOnce for &'a mut T where T: RenderMut {
     fn render_once(self, tmpl: &mut TemplateBuilder) {
@@ -97,7 +97,7 @@ impl<'b> RenderOnce for Box<RenderMut + 'b> {
     }
 
     #[inline]
-    fn size_hint(&self) -> usize { 
+    fn size_hint(&self) -> usize {
         RenderMut::size_hint(&**self)
     }
 }
@@ -118,7 +118,7 @@ impl<'b> RenderOnce for Box<Render + 'b> {
     }
 
     #[inline]
-    fn size_hint(&self) -> usize { 
+    fn size_hint(&self) -> usize {
         Render::size_hint(&**self)
     }
 }
@@ -187,7 +187,9 @@ impl<F> fmt::Display for Renderer<F> where Renderer<F>: Render {
 
 /// Used by the `html! {}` macro
 #[doc(hidden)]
-pub fn __new_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: F) -> Renderer<F> {
+pub fn __new_renderer<F>(expected_size: usize, f: F) -> Renderer<F>
+    where F: FnOnce(&mut TemplateBuilder)
+{
     Renderer {
         renderer: f,
         expected_size: expected_size,
@@ -196,7 +198,9 @@ pub fn __new_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: 
 
 /// Used by the `html! {}` macro
 #[doc(hidden)]
-pub fn __new_boxed_renderer<F: FnOnce(&mut TemplateBuilder)>(expected_size: usize, f: F) -> Box<Renderer<F>> {
+pub fn __new_boxed_renderer<F>(expected_size: usize, f: F) -> Box<Renderer<F>>
+    where F: FnOnce(&mut TemplateBuilder)
+{
     Box::new(Renderer {
         renderer: f,
         expected_size: expected_size,
@@ -298,4 +302,3 @@ impl Render for String {
         tmpl.write_str(self)
     }
 }
-

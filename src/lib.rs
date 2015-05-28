@@ -45,38 +45,33 @@
 //!     }
 //! }.into_string();
 //!
-//! let expected = "<html><head><title>Hello world!</title></head><body><h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1><p>Let's <i>count</i> to 10!</p><ol id=\"count\"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li></ol><br /><br /><p>Easy!</p></body></html>";
+//! let expected = "\
+//! <html>\
+//!   <head>\
+//!     <title>Hello world!</title>\
+//!   </head>\
+//!   <body>\
+//!     <h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1>\
+//!     <p>Let's <i>count</i> to 10!</p>\
+//!     <ol id=\"count\">\
+//!       <li>1</li>\
+//!       <li>2</li>\
+//!       <li>3</li>\
+//!       <li>4</li>\
+//!       <li>5</li>\
+//!       <li>6</li>\
+//!       <li>7</li>\
+//!       <li>8</li>\
+//!       <li>9</li>\
+//!       <li>10</li>\
+//!     </ol>\
+//!     <br /><br />\
+//!     <p>Easy!</p>\
+//!   </body>\
+//! </html>";
 //! assert_eq!(expected, actual);
 //!
 //! # }
-//! ```
-//!
-//! Or cleaned up:
-//!
-//! ```html
-//! <html>
-//!   <head>
-//!     <title>Hello world!</title>
-//!   </head>
-//!   <body>
-//!     <h1 id="heading">Hello!</h1>
-//!     <p>Let's count to 10!</p>
-//!     <ol id="count">
-//!       <li>1</li>
-//!       <li>2</li>
-//!       <li>3</li>
-//!       <li>4</li>
-//!       <li>5</li>
-//!       <li>6</li>
-//!       <li>7</li>
-//!       <li>8</li>
-//!       <li>9</li>
-//!       <li>10</li>
-//!     </ol>
-//!     <br /><br />
-//!     <p>Easy!</p>
-//!   </body>
-//! </html>
 //! ```
 //!
 //! ## Usage
@@ -95,8 +90,8 @@
 //! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result
 //! current position. To insert literal html, mark it as raw with the `raw!` macro.
 //!
-//! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and insert the
-//! result at the current position.
+//! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and
+//! insert the result at the current position.
 //!
 //! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
 //! actually a closure so the block/expression can append to the current template through `tmpl`
@@ -132,21 +127,10 @@ mod macros;
 mod ops;
 
 mod template;
-pub use template::{
-    TemplateBuilder,
-    Template,
-};
+pub use template::{TemplateBuilder, Template};
 mod render;
-pub use render::{
-    RenderOnce,
-    RenderMut,
-    Render,
-    RenderBox,
-    Renderer,
-    Raw,
-    __new_renderer,
-    __new_boxed_renderer,
-};
+pub use render::{RenderOnce, RenderMut, Render, RenderBox, Renderer, Raw,
+                 __new_renderer, __new_boxed_renderer};
 
 /// Traits that should always be imported.
 pub mod prelude;

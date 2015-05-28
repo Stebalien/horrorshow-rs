@@ -22,7 +22,7 @@ macro_rules! html {
 /// ```rust
 /// # #[macro_use]
 /// # extern crate horrorshow;
-/// 
+///
 /// # fn main() {
 /// fn post<'a>(title: &'a str) -> Box<horrorshow::RenderBox + 'a> {
 ///     box_html! {
@@ -137,7 +137,9 @@ macro_rules! __append_html {
         write!($tmpl, $($tok)+);
         __append_html!($tmpl, $($next)*);
     }};
-    ($tmpl:ident, $tag:ident($($($($attr:ident)-+):+ = $value:expr),+) { $($children:tt)* } $($next:tt)* ) => {{
+    ($tmpl:ident, $tag:ident($($($($attr:ident)-+):+ = $value:expr),+) {
+        $($children:tt)*
+    } $($next:tt)* ) => {{
         $tmpl.write_raw(concat!("<", stringify!($tag)));
         $(
             $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+), "=\""));

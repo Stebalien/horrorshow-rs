@@ -23,7 +23,7 @@ pub trait Template: RenderOnce + Sized {
     }
 
     /// Render this into something that implements fmt::Write.
-    /// 
+    ///
     /// Renderer also implements Display but that's about twice as slow...
     fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), fmt::Error> {
         let mut builder = TemplateBuilder(TemplateWriter::Fmt { writer: writer, error: None });
@@ -158,7 +158,8 @@ impl<'a> fmt::Write for TemplateWriter<'a> {
                         '<' => writer.write_str("&lt;"),
                         '>' => writer.write_str("&gt;"),
                         _ => {
-                            // TODO: Use fmt::Write::write_char once beta stabalizes. This is very slow!
+                            // TODO: Use fmt::Write::write_char once beta stabalizes. This is very
+                            // slow!
                             s.push(c);
                             let r = writer.write_str(&s);
                             s.clear();
@@ -187,4 +188,3 @@ impl<'a> fmt::Write for TemplateWriter<'a> {
         Ok(())
     }
 }
-
