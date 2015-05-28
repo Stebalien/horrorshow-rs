@@ -85,7 +85,7 @@ enum TemplateWriter<'a> {
 impl<'a> TemplateBuilder<'a> {
 
     /// Write a raw string to the template output.
-    #[inline]
+    #[inline(always)]
     pub fn write_raw(&mut self, text: &str) {
         use self::TemplateWriter::*;
         use std::fmt::Write;
