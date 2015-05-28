@@ -49,6 +49,16 @@ fn test_attr_fmt() {
     }.into_string(), "<tag attr=\"1\" />");
 }
 
+#[test]
+fn test_option() {
+    assert_eq!(html! {
+        tag : Some("testing")
+    }.into_string(), "<tag>testing</tag>");
+
+    assert_eq!(html! {
+        tag : None::<&str>
+    }.into_string(), "<tag></tag>");
+}
 
 #[test]
 fn test_into_string_by_ref() {
