@@ -302,3 +302,27 @@ impl Render for String {
         tmpl.write_str(self)
     }
 }
+
+impl<T> RenderOnce for Option<T> where T: RenderOnce {
+    fn render_once(self, tmpl: &mut TemplateBuilder) {
+        if let Some(v) = self {
+            v.render_once(tmpl);
+        }
+    }
+}
+
+impl<T> RenderMut for Option<T> where T: RenderMut {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuilder) {
+        if let Some(v) = self.as_mut() {
+            v.render_mut(tmpl);
+        }
+    }
+}
+
+impl<T> Render for Option<T> where T: Render {
+    fn render(&self, tmpl: &mut TemplateBuilder) {
+        if let Some(v) = self.as_ref() {
+            v.render(tmpl);
+        }
+    }
+}
