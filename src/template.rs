@@ -91,15 +91,13 @@ impl<'a> TemplateBuilder<'a> {
         use std::fmt::Write;
         match self.0 {
             Io { ref mut writer, ref mut error } => {
-                if error.is_some() { return; }
-                if let Err(e) = writer.write_all(text.as_bytes()) {
-                    *error = Some(e);
+                if error.is_none() {
+                    *error = writer.write_all(text.as_bytes()).err();
                 }
             },
             Fmt {ref mut writer, ref mut error } => {
-                if error.is_some() { return; }
-                if let Err(e) = writer.write_str(text) {
-                    *error = Some(e);
+                if error.is_none() {
+                    *error = writer.write_str(text).err();
                 }
             },
             Str {ref mut writer } => {
