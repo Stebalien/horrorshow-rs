@@ -47,6 +47,11 @@ impl<'a, T: ?Sized> RenderOnce for &'a T where T: Render {
 // Box Stuff
 
 /// Something that can be rendered once out of a box.
+///
+/// This should only ever be used in the form `Box<RenderBox>` by casting `Box<RenderOnce>` to
+/// `Box<RenderBox>`. This trait has methods but I've hidden them because you should never call
+/// them directly.  Instead, you should call the `RenderOnce` methods implemented on
+/// `Box<RenderBox>`.
 pub trait RenderBox {
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>
     #[doc(hidden)]
