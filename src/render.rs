@@ -198,6 +198,8 @@ impl<'a> RenderOnce for &'a str {
     fn render_once(self, tmpl: &mut TemplateBuilder) {
         tmpl.write_str(self)
     }
+
+    #[inline]
     fn size_hint(&self) -> usize {
         self.len()
     }
@@ -222,6 +224,7 @@ impl RenderOnce for String {
     fn render_once(self, tmpl: &mut TemplateBuilder) {
         tmpl.write_str(&self)
     }
+    #[inline]
     fn size_hint(&self) -> usize {
         self.len()
     }

@@ -130,7 +130,6 @@ impl<'a> TemplateBuilder<'a> {
 }
 
 impl<'a> fmt::Write for TemplateWriter<'a> {
-    #[inline]
     fn write_str(&mut self, text: &str) -> fmt::Result {
         use self::TemplateWriter::*;
         match self {
