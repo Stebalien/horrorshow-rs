@@ -81,7 +81,12 @@
 //! * `some_tag;` -- Insert a the tag `some_tag`.
 //!
 //! * `some_tag(attr=rust_expresion,...);` -- Insert a the tag `some_tag` with the specified
-//!    attributes. The attribute values will be evaluated as rust expressions at runtime.
+//!    attributes. The attribute values will be evaluated as rust expressions at runtime and they
+//!    must implement RenderOnce (already implemented on &str, String, other templates, etc.).
+//!
+//! * `some_tag(attr,...);` -- You can also omit the value.
+//!
+//! * `some_tag(attr=#{"{}", 1},...);` -- You can also use format strings.
 //!
 //! * `some_tag { ... }` -- Insert the tag `some_tag` and recursively evaluate the `...`.
 //!

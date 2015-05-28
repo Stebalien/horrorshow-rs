@@ -33,6 +33,22 @@ fn test_dash() {
     }.into_string(), "<my_tag><inner data-test=\"abcde\" /></my_tag>");
 }
 
+#[test]
+fn test_attr_no_value() {
+    assert_eq!(html! {
+        my_tag {
+            inner(a="test", some_tag, other="1");
+        }
+    }.into_string(), "<my_tag><inner a=\"test\" some_tag other=\"1\" /></my_tag>");
+}
+
+#[test]
+fn test_attr_fmt() {
+    assert_eq!(html! {
+        tag(attr = #{"{}", 1});
+    }.into_string(), "<tag attr=\"1\" />");
+}
+
 
 #[test]
 fn test_into_string_by_ref() {
