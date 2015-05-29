@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-141' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-180' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -165,6 +165,41 @@ occurs, template rendering will continue but no more data will be written and th
 
 <p>There is no way to abort template rendering other than panicing. Try to do everything that can
 fail before rendering a template.</p>
+
+<h2 id="escaping" class='section-header'><a
+                           href="#escaping">Escaping</a></h2>
+<p>This library does HTML escaping by default. However, it doesn&#39;t do any javascript/URL escaping.
+Furthermore, it will do html escaping in any literal javascript you might include.</p>
+
+<p>For example, the following will display an alert:</p>
+
+<pre><code class="language-norun">html! {
+  script {
+    : &quot;alert(&#39;hello&#39;);&quot;
+  }
+}
+</code></pre>
+
+<p>The following will break due to html escaping (the <code>&quot;</code> will be escaped to <code>&amp;quot;</code>):</p>
+
+<pre><code class="language-norun">html! {
+  script {
+    : &#39;alert(&quot;hello&quot;);&#39;
+  }
+}
+</code></pre>
+
+<p>And the following will display as-is (but won&#39;t run any javascript) due to the HTML escaping:</p>
+
+<pre><code class="language-norun">html! {
+    : &#39;&lt;script&gt;alert(&quot;hello&quot;);&lt;/script&gt;&#39;
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code class="language-html">&amp;lt;script&amp;gt;alert(&amp;quot;hello&amp;quot;);&amp;lt;/script&amp;gt;
+</code></pre>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
