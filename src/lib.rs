@@ -125,6 +125,45 @@
 //!
 //! There is no way to abort template rendering other than panicing. Try to do everything that can
 //! fail before rendering a template.
+//!
+//! ## Escaping
+//!
+//! This library does HTML escaping by default. However, it doesn't do any javascript/URL escaping.
+//! Furthermore, it will do html escaping in any literal javascript you might include.
+//!
+//! For example, the following will display an alert:
+//!
+//! ```norun
+//! html! {
+//!   script {
+//!     : "alert('hello');"
+//!   }
+//! }
+//! ```
+//!
+//! The following will break due to html escaping (the `"` will be escaped to `&quot;`):
+//!
+//! ```norun
+//! html! {
+//!   script {
+//!     : 'alert("hello");'
+//!   }
+//! }
+//! ```
+//!
+//! And the following will display as-is (but won't run any javascript) due to the HTML escaping:
+//!
+//! ```norun
+//! html! {
+//!     : '<script>alert("hello");</script>'
+//! }
+//! ```
+//!
+//! Output:
+//!
+//! ```html
+//! &lt;script&gt;alert(&quot;hello&quot;);&lt;/script&gt;
+//! ```
 #[macro_use]
 mod macros;
 
