@@ -37,9 +37,20 @@ fn test_dash() {
 fn test_attr_no_value() {
     assert_eq!(html! {
         my_tag {
-            inner(a="test", some_tag, other="1");
+            inner(a="test", some_tag?, other="1");
         }
     }.into_string(), "<my_tag><inner a=\"test\" some_tag other=\"1\" /></my_tag>");
+}
+
+#[test]
+fn test_attr_boolean() {
+    assert_eq!(html! {
+        tag(flag?=true);
+    }.into_string(), "<tag flag />");
+
+    assert_eq!(html! {
+        tag(flag?=false);
+    }.into_string(), "<tag />");
 }
 
 #[test]
