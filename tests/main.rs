@@ -4,6 +4,25 @@ extern crate horrorshow;
 use horrorshow::Template;
 
 #[test]
+fn test_multi() {
+    assert_eq!(&html! {
+        html body p : "Some content";
+    }.into_string(), "<html><body><p>Some content</p></body></html>");
+
+    assert_eq!(&html! {
+        html(lang="en") body p : "Some content";
+    }.into_string(), "<html lang=\"en\"><body><p>Some content</p></body></html>");
+
+    assert_eq!(&html! {
+        html(lang="en") body p(id="test") : "Some content";
+    }.into_string(), "<html lang=\"en\"><body><p id=\"test\">Some content</p></body></html>");
+
+    assert_eq!(&html! {
+        html(lang="en") body(class="body") p(id="test") { : "Some content" }
+    }.into_string(), "<html lang=\"en\"><body class=\"body\"><p id=\"test\">Some content</p></body></html>");
+}
+
+#[test]
 fn test_reentrant() {
     assert_eq!(&html! {
         p {
