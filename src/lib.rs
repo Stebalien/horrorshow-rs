@@ -164,6 +164,97 @@
 //! ```html
 //! &lt;script&gt;alert(&quot;hello&quot;);&lt;/script&gt;
 //! ```
+//!
+//! ## Returning Templates
+//!
+//! To return a template directly, you have to create it using the `box_html!` macro instead of the
+//! `html!` macro. The template type will be one of `Box<RenderBox>` (can be rendered once),
+//! `Box<RenderMut>`, or `Box<Render>` depending on how the template affects its environment.
+//!
+//! ```
+//! #[macro_use]
+//! extern crate horrorshow;
+//!
+//! use horrorshow::{RenderOnce, RenderBox, RenderMut, Render};
+//!
+//! // Consume the environment
+//! fn identity<T: RenderOnce + 'static>(something: T) -> Box<RenderBox + 'static> {
+//!     box_html! {
+//!         : something
+//!     }
+//! }
+//!
+//! // Mutate the environment
+//! fn counter() -> Box<RenderMut> {
+//!     let mut counter = 0;
+//!     box_html! {
+//!         |t| {
+//!             write!(t, "{}", counter);
+//!             counter += 1;
+//!         }
+//!     }
+//! }
+//!
+//! // Borrow the environment.
+//! fn say_hello(name: String) -> Box<Render> {
+//!     let mut counter = 0;
+//!     box_html! {
+//!         span {
+//!             : "Hello ";
+//!             : &name;
+//!             : ".";
+//!         }
+//!     }
+//! }
+//!
+//! # fn main() {}
+//! ```
+//!
+//! *Note*: To avoid allocating, you can implement render manually instead of returning a boxed
+//! template:
+//!
+//! ```
+//! #[macro_use]
+//! extern crate horrorshow;
+//!
+//! use horrorshow::{RenderOnce, TemplateBuilder, Template};
+//!
+//! struct Page<C> {
+//!     title: String,
+//!     content: C,
+//! }
+//!
+//! impl Page<String> {
+//!     fn from_string_content(title: String, content: String) -> Self {
+//!         Page { title: title, content: content }
+//!     }
+//! }
+//!
+//! impl<C> RenderOnce for Page<C> where C: RenderOnce {
+//!     fn render_once(self, tmpl: &mut TemplateBuilder) {
+//!         let Page {title, content} = self;
+//!         // The actual template:
+//!         tmpl << html! {
+//!             article {
+//!                 header {
+//!                     h1 : title
+//!                 }
+//!                 section : content
+//!             }
+//!         };
+//!     }
+//! }
+//!
+//! fn main() {
+//!   let page = Page::from_string_content(String::from("My title"),
+//!                                        String::from("Some content."));
+//!   assert_eq!(page.into_string(),
+//!              "<article>\
+//!                 <header><h1>My title</h1></header>\
+//!                 <section>Some content.</section>\
+//!               </article>");
+//! }
+//! ```
 #[macro_use]
 mod macros;
 
