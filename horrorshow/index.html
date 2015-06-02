@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-180' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-271' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -200,6 +200,93 @@ Furthermore, it will do html escaping in any literal javascript you might includ
 
 <pre><code class="language-html">&amp;lt;script&amp;gt;alert(&amp;quot;hello&amp;quot;);&amp;lt;/script&amp;gt;
 </code></pre>
+
+<h2 id="returning-templates" class='section-header'><a
+                           href="#returning-templates">Returning Templates</a></h2>
+<p>To return a template directly, you have to create it using the <code>box_html!</code> macro instead of the
+<code>html!</code> macro. The template type will be one of <code>Box&lt;RenderBox&gt;</code> (can be rendered once),
+<code>Box&lt;RenderMut&gt;</code>, or <code>Box&lt;Render&gt;</code> depending on how the template affects its environment.</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;
+
+<span class='kw'>use</span> <span class='ident'>horrorshow</span>::{<span class='ident'>RenderOnce</span>, <span class='ident'>RenderBox</span>, <span class='ident'>RenderMut</span>, <span class='ident'>Render</span>};
+
+<span class='comment'>// Consume the environment</span>
+<span class='kw'>fn</span> <span class='ident'>identity</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>RenderOnce</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;</span>(<span class='ident'>something</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>RenderBox</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;</span> {
+    <span class='macro'>box_html</span><span class='macro'>!</span> {
+        : <span class='ident'>something</span>
+    }
+}
+
+<span class='comment'>// Mutate the environment</span>
+<span class='kw'>fn</span> <span class='ident'>counter</span>() <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>RenderMut</span><span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>counter</span> <span class='op'>=</span> <span class='number'>0</span>;
+    <span class='macro'>box_html</span><span class='macro'>!</span> {
+        <span class='op'>|</span><span class='ident'>t</span><span class='op'>|</span> {
+            <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>t</span>, <span class='string'>&quot;{}&quot;</span>, <span class='ident'>counter</span>);
+            <span class='ident'>counter</span> <span class='op'>+=</span> <span class='number'>1</span>;
+        }
+    }
+}
+
+<span class='comment'>// Borrow the environment.</span>
+<span class='kw'>fn</span> <span class='ident'>say_hello</span>(<span class='ident'>name</span>: <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>Render</span><span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>counter</span> <span class='op'>=</span> <span class='number'>0</span>;
+    <span class='macro'>box_html</span><span class='macro'>!</span> {
+        <span class='ident'>span</span> {
+            : <span class='string'>&quot;Hello &quot;</span>;
+            : <span class='kw-2'>&amp;</span><span class='ident'>name</span>;
+            : <span class='string'>&quot;.&quot;</span>;
+        }
+    }
+}
+</pre>
+
+<p><em>Note</em>: To avoid allocating, you can implement render manually instead of returning a boxed
+template:</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;
+
+<span class='kw'>use</span> <span class='ident'>horrorshow</span>::{<span class='ident'>RenderOnce</span>, <span class='ident'>TemplateBuilder</span>, <span class='ident'>Template</span>};
+
+<span class='kw'>struct</span> <span class='ident'>Page</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span> {
+    <span class='ident'>title</span>: <span class='ident'>String</span>,
+    <span class='ident'>content</span>: <span class='ident'>C</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>Page</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>from_string_content</span>(<span class='ident'>title</span>: <span class='ident'>String</span>, <span class='ident'>content</span>: <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
+        <span class='ident'>Page</span> { <span class='ident'>title</span>: <span class='ident'>title</span>, <span class='ident'>content</span>: <span class='ident'>content</span> }
+    }
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span> <span class='ident'>RenderOnce</span> <span class='kw'>for</span> <span class='ident'>Page</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>RenderOnce</span> {
+    <span class='kw'>fn</span> <span class='ident'>render_once</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
+        <span class='kw'>let</span> <span class='ident'>Page</span> {<span class='ident'>title</span>, <span class='ident'>content</span>} <span class='op'>=</span> <span class='self'>self</span>;
+        <span class='comment'>// The actual template:</span>
+        <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
+            <span class='ident'>article</span> {
+                <span class='ident'>header</span> {
+                    <span class='ident'>h1</span> : <span class='ident'>title</span>
+                }
+                <span class='ident'>section</span> : <span class='ident'>content</span>
+            }
+        };
+    }
+}
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+  <span class='kw'>let</span> <span class='ident'>page</span> <span class='op'>=</span> <span class='ident'>Page</span>::<span class='ident'>from_string_content</span>(<span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;My title&quot;</span>),
+                                       <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;Some content.&quot;</span>));
+  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>page</span>.<span class='ident'>into_string</span>(),
+             <span class='string'>&quot;&lt;article&gt;\
+                &lt;header&gt;&lt;h1&gt;My title&lt;/h1&gt;&lt;/header&gt;\
+                &lt;section&gt;Some content.&lt;/section&gt;\
+              &lt;/article&gt;&quot;</span>);
+}
+</pre>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
