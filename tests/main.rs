@@ -3,6 +3,7 @@ extern crate horrorshow;
 
 use horrorshow::Template;
 
+/* Wait for 1.2
 #[test]
 fn test_multi() {
     assert_eq!(&html! {
@@ -21,6 +22,7 @@ fn test_multi() {
         html(lang="en") body(class="body") p(id="test") { : "Some content" }
     }.into_string(), "<html lang=\"en\"><body class=\"body\"><p id=\"test\">Some content</p></body></html>");
 }
+*/
 
 #[test]
 fn test_reentrant() {
