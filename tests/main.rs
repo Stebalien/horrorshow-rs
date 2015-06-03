@@ -25,6 +25,16 @@ fn test_multi() {
 */
 
 #[test]
+fn test_prim() {
+    assert_eq!(html! {
+        : 1.01;
+        : 2i32;
+        : 3usize;
+        : 'c'
+    }.into_string(), "1.0123c");
+}
+
+#[test]
 fn test_reentrant() {
     assert_eq!(&html! {
         p {

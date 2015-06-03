@@ -304,6 +304,7 @@ impl Render for String {
 }
 
 impl<T> RenderOnce for Option<T> where T: RenderOnce {
+    #[inline]
     fn render_once(self, tmpl: &mut TemplateBuilder) {
         if let Some(v) = self {
             v.render_once(tmpl);
@@ -312,6 +313,7 @@ impl<T> RenderOnce for Option<T> where T: RenderOnce {
 }
 
 impl<T> RenderMut for Option<T> where T: RenderMut {
+    #[inline]
     fn render_mut(&mut self, tmpl: &mut TemplateBuilder) {
         if let Some(v) = self.as_mut() {
             v.render_mut(tmpl);
@@ -320,9 +322,40 @@ impl<T> RenderMut for Option<T> where T: RenderMut {
 }
 
 impl<T> Render for Option<T> where T: Render {
+    #[inline]
     fn render(&self, tmpl: &mut TemplateBuilder) {
         if let Some(v) = self.as_ref() {
             v.render(tmpl);
         }
     }
 }
+
+macro_rules! impl_fmt_render {
+    ($($t:ty),+) => {
+        $(
+            impl Render for $t {
+                #[inline]
+                fn render(&self, tmpl: &mut TemplateBuilder) {
+                    write!(tmpl, "{}", self)
+                }
+            }
+            impl RenderMut for $t {
+                #[inline]
+                fn render_mut(&mut self, tmpl: &mut TemplateBuilder) {
+                    self.render(tmpl)
+                }
+            }
+
+            impl RenderOnce for $t {
+                #[inline]
+                fn render_once(self, tmpl: &mut TemplateBuilder) {
+                    self.render(tmpl)
+                }
+            }
+        )+
+    }
+}
+
+impl_fmt_render!(i8, i16, i32, i64, isize,
+                 u8, u16, u32, u64, usize,
+                          f32, f64, char);
