@@ -368,6 +368,39 @@
 <span id="326">326</span>
 <span id="327">327</span>
 <span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Deref</span>;
@@ -675,6 +708,7 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>RenderOnce</span> <span class='kw'>for</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>RenderOnce</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>render_once</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>v</span>) <span class='op'>=</span> <span class='self'>self</span> {
             <span class='ident'>v</span>.<span class='ident'>render_once</span>(<span class='ident'>tmpl</span>);
@@ -683,6 +717,7 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>RenderMut</span> <span class='kw'>for</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>RenderMut</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>render_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>v</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>as_mut</span>() {
             <span class='ident'>v</span>.<span class='ident'>render_mut</span>(<span class='ident'>tmpl</span>);
@@ -691,12 +726,43 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>Render</span> <span class='kw'>for</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Render</span> {
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>v</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>as_ref</span>() {
             <span class='ident'>v</span>.<span class='ident'>render</span>(<span class='ident'>tmpl</span>);
         }
     }
 }
+
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>impl_fmt_render</span> {
+    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span>:<span class='ident'>ty</span>),<span class='op'>+</span>) <span class='op'>=&gt;</span> {
+        $(
+            <span class='kw'>impl</span> <span class='ident'>Render</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> {
+                <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+                <span class='kw'>fn</span> <span class='ident'>render</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
+                    <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, <span class='string'>&quot;{}&quot;</span>, <span class='self'>self</span>)
+                }
+            }
+            <span class='kw'>impl</span> <span class='ident'>RenderMut</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> {
+                <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+                <span class='kw'>fn</span> <span class='ident'>render_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
+                    <span class='self'>self</span>.<span class='ident'>render</span>(<span class='ident'>tmpl</span>)
+                }
+            }
+
+            <span class='kw'>impl</span> <span class='ident'>RenderOnce</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>t</span> {
+                <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+                <span class='kw'>fn</span> <span class='ident'>render_once</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
+                    <span class='self'>self</span>.<span class='ident'>render</span>(<span class='ident'>tmpl</span>)
+                }
+            }
+        )<span class='op'>+</span>
+    }
+}
+
+<span class='macro'>impl_fmt_render</span><span class='macro'>!</span>(<span class='ident'>i8</span>, <span class='ident'>i16</span>, <span class='ident'>i32</span>, <span class='ident'>i64</span>, <span class='ident'>isize</span>,
+                 <span class='ident'>u8</span>, <span class='ident'>u16</span>, <span class='ident'>u32</span>, <span class='ident'>u64</span>, <span class='ident'>usize</span>,
+                          <span class='ident'>f32</span>, <span class='ident'>f64</span>, <span class='ident'>char</span>);
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
