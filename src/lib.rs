@@ -256,6 +256,10 @@
 //!               </article>");
 //! }
 //! ```
+//!
+//! # Examples
+//!
+//! See the test cases.
 #[macro_use]
 mod macros;
 
@@ -273,4 +277,31 @@ pub use render::{RenderOnce, RenderMut, Render, RenderBox, Renderer, Raw,
 
 /// Traits that should always be imported.
 pub mod prelude;
+
+
+/// Helper trait for matching dispatching `attr ?= `.
+#[doc(hidden)]
+pub trait BoolOption: Sized {
+    type Value;
+    fn bool_option(self) -> (bool, Option<Self::Value>);
+}
+
+impl<T> BoolOption for Option<T> {
+    type Value = T;
+    #[inline(always)]
+    fn bool_option(self) -> (bool, Option<T>) {
+        (false, self)
+    }
+}
+
+// Need &str because Value needs to implement RenderOnce (even though we never actually render
+// it...
+impl BoolOption for bool {
+    type Value = &'static str;
+    #[inline(always)]
+    fn bool_option(self) -> (bool, Option<&'static str>) {
+        (true, if self { Some("") } else { None })
+    }
+}
+
 

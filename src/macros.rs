@@ -102,16 +102,18 @@ macro_rules! __append_attrs {
         __append_attrs!($tmpl, $($rest)+);
     };
     ($tmpl:ident, $($($attr:ident)-+):+ ?= $value:expr) => {
-        if $value {
-            $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+)));
-        }
+        match $crate::BoolOption::bool_option($value) {
+            (_, None) => {},
+            (true, Some(_)) => { __append_attrs!($tmpl, $($($attr)-+):+); }
+            (false, Some(v)) => { __append_attrs!($tmpl, $($($attr)-+):+ = v); }
+        };
     };
     ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr, $($rest:tt)+) => {
         __append_attrs!($tmpl, $($($attr)-+):+ = $value);
         __append_attrs!($tmpl, $($rest)+);
     };
-    ($tmpl:ident, $($($attr:ident)-+):+ ?, $($rest:tt)+) => {
-        __append_attrs!($tmpl, $($($attr)-+):+ ?);
+    ($tmpl:ident, $($($attr:ident)-+):+, $($rest:tt)+) => {
+        __append_attrs!($tmpl, $($($attr)-+):+);
         __append_attrs!($tmpl, $($rest)+);
     };
     ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr) => {
@@ -119,7 +121,7 @@ macro_rules! __append_attrs {
         $crate::RenderOnce::render_once($value, $tmpl);
         $tmpl.write_raw("\"");
     };
-    ($tmpl:ident, $($($attr:ident)-+):+ ?) => {
+    ($tmpl:ident, $($($attr:ident)-+):+) => {
         $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+)));
     };
 
