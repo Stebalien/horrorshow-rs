@@ -311,6 +311,11 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -357,7 +362,7 @@
 <span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!         }</span>
 <span class='doccomment'>//!     }</span>
-<span class='doccomment'>//! }.into_string();</span>
+<span class='doccomment'>//! }.into_string().unwrap();</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let expected = &quot;\</span>
 <span class='doccomment'>//! &lt;html&gt;\</span>
@@ -433,12 +438,13 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Error Handling</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error</span>
-<span class='doccomment'>//! occurs, template rendering will continue but no more data will be written and the original</span>
-<span class='doccomment'>//! `write_to_fmt`/`write_to_io` call will return the error when rendering terminates.</span>
+<span class='doccomment'>//! Both render and IO errors are handled in the background. If an io (or fmt) error occurs,</span>
+<span class='doccomment'>//! template rendering will continue but no more data will be written and the original `write_to_*`</span>
+<span class='doccomment'>//! call will return the error when rendering terminates. If you need to record a render error, use</span>
+<span class='doccomment'>//! `TemplateBuilder::record_error`. As with IO errors, custom errors DO NOT cause rendering to be</span>
+<span class='doccomment'>//! aborted. Instead, all recorded errors (if any) are returned when rendering completes.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! There is no way to abort template rendering other than panicing. Try to do everything that can</span>
-<span class='doccomment'>//! fail before rendering a template.</span>
+<span class='doccomment'>//! TL;DR: There is no way to abort rendering but you can report errors.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Escaping</span>
 <span class='doccomment'>//!</span>
@@ -562,7 +568,7 @@
 <span class='doccomment'>//! fn main() {</span>
 <span class='doccomment'>//!   let page = Page::from_string_content(String::from(&quot;My title&quot;),</span>
 <span class='doccomment'>//!                                        String::from(&quot;Some content.&quot;));</span>
-<span class='doccomment'>//!   assert_eq!(page.into_string(),</span>
+<span class='doccomment'>//!   assert_eq!(page.into_string().unwrap(),</span>
 <span class='doccomment'>//!              &quot;&lt;article&gt;\</span>
 <span class='doccomment'>//!                 &lt;header&gt;&lt;h1&gt;My title&lt;/h1&gt;&lt;/header&gt;\</span>
 <span class='doccomment'>//!                 &lt;section&gt;Some content.&lt;/section&gt;\</span>
@@ -575,6 +581,9 @@
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;ops&quot;</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>ops</span>;
 
+<span class='kw'>mod</span> <span class='ident'>error</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
+
 <span class='kw'>mod</span> <span class='ident'>template</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template</span>::{<span class='ident'>TemplateBuilder</span>, <span class='ident'>Template</span>};
 <span class='kw'>mod</span> <span class='ident'>render</span>;
@@ -583,6 +592,7 @@
 
 <span class='doccomment'>/// Traits that should always be imported.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>prelude</span>;
+
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

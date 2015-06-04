@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-271' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-275' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -89,7 +89,7 @@
             }
         }
     }
-}.<span class='ident'>into_string</span>();
+}.<span class='ident'>into_string</span>().<span class='ident'>unwrap</span>();
 
 <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;\
 &lt;html&gt;\
@@ -159,12 +159,13 @@ environment (<code>RenderOnce</code>).</p>
 
 <h2 id="error-handling" class='section-header'><a
                            href="#error-handling">Error Handling</a></h2>
-<p>IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error
-occurs, template rendering will continue but no more data will be written and the original
-<code>write_to_fmt</code>/<code>write_to_io</code> call will return the error when rendering terminates.</p>
+<p>Both render and IO errors are handled in the background. If an io (or fmt) error occurs,
+template rendering will continue but no more data will be written and the original <code>write_to_*</code>
+call will return the error when rendering terminates. If you need to record a render error, use
+<code>TemplateBuilder::record_error</code>. As with IO errors, custom errors DO NOT cause rendering to be
+aborted. Instead, all recorded errors (if any) are returned when rendering completes.</p>
 
-<p>There is no way to abort template rendering other than panicing. Try to do everything that can
-fail before rendering a template.</p>
+<p>TL;DR: There is no way to abort rendering but you can report errors.</p>
 
 <h2 id="escaping" class='section-header'><a
                            href="#escaping">Escaping</a></h2>
@@ -280,7 +281,7 @@ template:</p>
 <span class='kw'>fn</span> <span class='ident'>main</span>() {
   <span class='kw'>let</span> <span class='ident'>page</span> <span class='op'>=</span> <span class='ident'>Page</span>::<span class='ident'>from_string_content</span>(<span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;My title&quot;</span>),
                                        <span class='ident'>String</span>::<span class='ident'>from</span>(<span class='string'>&quot;Some content.&quot;</span>));
-  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>page</span>.<span class='ident'>into_string</span>(),
+  <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>page</span>.<span class='ident'>into_string</span>().<span class='ident'>unwrap</span>(),
              <span class='string'>&quot;&lt;article&gt;\
                 &lt;header&gt;&lt;h1&gt;My title&lt;/h1&gt;&lt;/header&gt;\
                 &lt;section&gt;Some content.&lt;/section&gt;\
@@ -327,6 +328,14 @@ template:</p>
                     </tr>
                 </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.Error.html'
+                               title='horrorshow::Error'>Error</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
                     <tr class=' module-item'>
                         <td><a class='struct' href='struct.Raw.html'
                                title='horrorshow::Raw'>Raw</a></td>
