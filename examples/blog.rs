@@ -43,7 +43,7 @@ fn render<I: Iterator<Item=Post>>(title: &str, posts: I) -> String {
                 }
             }
         }
-    }).into_string()
+    }).into_string().unwrap()
 }
 
 struct Post {

@@ -181,7 +181,7 @@ impl<F> fmt::Display for Renderer<F> where Renderer<F>: Render {
                 self.0.write_fmt(args)
             }
         }
-        self.write_to_fmt(&mut Adapter(f))
+        self.write_to_fmt(&mut Adapter(f)).or(Err(fmt::Error))
     }
 }
 
@@ -326,6 +326,16 @@ impl<T> Render for Option<T> where T: Render {
     fn render(&self, tmpl: &mut TemplateBuilder) {
         if let Some(v) = self.as_ref() {
             v.render(tmpl);
+        }
+    }
+}
+
+impl<T, E> RenderOnce for Result<T, E> where T: RenderOnce, E: Into<Box<::std::error::Error + Send + Sync>> {
+    #[inline]
+    fn render_once(self, tmpl: &mut TemplateBuilder) {
+        match self {
+            Ok(v) => v.render_once(tmpl),
+            Err(e) => tmpl.record_error(e),
         }
     }
 }

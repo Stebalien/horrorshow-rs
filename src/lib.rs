@@ -43,7 +43,7 @@
 //!             }
 //!         }
 //!     }
-//! }.into_string();
+//! }.into_string().unwrap();
 //!
 //! let expected = "\
 //! <html>\
@@ -119,12 +119,13 @@
 //!
 //! ## Error Handling
 //!
-//! IO errors (writing to the buffer) are handled in the background. If an io (or fmt) error
-//! occurs, template rendering will continue but no more data will be written and the original
-//! `write_to_fmt`/`write_to_io` call will return the error when rendering terminates.
+//! Both render and IO errors are handled in the background. If an io (or fmt) error occurs,
+//! template rendering will continue but no more data will be written and the original `write_to_*`
+//! call will return the error when rendering terminates. If you need to record a render error, use
+//! `TemplateBuilder::record_error`. As with IO errors, custom errors DO NOT cause rendering to be
+//! aborted. Instead, all recorded errors (if any) are returned when rendering completes.
 //!
-//! There is no way to abort template rendering other than panicing. Try to do everything that can
-//! fail before rendering a template.
+//! TL;DR: There is no way to abort rendering but you can report errors.
 //!
 //! ## Escaping
 //!
@@ -248,7 +249,7 @@
 //! fn main() {
 //!   let page = Page::from_string_content(String::from("My title"),
 //!                                        String::from("Some content."));
-//!   assert_eq!(page.into_string(),
+//!   assert_eq!(page.into_string().unwrap(),
 //!              "<article>\
 //!                 <header><h1>My title</h1></header>\
 //!                 <section>Some content.</section>\
@@ -261,6 +262,9 @@ mod macros;
 #[cfg(feature = "ops")]
 mod ops;
 
+mod error;
+pub use error::Error;
+
 mod template;
 pub use template::{TemplateBuilder, Template};
 mod render;
@@ -269,3 +273,4 @@ pub use render::{RenderOnce, RenderMut, Render, RenderBox, Renderer, Raw,
 
 /// Traits that should always be imported.
 pub mod prelude;
+

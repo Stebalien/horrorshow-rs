@@ -32,5 +32,5 @@ fn test_coherence() {
         |t| t << Test;
         |t| t << &mut Test;
         |t| t << &Test;
-    }).into_string(), "TestTestTest");
+    }).into_string().unwrap(), "TestTestTest");
 }

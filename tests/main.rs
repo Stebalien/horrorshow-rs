@@ -31,39 +31,39 @@ fn test_prim() {
         : 2i32;
         : 3usize;
         : 'c'
-    }.into_string(), "1.0123c");
+    }.into_string().unwrap(), "1.0123c");
 }
 
 #[test]
 fn test_reentrant() {
     assert_eq!(&html! {
         p {
-            #{"{}", html! { a(href="abcde") }.into_string()}
+            #{"{}", html! { a(href="abcde") }.into_string().unwrap()}
         }
-    }.into_string(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
+    }.into_string().unwrap(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
     assert_eq!(&html! {
         p {
-            |tmpl| tmpl << (html! { a(href="abcde") }).into_string();
+            |tmpl| tmpl << (html! { a(href="abcde") }).into_string().unwrap();
         }
-    }.into_string(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
+    }.into_string().unwrap(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
     assert_eq!(&html! {
         p {
-            : raw!(html! { a(href="abcde") }.into_string());
+            : raw!(html! { a(href="abcde") }.into_string().unwrap());
         }
-    }.into_string(), "<p><a href=\"abcde\" /></p>");
+    }.into_string().unwrap(), "<p><a href=\"abcde\" /></p>");
 }
 
 #[test]
 fn test_option() {
     assert_eq!(html! {
         tag : Some("testing")
-    }.into_string(), "<tag>testing</tag>");
+    }.into_string().unwrap(), "<tag>testing</tag>");
 
     assert_eq!(html! {
         tag : None::<&str>
-    }.into_string(), "<tag></tag>");
+    }.into_string().unwrap(), "<tag></tag>");
 }
 
 #[test]
@@ -71,8 +71,8 @@ fn test_into_string_by_ref() {
     let r = html! {
         |tmpl| tmpl << "test";
     };
-    assert_eq!((&r).into_string(), "test");
-    assert_eq!((&r).into_string(), "test");
+    assert_eq!((&r).into_string().unwrap(), "test");
+    assert_eq!((&r).into_string().unwrap(), "test");
 }
 
 #[test]
@@ -83,7 +83,7 @@ fn test_embed_twice() {
             tmpl << &sub << &sub;
         }
     };
-    assert_eq!(r.into_string(), "abcdeabcde");
+    assert_eq!(r.into_string().unwrap(), "abcdeabcde");
 }
 
 #[test]
