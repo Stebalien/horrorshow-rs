@@ -316,6 +316,37 @@
 <span id="274">274</span>
 <span id="275">275</span>
 <span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -575,6 +606,10 @@
 <span class='doccomment'>//!               &lt;/article&gt;&quot;);</span>
 <span class='doccomment'>//! }</span>
 <span class='doccomment'>//! ```</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! # Examples</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! See the test cases.</span>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>mod</span> <span class='ident'>macros</span>;
 
@@ -592,6 +627,33 @@
 
 <span class='doccomment'>/// Traits that should always be imported.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>prelude</span>;
+
+
+<span class='doccomment'>/// Helper trait for matching dispatching `attr ?= `.</span>
+<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>BoolOption</span>: <span class='ident'>Sized</span> {
+    <span class='kw'>type</span> <span class='ident'>Value</span>;
+    <span class='kw'>fn</span> <span class='ident'>bool_option</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> (<span class='ident'>bool</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Self</span>::<span class='ident'>Value</span><span class='op'>&gt;</span>);
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>BoolOption</span> <span class='kw'>for</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
+    <span class='kw'>type</span> <span class='ident'>Value</span> <span class='op'>=</span> <span class='ident'>T</span>;
+    <span class='attribute'>#[<span class='ident'>inline</span>(<span class='ident'>always</span>)]</span>
+    <span class='kw'>fn</span> <span class='ident'>bool_option</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> (<span class='ident'>bool</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) {
+        (<span class='boolval'>false</span>, <span class='self'>self</span>)
+    }
+}
+
+<span class='comment'>// Need &amp;str because Value needs to implement RenderOnce (even though we never actually render</span>
+<span class='comment'>// it...</span>
+<span class='kw'>impl</span> <span class='ident'>BoolOption</span> <span class='kw'>for</span> <span class='ident'>bool</span> {
+    <span class='kw'>type</span> <span class='ident'>Value</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span>;
+    <span class='attribute'>#[<span class='ident'>inline</span>(<span class='ident'>always</span>)]</span>
+    <span class='kw'>fn</span> <span class='ident'>bool_option</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> (<span class='ident'>bool</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span><span class='op'>&gt;</span>) {
+        (<span class='boolval'>true</span>, <span class='kw'>if</span> <span class='self'>self</span> { <span class='prelude-val'>Some</span>(<span class='string'>&quot;&quot;</span>) } <span class='kw'>else</span> { <span class='prelude-val'>None</span> })
+    }
+}
+
 
 </pre>
 </section>
