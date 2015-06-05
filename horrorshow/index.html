@@ -137,7 +137,7 @@ current position. To insert literal html, mark it as raw with the <code>raw!</co
 insert the result at the current position.</p></li>
 <li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
 actually a closure so the block/expression can append to the current template through <code>tmpl</code>
-(of type <code>&amp;mut TemplateBuilder</code>).</p></li>
+(of type <code>&amp;mut TemplateBuffer</code>).</p></li>
 </ul>
 
 <h2 id="traits,-traits-oh-my!" class='section-header'><a
@@ -162,7 +162,7 @@ environment (<code>RenderOnce</code>).</p>
 <p>Both render and IO errors are handled in the background. If an io (or fmt) error occurs,
 template rendering will continue but no more data will be written and the original <code>write_to_*</code>
 call will return the error when rendering terminates. If you need to record a render error, use
-<code>TemplateBuilder::record_error</code>. As with IO errors, custom errors DO NOT cause rendering to be
+<code>TemplateBuffer::record_error</code>. As with IO errors, custom errors DO NOT cause rendering to be
 aborted. Instead, all recorded errors (if any) are returned when rendering completes.</p>
 
 <p>TL;DR: There is no way to abort rendering but you can report errors.</p>
@@ -250,7 +250,7 @@ template:</p>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;
 
-<span class='kw'>use</span> <span class='ident'>horrorshow</span>::{<span class='ident'>RenderOnce</span>, <span class='ident'>TemplateBuilder</span>, <span class='ident'>Template</span>};
+<span class='kw'>use</span> <span class='ident'>horrorshow</span>::{<span class='ident'>RenderOnce</span>, <span class='ident'>TemplateBuffer</span>, <span class='ident'>Template</span>};
 
 <span class='kw'>struct</span> <span class='ident'>Page</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span> {
     <span class='ident'>title</span>: <span class='ident'>String</span>,
@@ -264,7 +264,7 @@ template:</p>
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span> <span class='ident'>RenderOnce</span> <span class='kw'>for</span> <span class='ident'>Page</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>RenderOnce</span> {
-    <span class='kw'>fn</span> <span class='ident'>render_once</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuilder</span>) {
+    <span class='kw'>fn</span> <span class='ident'>render_once</span>(<span class='self'>self</span>, <span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>TemplateBuffer</span>) {
         <span class='kw'>let</span> <span class='ident'>Page</span> {<span class='ident'>title</span>, <span class='ident'>content</span>} <span class='op'>=</span> <span class='self'>self</span>;
         <span class='comment'>// The actual template:</span>
         <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
@@ -359,10 +359,10 @@ template:</p>
                     </tr>
                 
                     <tr class=' module-item'>
-                        <td><a class='struct' href='struct.TemplateBuilder.html'
-                               title='horrorshow::TemplateBuilder'>TemplateBuilder</a></td>
+                        <td><a class='struct' href='struct.TemplateBuffer.html'
+                               title='horrorshow::TemplateBuffer'>TemplateBuffer</a></td>
                         <td class='docblock short'>
-                             <p>A template builder. This is the type that gets passed to closures inside templates.</p>
+                             <p>A template buffer. This is the type that gets passed to closures inside templates.</p>
 
                         </td>
                     </tr>

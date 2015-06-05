@@ -450,7 +450,7 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is</span>
 <span class='doccomment'>//! actually a closure so the block/expression can append to the current template through `tmpl`</span>
-<span class='doccomment'>//! (of type `&amp;mut TemplateBuilder`).</span>
+<span class='doccomment'>//! (of type `&amp;mut TemplateBuffer`).</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Traits, traits oh-my!</span>
 <span class='doccomment'>//!</span>
@@ -472,7 +472,7 @@
 <span class='doccomment'>//! Both render and IO errors are handled in the background. If an io (or fmt) error occurs,</span>
 <span class='doccomment'>//! template rendering will continue but no more data will be written and the original `write_to_*`</span>
 <span class='doccomment'>//! call will return the error when rendering terminates. If you need to record a render error, use</span>
-<span class='doccomment'>//! `TemplateBuilder::record_error`. As with IO errors, custom errors DO NOT cause rendering to be</span>
+<span class='doccomment'>//! `TemplateBuffer::record_error`. As with IO errors, custom errors DO NOT cause rendering to be</span>
 <span class='doccomment'>//! aborted. Instead, all recorded errors (if any) are returned when rendering completes.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! TL;DR: There is no way to abort rendering but you can report errors.</span>
@@ -568,7 +568,7 @@
 <span class='doccomment'>//! #[macro_use]</span>
 <span class='doccomment'>//! extern crate horrorshow;</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! use horrorshow::{RenderOnce, TemplateBuilder, Template};</span>
+<span class='doccomment'>//! use horrorshow::{RenderOnce, TemplateBuffer, Template};</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! struct Page&lt;C&gt; {</span>
 <span class='doccomment'>//!     title: String,</span>
@@ -582,7 +582,7 @@
 <span class='doccomment'>//! }</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! impl&lt;C&gt; RenderOnce for Page&lt;C&gt; where C: RenderOnce {</span>
-<span class='doccomment'>//!     fn render_once(self, tmpl: &amp;mut TemplateBuilder) {</span>
+<span class='doccomment'>//!     fn render_once(self, tmpl: &amp;mut TemplateBuffer) {</span>
 <span class='doccomment'>//!         let Page {title, content} = self;</span>
 <span class='doccomment'>//!         // The actual template:</span>
 <span class='doccomment'>//!         tmpl &lt;&lt; html! {</span>
@@ -620,7 +620,7 @@
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>Error</span>;
 
 <span class='kw'>mod</span> <span class='ident'>template</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template</span>::{<span class='ident'>TemplateBuilder</span>, <span class='ident'>Template</span>};
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>template</span>::{<span class='ident'>TemplateBuffer</span>, <span class='ident'>Template</span>};
 <span class='kw'>mod</span> <span class='ident'>render</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>render</span>::{<span class='ident'>RenderOnce</span>, <span class='ident'>RenderMut</span>, <span class='ident'>Render</span>, <span class='ident'>RenderBox</span>, <span class='ident'>Renderer</span>, <span class='ident'>Raw</span>,
                  <span class='ident'>__new_renderer</span>, <span class='ident'>__new_boxed_renderer</span>};

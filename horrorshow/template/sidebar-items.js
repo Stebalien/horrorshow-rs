@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TemplateBuilder","A template builder. This is the type that gets passed to closures inside templates."]],"trait":[["Template","A template that can be rendered into something."]]});
+initSidebarItems({"struct":[["TemplateBuffer","A template buffer. This is the type that gets passed to closures inside templates."]],"trait":[["Template","A template that can be rendered into something."]]});
