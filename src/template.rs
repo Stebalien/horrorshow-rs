@@ -18,24 +18,24 @@ pub trait Template: RenderOnce + Sized {
     ///
     /// Note: You could also use render_into_fmt but this is noticeably faster.
     fn write_to_string(self, string: &mut String) -> Result<(), Error> {
-        let mut builder = TemplateBuilder {
+        let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Str(string),
             error: Error::new(),
         };
-        self.render_once(&mut builder);
-        builder.into_result()
+        self.render_once(&mut buffer);
+        buffer.into_result()
     }
 
     /// Render this into something that implements fmt::Write.
     ///
     /// Renderer also implements Display but that's about twice as slow...
     fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), Error> {
-        let mut builder = TemplateBuilder {
+        let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Fmt(writer),
             error: Error::new(),
         };
-        self.render_once(&mut builder);
-        builder.into_result()
+        self.render_once(&mut buffer);
+        buffer.into_result()
     }
 
     /// Render this into something that implements io::Write.
@@ -44,19 +44,19 @@ pub trait Template: RenderOnce + Sized {
     /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
     /// system calls.
     fn write_to_io(self, writer: &mut io::Write) -> Result<(), Error> {
-        let mut builder = TemplateBuilder {
+        let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Io(writer),
             error: Error::new(),
         };
-        self.render_once(&mut builder);
-        builder.into_result()
+        self.render_once(&mut buffer);
+        buffer.into_result()
     }
 }
 
 impl<T: RenderOnce + Sized> Template for T { }
 
 
-/// A template builder. This is the type that gets passed to closures inside templates.
+/// A template buffer. This is the type that gets passed to closures inside templates.
 ///
 /// Example:
 ///
@@ -64,11 +64,11 @@ impl<T: RenderOnce + Sized> Template for T { }
 /// # #[macro_use] extern crate horrorshow;
 /// # fn main() {
 ///     html! {
-///         |tmpl /*: &mut TemplateBuilder */| tmpl << "Some String";
+///         |tmpl /*: &mut TemplateBuffer */| tmpl << "Some String";
 ///     };
 /// # }
 /// ```
-pub struct TemplateBuilder<'a> {
+pub struct TemplateBuffer<'a> {
     writer: InnerTemplateWriter<'a>,
     error: Error,
 }
@@ -79,7 +79,7 @@ enum InnerTemplateWriter<'a> {
     Str(&'a mut String),
 }
 
-impl<'a> TemplateBuilder<'a> {
+impl<'a> TemplateBuffer<'a> {
     #[cold]
     pub fn record_error<E: Into<Box<::std::error::Error + Send + Sync>>>(&mut self, e: E) {
         self.error.render.push(e.into());
@@ -133,7 +133,7 @@ impl<'a> TemplateBuilder<'a> {
     }
 }
 
-pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuilder<'a>) where 'a: 'b;
+pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>) where 'a: 'b;
 
 impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     // This is the fast-path.
@@ -162,7 +162,7 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     }
 }
 
-pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuilder<'a>) where 'a: 'b;
+pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>) where 'a: 'b;
 
 
 impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {

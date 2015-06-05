@@ -4,7 +4,7 @@ macro_rules! html {
     ($($inner:tt)*) => {{
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
-        let f = |tmpl: &mut $crate::TemplateBuilder| -> () {
+        let f = |tmpl: &mut $crate::TemplateBuffer| -> () {
             __append_html!(tmpl, $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
@@ -53,7 +53,7 @@ macro_rules! box_html {
     ($($inner:tt)*) => {{
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
-        let f = move |tmpl: &mut $crate::TemplateBuilder| -> () {
+        let f = move |tmpl: &mut $crate::TemplateBuffer| -> () {
             __append_html!(tmpl, $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
@@ -144,36 +144,36 @@ macro_rules! __append_html {
         $crate::RenderOnce::render_once($code, $tmpl);
     };
     ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {
-        (|$var: &mut $crate::TemplateBuilder| {
+        (|$var: &mut $crate::TemplateBuffer| {
             __horrorshow_block_identity!({$($code)*})
         })($tmpl);
         __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |mut $var:ident| {$($code:tt)*} $($next:tt)*) => {
-        (|mut $var: &mut $crate::TemplateBuilder| {
+        (|mut $var: &mut $crate::TemplateBuffer| {
             __horrorshow_block_identity!({$($code)*})
         })($tmpl);
         __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |$var:ident| $code:stmt; $($next:tt)* ) => {
-        (|$var: &mut $crate::TemplateBuilder| {
+        (|$var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
         __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |mut $var:ident| $code:stmt; $($next:tt)* ) => {
-        (|mut $var: &mut $crate::TemplateBuilder| {
+        (|mut $var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
         __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |$var:ident| $code:stmt ) => {
-        (|$var: &mut $crate::TemplateBuilder| {
+        (|$var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
     };
     ($tmpl:ident, |mut $var:ident| $code:stmt ) => {
-        (|mut $var: &mut $crate::TemplateBuilder| {
+        (|mut $var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
     };

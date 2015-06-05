@@ -100,7 +100,7 @@
 //!
 //! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
 //! actually a closure so the block/expression can append to the current template through `tmpl`
-//! (of type `&mut TemplateBuilder`).
+//! (of type `&mut TemplateBuffer`).
 //!
 //! ## Traits, traits oh-my!
 //!
@@ -122,7 +122,7 @@
 //! Both render and IO errors are handled in the background. If an io (or fmt) error occurs,
 //! template rendering will continue but no more data will be written and the original `write_to_*`
 //! call will return the error when rendering terminates. If you need to record a render error, use
-//! `TemplateBuilder::record_error`. As with IO errors, custom errors DO NOT cause rendering to be
+//! `TemplateBuffer::record_error`. As with IO errors, custom errors DO NOT cause rendering to be
 //! aborted. Instead, all recorded errors (if any) are returned when rendering completes.
 //!
 //! TL;DR: There is no way to abort rendering but you can report errors.
@@ -218,7 +218,7 @@
 //! #[macro_use]
 //! extern crate horrorshow;
 //!
-//! use horrorshow::{RenderOnce, TemplateBuilder, Template};
+//! use horrorshow::{RenderOnce, TemplateBuffer, Template};
 //!
 //! struct Page<C> {
 //!     title: String,
@@ -232,7 +232,7 @@
 //! }
 //!
 //! impl<C> RenderOnce for Page<C> where C: RenderOnce {
-//!     fn render_once(self, tmpl: &mut TemplateBuilder) {
+//!     fn render_once(self, tmpl: &mut TemplateBuffer) {
 //!         let Page {title, content} = self;
 //!         // The actual template:
 //!         tmpl << html! {
@@ -270,7 +270,7 @@ mod error;
 pub use error::Error;
 
 mod template;
-pub use template::{TemplateBuilder, Template};
+pub use template::{TemplateBuffer, Template};
 mod render;
 pub use render::{RenderOnce, RenderMut, Render, RenderBox, Renderer, Raw,
                  __new_renderer, __new_boxed_renderer};

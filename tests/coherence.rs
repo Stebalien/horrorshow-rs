@@ -1,27 +1,27 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{RenderOnce, Render, RenderMut, TemplateBuilder};
+use horrorshow::{RenderOnce, Render, RenderMut, TemplateBuffer};
 use horrorshow::prelude::*;
 
 struct Test;
 
 impl RenderOnce for Test {
-    fn render_once(self, t: &mut TemplateBuilder) {
+    fn render_once(self, t: &mut TemplateBuffer) {
         self.render(t);
     }
 }
 
 
 impl RenderMut for Test {
-    fn render_mut(&mut self, t: &mut TemplateBuilder) {
+    fn render_mut(&mut self, t: &mut TemplateBuffer) {
         self.render(t);
     }
 }
 
 
 impl Render for Test {
-    fn render(&self, t: &mut TemplateBuilder) {
+    fn render(&self, t: &mut TemplateBuffer) {
         t.write_str("Test");
     }
 }
