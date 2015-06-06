@@ -30,8 +30,8 @@
 //!                     // store output because rust bug #25753
 //!                     tmpl = tmpl << html! {
 //!                         li(first? = (i == 0)) {
-//!                             // format some text
-//!                             #{"{}", i+1 }
+//!                             // Format some text.
+//!                             : format_args!("{}", i+1)
 //!                         }
 //!                     };
 //!                 }
@@ -86,8 +86,6 @@
 //!
 //! * `some_tag(attr,...);` -- You can also omit the value.
 //!
-//! * `some_tag(attr=#{"{}", 1},...);` -- You can also use format strings.
-//!
 //! * `some_tag(attr? = Some("test"),...);` -- You can optionally include an attribute.
 //!
 //! * `some_tag(attr? = some_boolean,...);` -- You can optionally include an attribute without a value.
@@ -98,9 +96,6 @@
 //!
 //! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result
 //! current position. To insert literal html, mark it as raw with the `raw!` macro.
-//!
-//! * `#{"format_str", rust_expressions... }` -- Format the arguments according to `format_str` and
-//! insert the result at the current position.
 //!
 //! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
 //! actually a closure so the block/expression can append to the current template through `tmpl`

@@ -37,9 +37,7 @@ fn test_prim() {
 #[test]
 fn test_reentrant() {
     assert_eq!(&html! {
-        p {
-            #{"{}", html! { a(href="abcde") }.into_string().unwrap()}
-        }
+        p : format_args!("{}", html! { a(href="abcde") }.into_string().unwrap())
     }.into_string().unwrap(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
 
     assert_eq!(&html! {

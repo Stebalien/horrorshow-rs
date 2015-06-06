@@ -88,15 +88,6 @@ macro_rules! __horrorshow_block_identity {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __append_attrs {
-    ($tmpl:ident, $($($attr:ident)-+):+ = #{$($fmt_value:tt)+}, $($rest:tt)+) => {
-        __append_attrs!($tmpl, $($($attr)-+):+ = #{$($fmt_value)+});
-        __append_attrs!($tmpl, $($rest)+);
-    };
-    ($tmpl:ident, $($($attr:ident)-+):+ = #{$($fmt:tt)+}) => {
-        $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+), "=\""));
-        write!($tmpl, $($fmt)*);
-        $tmpl.write_raw("\"");
-    };
     ($tmpl:ident, $($($attr:ident)-+):+ ?= $value:expr, $($rest:tt)+) => {
         __append_attrs!($tmpl, $($($attr)-+):+ ?= $value);
         __append_attrs!($tmpl, $($rest)+);
@@ -176,10 +167,6 @@ macro_rules! __append_html {
         (|mut $var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
-    };
-    ($tmpl:ident, #{$($tok:tt)+} $($next:tt)*) => {
-        write!($tmpl, $($tok)+);
-        __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, $tag:ident($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));

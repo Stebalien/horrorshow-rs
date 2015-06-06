@@ -43,10 +43,3 @@ fn test_option() {
         tag(flag?=None::<&'static str>);
     }.into_string().unwrap(), "<tag />");
 }
-
-#[test]
-fn test_fmt() {
-    assert_eq!(html! {
-        tag(attr = #{"{}", 1});
-    }.into_string().unwrap(), "<tag attr=\"1\" />");
-}

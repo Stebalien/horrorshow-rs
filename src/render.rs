@@ -340,6 +340,27 @@ impl<T, E> RenderOnce for Result<T, E> where T: RenderOnce, E: Into<Box<::std::e
     }
 }
 
+impl<'a> RenderOnce for fmt::Arguments<'a> {
+    #[inline]
+    fn render_once(self, tmpl: &mut TemplateBuffer) {
+        self.render(tmpl)
+    }
+}
+
+impl<'a> RenderMut for fmt::Arguments<'a> {
+    #[inline]
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+        self.render(tmpl);
+    }
+}
+
+impl<'a> Render for fmt::Arguments<'a> {
+    #[inline]
+    fn render(&self, tmpl: &mut TemplateBuffer) {
+        tmpl.write_fmt(*self);
+    }
+}
+
 macro_rules! impl_fmt_render {
     ($($t:ty),+) => {
         $(

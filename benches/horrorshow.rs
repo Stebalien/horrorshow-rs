@@ -9,7 +9,6 @@ use horrorshow::Template;
 #[bench]
 fn bench_fmt(b: &mut test::Bencher) {
     b.iter(|| {
-        use std::fmt::Write;
         let mut s = String::new();
         let template = html! {
             html {
@@ -30,10 +29,7 @@ fn bench_fmt(b: &mut test::Bencher) {
                             // append to the current template.
                             // store output because rust bug #25753
                             tmpl = tmpl << html! {
-                                li {
-                                    // format some text
-                                    #{"{}", i+1 }
-                                }
+                                li : format_args!("{}", i+1)
                             };
                         }
                     }
@@ -70,10 +66,7 @@ fn bench_short(b: &mut test::Bencher) {
                             // append to the current template.
                             // store output because rust bug #25753
                             tmpl = tmpl << html! {
-                                li {
-                                    // format some text
-                                    #{"{}", i+1 }
-                                }
+                                li : format_args!("{}", i+1)
                             };
                         }
                     }
@@ -109,10 +102,7 @@ fn bench_long(b: &mut test::Bencher) {
                             // append to the current template.
                             // store output because rust bug #25753
                             tmpl = tmpl << html! {
-                                li {
-                                    // format some text
-                                    #{"{}", i+1 }
-                                }
+                                li : format_args!("{}", i+1)
                             };
                         }
                     }

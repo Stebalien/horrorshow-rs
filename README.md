@@ -35,7 +35,7 @@ let actual = html! {
                     tmpl = tmpl << html! {
                         li {
                             // format some text
-                            #{"{}", i+1 }
+                            : format_args!("{}", i+1)
                         }
                     };
                 }
