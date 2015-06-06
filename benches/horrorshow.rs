@@ -25,10 +25,8 @@ fn bench_fmt(b: &mut test::Bencher) {
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |mut tmpl| for i in 0..10 {
-                            // append to the current template.
-                            // store output because rust bug #25753
-                            tmpl = tmpl << html! {
+                        |tmpl| for i in 0..10 {
+                            &mut *tmpl << html! {
                                 li : format_args!("{}", i+1)
                             };
                         }
@@ -62,10 +60,10 @@ fn bench_short(b: &mut test::Bencher) {
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |mut tmpl| for i in 0..10 {
+                        |tmpl| for i in 0..10 {
                             // append to the current template.
                             // store output because rust bug #25753
-                            tmpl = tmpl << html! {
+                            &mut *tmpl << html! {
                                 li : format_args!("{}", i+1)
                             };
                         }
@@ -98,10 +96,10 @@ fn bench_long(b: &mut test::Bencher) {
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |mut tmpl| for i in 0..count {
+                        |tmpl| for i in 0..count {
                             // append to the current template.
                             // store output because rust bug #25753
-                            tmpl = tmpl << html! {
+                            &mut *tmpl << html! {
                                 li : format_args!("{}", i+1)
                             };
                         }
