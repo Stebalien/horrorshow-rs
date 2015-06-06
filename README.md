@@ -47,7 +47,7 @@ let actual = html! {
             }
         }
     }
-}.into_string();
+}.into_string().unwrap();
 
 let expected = "\
 <html>\
