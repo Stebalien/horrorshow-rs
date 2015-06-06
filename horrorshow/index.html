@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-312' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-307' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -76,8 +76,8 @@
                     <span class='comment'>// store output because rust bug #25753</span>
                     <span class='ident'>tmpl</span> <span class='op'>=</span> <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
                         <span class='ident'>li</span>(<span class='ident'>first</span>? <span class='op'>=</span> (<span class='ident'>i</span> <span class='op'>==</span> <span class='number'>0</span>)) {
-                            <span class='comment'>// format some text</span>
-                            <span class='attribute'>#{<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span> }
+                            <span class='comment'>// Format some text.</span>
+                            : <span class='macro'>format_args</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)
                         }
                     };
                 }
@@ -128,15 +128,12 @@
 attributes. The attribute values will be evaluated as rust expressions at runtime and they
 must implement RenderOnce (already implemented on &amp;str, String, other templates, etc.).</p></li>
 <li><p><code>some_tag(attr,...);</code> -- You can also omit the value.</p></li>
-<li><p><code>some_tag(attr=#{&quot;{}&quot;, 1},...);</code> -- You can also use format strings.</p></li>
 <li><p><code>some_tag(attr? = Some(&quot;test&quot;),...);</code> -- You can optionally include an attribute.</p></li>
 <li><p><code>some_tag(attr? = some_boolean,...);</code> -- You can optionally include an attribute without a value.</p></li>
 <li><p><code>some_tag { ... }</code> -- Insert the tag <code>some_tag</code> and recursively evaluate the <code>...</code>.</p></li>
 <li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result
 current position. To insert literal html, mark it as raw with the <code>raw!</code> macro.</p></li>
-<li><p><code>#{&quot;format_str&quot;, rust_expressions... }</code> -- Format the arguments according to <code>format_str</code> and
-insert the result at the current position.</p></li>
 <li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
 actually a closure so the block/expression can append to the current template through <code>tmpl</code>
 (of type <code>&amp;mut TemplateBuffer</code>).</p></li>

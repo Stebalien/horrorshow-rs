@@ -349,11 +349,6 @@
 <span id="307">307</span>
 <span id="308">308</span>
 <span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -387,8 +382,8 @@
 <span class='doccomment'>//!                     // store output because rust bug #25753</span>
 <span class='doccomment'>//!                     tmpl = tmpl &lt;&lt; html! {</span>
 <span class='doccomment'>//!                         li(first? = (i == 0)) {</span>
-<span class='doccomment'>//!                             // format some text</span>
-<span class='doccomment'>//!                             #{&quot;{}&quot;, i+1 }</span>
+<span class='doccomment'>//!                             // Format some text.</span>
+<span class='doccomment'>//!                             : format_args!(&quot;{}&quot;, i+1)</span>
 <span class='doccomment'>//!                         }</span>
 <span class='doccomment'>//!                     };</span>
 <span class='doccomment'>//!                 }</span>
@@ -443,8 +438,6 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag(attr,...);` -- You can also omit the value.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! * `some_tag(attr=#{&quot;{}&quot;, 1},...);` -- You can also use format strings.</span>
-<span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag(attr? = Some(&quot;test&quot;),...);` -- You can optionally include an attribute.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag(attr? = some_boolean,...);` -- You can optionally include an attribute without a value.</span>
@@ -455,9 +448,6 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result</span>
 <span class='doccomment'>//! current position. To insert literal html, mark it as raw with the `raw!` macro.</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! * `#{&quot;format_str&quot;, rust_expressions... }` -- Format the arguments according to `format_str` and</span>
-<span class='doccomment'>//! insert the result at the current position.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is</span>
 <span class='doccomment'>//! actually a closure so the block/expression can append to the current template through `tmpl`</span>
