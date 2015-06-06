@@ -1,6 +1,7 @@
 use std::io;
 use std::fmt;
 
+#[derive(Debug)]
 pub struct Error {
     pub write: Option<io::Error>,
     pub render: Vec<Box<::std::error::Error + Send + Sync>>
@@ -41,20 +42,5 @@ impl fmt::Display for Error {
             // Panic?
             write!(f, "Empty Error")
         }
-    }
-}
-
-
-impl fmt::Debug for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(f, "{{ write: {:?}, render: [", self.write));
-        if self.render.is_empty() {
-            write!(f, "]}}")
-        } else {
-            for i in 0..(self.render.len()-1) {
-                try!(write!(f, "{:?}, ", self.render[i]));
-            }
-            write!(f, "{:?}]}}", self.render.last().unwrap())
-        } 
     }
 }
