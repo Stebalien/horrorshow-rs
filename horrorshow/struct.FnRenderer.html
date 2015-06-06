@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `FnRenderer` struct in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, FnRenderer">
+
+    <title>horrorshow::FnRenderer - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'FnRenderer', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>horrorshow</a>::<wbr><a class='struct' href=''>FnRenderer</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-1456' class='srclink' href='../src/horrorshow/render.rs.html#141-144' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct FnRenderer&lt;F&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>A template renderer. The <code>html! {}</code> macro returns a <code>FnRenderer</code>.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(f: F) -&gt; Self</code></h4>
+<h4 id='method.with_capacity' class='method'><code>fn <a href='#method.with_capacity' class='fnname'>with_capacity</a>(expected_size: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, f: F) -&gt; Self</code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.RenderOnce.html' title='horrorshow::RenderOnce'>RenderOnce</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_once' class='method'><code>fn <a href='../horrorshow/trait.RenderOnce.html#method.render_once' class='fnname'>render_once</a>(self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
+<h4 id='method.size_hint' class='method'><code>fn <a href='../horrorshow/trait.RenderOnce.html#method.size_hint' class='fnname'>size_hint</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.RenderMut.html' title='horrorshow::RenderMut'>RenderMut</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_mut' class='method'><code>fn <a href='../horrorshow/trait.RenderMut.html#method.render_mut' class='fnname'>render_mut</a>(&amp;mut self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
+</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.Render.html' title='horrorshow::Render'>Render</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render' class='method'><code>fn <a href='../horrorshow/trait.Render.html#method.render' class='fnname'>render</a>(&amp;self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
+</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Display.html' title='core::fmt::Display'>Display</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt;: <a class='trait' href='../horrorshow/trait.Render.html' title='horrorshow::Render'>Render</a></span></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/fmt/trait.Display.html#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "horrorshow";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

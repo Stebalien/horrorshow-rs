@@ -64,7 +64,7 @@
 <p>Note: You could also use render_into_fmt but this is noticeably faster.</p>
 </div><h3 id='method.write_to_fmt' class='method stab '><code>fn <a href='#method.write_to_fmt' class='fnname'>write_to_fmt</a>(self, writer: &amp;mut <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Write.html' title='core::fmt::Write'>Write</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='../horrorshow/struct.Error.html' title='horrorshow::Error'>Error</a>&gt;</code></h3><div class='docblock'><p>Render this into something that implements fmt::Write.</p>
 
-<p>Renderer also implements Display but that&#39;s about twice as slow...</p>
+<p>FnRenderer also implements Display but that&#39;s about twice as slow...</p>
 </div><h3 id='method.write_to_io' class='method stab '><code>fn <a href='#method.write_to_io' class='fnname'>write_to_io</a>(self, writer: &amp;mut <a class='trait' href='http://doc.rust-lang.org/nightly/std/io/trait.Write.html' title='std::io::Write'>Write</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='../horrorshow/struct.Error.html' title='horrorshow::Error'>Error</a>&gt;</code></h3><div class='docblock'><p>Render this into something that implements io::Write.</p>
 
 <p>Note: If you&#39;re writing directly to a file/socket etc., you should <em>seriously</em> consider
