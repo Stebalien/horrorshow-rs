@@ -29,7 +29,7 @@
 //!                     // append to the current template.
 //!                     // store output because rust bug #25753
 //!                     tmpl = tmpl << html! {
-//!                         li {
+//!                         li(first? = (i == 0)) {
 //!                             // format some text
 //!                             #{"{}", i+1 }
 //!                         }
@@ -54,7 +54,7 @@
 //!     <h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1>\
 //!     <p>Let's <i>count</i> to 10!</p>\
 //!     <ol id=\"count\">\
-//!       <li>1</li>\
+//!       <li first>1</li>\
 //!       <li>2</li>\
 //!       <li>3</li>\
 //!       <li>4</li>\
@@ -87,6 +87,10 @@
 //! * `some_tag(attr,...);` -- You can also omit the value.
 //!
 //! * `some_tag(attr=#{"{}", 1},...);` -- You can also use format strings.
+//!
+//! * `some_tag(attr? = Some("test"),...);` -- You can optionally include an attribute.
+//!
+//! * `some_tag(attr? = some_boolean,...);` -- You can optionally include an attribute without a value.
 //!
 //! * `some_tag { ... }` -- Insert the tag `some_tag` and recursively evaluate the `...`.
 //!
@@ -279,7 +283,10 @@ pub use render::{RenderOnce, RenderMut, Render, RenderBox, Renderer, Raw,
 pub mod prelude;
 
 
-/// Helper trait for matching dispatching `attr ?= `.
+/// Helper trait for dispatching `attr ?= `.
+///
+/// attr ?= Some("test") -> attr="test"
+/// attr ?= true -> attr
 #[doc(hidden)]
 pub trait BoolOption: Sized {
     type Value;
@@ -295,7 +302,7 @@ impl<T> BoolOption for Option<T> {
 }
 
 // Need &str because Value needs to implement RenderOnce (even though we never actually render
-// it...
+// it...)
 impl BoolOption for bool {
     type Value = &'static str;
     #[inline(always)]
