@@ -137,15 +137,29 @@ impl<'b> Render for Box<Render + 'b> {
     }
 }
 
-// {{{ Renderer
-
-/// A template renderer. The `html! {}` macro returns a `Renderer`.
-pub struct Renderer<F> {
+/// A template renderer. The `html! {}` macro returns a `FnRenderer`.
+pub struct FnRenderer<F> {
     renderer: F,
     expected_size: usize,
 }
 
-impl<F> RenderOnce for Renderer<F> where F: FnOnce(&mut TemplateBuffer) {
+impl<F> FnRenderer<F> where F: FnOnce(&mut TemplateBuffer) {
+    pub fn new(f: F) -> Self {
+        FnRenderer {
+            renderer: f,
+            expected_size: 0,
+        }
+    }
+
+    pub fn with_capacity(expected_size: usize, f: F) -> Self {
+        FnRenderer {
+            renderer: f,
+            expected_size: expected_size,
+        }
+    }
+}
+
+impl<F> RenderOnce for FnRenderer<F> where F: FnOnce(&mut TemplateBuffer) {
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         (self.renderer)(tmpl)
     }
@@ -155,20 +169,20 @@ impl<F> RenderOnce for Renderer<F> where F: FnOnce(&mut TemplateBuffer) {
     }
 }
 
-impl<F> RenderMut for Renderer<F> where F: FnMut(&mut TemplateBuffer) {
+impl<F> RenderMut for FnRenderer<F> where F: FnMut(&mut TemplateBuffer) {
     fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
         (self.renderer)(tmpl)
     }
 }
 
-impl<F> Render for Renderer<F> where F: Fn(&mut TemplateBuffer) {
+impl<F> Render for FnRenderer<F> where F: Fn(&mut TemplateBuffer) {
     fn render(&self, tmpl: &mut TemplateBuffer) {
         (self.renderer)(tmpl)
     }
 }
 
 // I'd like to be able to say impl Display for T where T: Render but coherence.
-impl<F> fmt::Display for Renderer<F> where Renderer<F>: Render {
+impl<F> fmt::Display for FnRenderer<F> where FnRenderer<F>: Render {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         struct Adapter<'a, 'b>(&'a mut fmt::Formatter<'b>) where 'b: 'a;
         impl<'a, 'b> fmt::Write for Adapter<'a, 'b> {
@@ -184,30 +198,6 @@ impl<F> fmt::Display for Renderer<F> where Renderer<F>: Render {
         self.write_to_fmt(&mut Adapter(f)).or(Err(fmt::Error))
     }
 }
-
-/// Used by the `html! {}` macro
-#[doc(hidden)]
-pub fn __new_renderer<F>(expected_size: usize, f: F) -> Renderer<F>
-    where F: FnOnce(&mut TemplateBuffer)
-{
-    Renderer {
-        renderer: f,
-        expected_size: expected_size,
-    }
-}
-
-/// Used by the `html! {}` macro
-#[doc(hidden)]
-pub fn __new_boxed_renderer<F>(expected_size: usize, f: F) -> Box<Renderer<F>>
-    where F: FnOnce(&mut TemplateBuffer)
-{
-    Box::new(Renderer {
-        renderer: f,
-        expected_size: expected_size,
-    })
-}
-
-// }}}
 
 /// Raw content marker.
 ///

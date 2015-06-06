@@ -8,7 +8,7 @@ macro_rules! html {
             __append_html!(tmpl, $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
-        $crate::__new_renderer(stringify!($($inner)*).len(), f)
+        $crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f)
     }}
 }
 
@@ -57,7 +57,7 @@ macro_rules! box_html {
             __append_html!(tmpl, $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
-        $crate::__new_boxed_renderer(stringify!($($inner)*).len(), f)
+        Box::new($crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f))
     }}
 }
 

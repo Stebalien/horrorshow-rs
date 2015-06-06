@@ -28,7 +28,7 @@ pub trait Template: RenderOnce + Sized {
 
     /// Render this into something that implements fmt::Write.
     ///
-    /// Renderer also implements Display but that's about twice as slow...
+    /// FnRenderer also implements Display but that's about twice as slow...
     fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Fmt(writer),

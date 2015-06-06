@@ -271,8 +271,7 @@ pub use error::Error;
 mod template;
 pub use template::{TemplateBuffer, Template};
 mod render;
-pub use render::{RenderOnce, RenderMut, Render, RenderBox, Renderer, Raw,
-                 __new_renderer, __new_boxed_renderer};
+pub use render::{RenderOnce, RenderMut, Render, RenderBox, FnRenderer, Raw};
 
 /// Traits that should always be imported.
 pub mod prelude;
