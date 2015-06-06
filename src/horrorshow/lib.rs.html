@@ -347,6 +347,13 @@
 <span id="305">305</span>
 <span id="306">306</span>
 <span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -379,7 +386,7 @@
 <span class='doccomment'>//!                     // append to the current template.</span>
 <span class='doccomment'>//!                     // store output because rust bug #25753</span>
 <span class='doccomment'>//!                     tmpl = tmpl &lt;&lt; html! {</span>
-<span class='doccomment'>//!                         li {</span>
+<span class='doccomment'>//!                         li(first? = (i == 0)) {</span>
 <span class='doccomment'>//!                             // format some text</span>
 <span class='doccomment'>//!                             #{&quot;{}&quot;, i+1 }</span>
 <span class='doccomment'>//!                         }</span>
@@ -404,7 +411,7 @@
 <span class='doccomment'>//!     &lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;\</span>
 <span class='doccomment'>//!     &lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;\</span>
 <span class='doccomment'>//!     &lt;ol id=\&quot;count\&quot;&gt;\</span>
-<span class='doccomment'>//!       &lt;li&gt;1&lt;/li&gt;\</span>
+<span class='doccomment'>//!       &lt;li first&gt;1&lt;/li&gt;\</span>
 <span class='doccomment'>//!       &lt;li&gt;2&lt;/li&gt;\</span>
 <span class='doccomment'>//!       &lt;li&gt;3&lt;/li&gt;\</span>
 <span class='doccomment'>//!       &lt;li&gt;4&lt;/li&gt;\</span>
@@ -437,6 +444,10 @@
 <span class='doccomment'>//! * `some_tag(attr,...);` -- You can also omit the value.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag(attr=#{&quot;{}&quot;, 1},...);` -- You can also use format strings.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * `some_tag(attr? = Some(&quot;test&quot;),...);` -- You can optionally include an attribute.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * `some_tag(attr? = some_boolean,...);` -- You can optionally include an attribute without a value.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `some_tag { ... }` -- Insert the tag `some_tag` and recursively evaluate the `...`.</span>
 <span class='doccomment'>//!</span>
@@ -629,7 +640,10 @@
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>prelude</span>;
 
 
-<span class='doccomment'>/// Helper trait for matching dispatching `attr ?= `.</span>
+<span class='doccomment'>/// Helper trait for dispatching `attr ?= `.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// attr ?= Some(&quot;test&quot;) -&gt; attr=&quot;test&quot;</span>
+<span class='doccomment'>/// attr ?= true -&gt; attr</span>
 <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>BoolOption</span>: <span class='ident'>Sized</span> {
     <span class='kw'>type</span> <span class='ident'>Value</span>;
@@ -645,7 +659,7 @@
 }
 
 <span class='comment'>// Need &amp;str because Value needs to implement RenderOnce (even though we never actually render</span>
-<span class='comment'>// it...</span>
+<span class='comment'>// it...)</span>
 <span class='kw'>impl</span> <span class='ident'>BoolOption</span> <span class='kw'>for</span> <span class='ident'>bool</span> {
     <span class='kw'>type</span> <span class='ident'>Value</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span>;
     <span class='attribute'>#[<span class='ident'>inline</span>(<span class='ident'>always</span>)]</span>
