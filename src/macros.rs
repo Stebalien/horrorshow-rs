@@ -179,6 +179,9 @@ macro_rules! __append_html {
     ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr; $($next:tt)* ) => {
         __append_html!($tmpl, $tag($($attr)+) { : $e; } $($next)* );
     };
+    ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr) => {
+        __append_html!($tmpl, $tag($($attr)+) { : $e });
+    };
     ($tmpl:ident, $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next)* ) => {
         __append_html!($tmpl, $tag($($attr)+) { : {$($code)*} } $($next)* );
     };
