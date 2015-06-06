@@ -377,10 +377,10 @@
 <span class='doccomment'>//!             }</span>
 <span class='doccomment'>//!             ol(id=&quot;count&quot;) {</span>
 <span class='doccomment'>//!                 // run some inline code...</span>
-<span class='doccomment'>//!                 |mut tmpl| for i in 0..10 {</span>
+<span class='doccomment'>//!                 |tmpl| for i in 0..10 {</span>
 <span class='doccomment'>//!                     // append to the current template.</span>
 <span class='doccomment'>//!                     // store output because rust bug #25753</span>
-<span class='doccomment'>//!                     tmpl = tmpl &lt;&lt; html! {</span>
+<span class='doccomment'>//!                     &amp;mut *tmpl &lt;&lt; html! {</span>
 <span class='doccomment'>//!                         li(first? = (i == 0)) {</span>
 <span class='doccomment'>//!                             // Format some text.</span>
 <span class='doccomment'>//!                             : format_args!(&quot;{}&quot;, i+1)</span>

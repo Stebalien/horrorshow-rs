@@ -71,10 +71,10 @@
             }
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
                 <span class='comment'>// run some inline code...</span>
-                <span class='op'>|</span><span class='kw-2'>mut</span> <span class='ident'>tmpl</span><span class='op'>|</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
+                <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
                     <span class='comment'>// append to the current template.</span>
                     <span class='comment'>// store output because rust bug #25753</span>
-                    <span class='ident'>tmpl</span> <span class='op'>=</span> <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
+                    <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
                         <span class='ident'>li</span>(<span class='ident'>first</span>? <span class='op'>=</span> (<span class='ident'>i</span> <span class='op'>==</span> <span class='number'>0</span>)) {
                             <span class='comment'>// Format some text.</span>
                             : <span class='macro'>format_args</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)
