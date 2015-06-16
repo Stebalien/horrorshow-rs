@@ -52,7 +52,7 @@
 <p>An html templating library.</p>
 
 <h2 id="example:" class='section-header'><a
-                           href="#example:">Example:</a></h2><pre id='rust-example-rendered' class='rust '>
+                           href="#example:">Example:</a></h2><pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>horrorshow</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 <span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>html</span><span class='macro'>!</span> {
     <span class='ident'>html</span> {
@@ -206,7 +206,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
 <p>To return a template directly, you have to create it using the <code>box_html!</code> macro instead of the
 <code>html!</code> macro. The template type will be one of <code>Box&lt;RenderBox&gt;</code> (can be rendered once),
 <code>Box&lt;RenderMut&gt;</code>, or <code>Box&lt;Render&gt;</code> depending on how the template affects its environment.</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;
 
@@ -245,7 +245,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
 
 <p><em>Note</em>: To avoid allocating, you can implement render manually instead of returning a boxed
 template:</p>
-<pre id='rust-example-rendered' class='rust '>
+<pre class='rust rust-example-rendered'>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;
 
@@ -327,6 +327,14 @@ template:</p>
                         <td class='docblock short'>
                              <p>Mark a string as a raw. The string will not be rendered.</p>
 
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.template!.html'
+                               title='horrorshow::template!'>template!</a></td>
+                        <td class='docblock short'>
+                             
                         </td>
                     </tr>
                 </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
