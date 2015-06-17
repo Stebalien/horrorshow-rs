@@ -27,6 +27,15 @@ impl ::std::error::Error for Error {
     }
 }
 
+impl From<io::Error> for Error {
+    fn from(e: io::Error) -> Error {
+        Error {
+            write: Some(e),
+            render: Vec::new(),
+        }
+    }
+}
+
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // TODO: Display both write/render errors at the same time.
