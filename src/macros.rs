@@ -118,11 +118,67 @@ macro_rules! __append_attrs {
 
 }
 
+/// And this is how I handle if versus if let... Fuuuuu...
+#[doc(hidden)]
+#[macro_export]
+macro_rules! __parse_if_chain {
+    ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } else $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
+            __append_html!($tmpl, $($inner)*);
+        } else ), $($next)*);
+    };
+    ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
+            __append_html!($tmpl, $($inner)*);
+        }));
+        __append_html!($tmpl, $($next)*);
+    };
+    ($tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } else $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)* if $e {
+            __append_html!($tmpl, $($inner)*);
+        } else ), $($next)*);
+    };
+    ($tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)* if $e {
+            __append_html!($tmpl, $($inner)*);
+        }));
+        __append_html!($tmpl, $($next)*);
+    };
+    ($tmpl:ident, ($($prefix:tt)*), { $($inner:tt)* } $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)* {
+            __append_html!($tmpl, $($inner)*);
+        }));
+        __append_html!($tmpl, $($next)*);
+    };
+    ($tmpl:ident, ($chain:stmt)) => {
+        $chain
+    };
+}
+
+
 /// Append html to the current template.
 /// Don't call this manually.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __append_html {
+    ($tmpl:ident, @ if $($next:tt)+) => {
+        __parse_if_chain!($tmpl, (), if $($next)*);
+    };
+    ($tmpl:ident, @ for $p:pat in $e:expr { $($inner:tt)* } $($next:tt)*) => {
+        for $p in $e {
+            __append_html!($tmpl, $($inner)*);
+        }
+    };
+    ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
+        while let $p = $e {
+            __append_html!($tmpl, $($inner)*);
+        }
+    };
+    ($tmpl:ident, @ while $e:expr { $($inner:tt)* } $($next:tt)*) => {
+        while $e {
+            __append_html!($tmpl, $($inner)*);
+        }
+    };
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {
         $crate::RenderOnce::render_once({$($code)*}, $tmpl);
         __append_html!($tmpl, $($next)*);
