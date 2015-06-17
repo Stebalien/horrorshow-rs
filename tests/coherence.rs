@@ -1,7 +1,6 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{RenderOnce, Render, RenderMut, TemplateBuffer};
 use horrorshow::prelude::*;
 
 struct Test;
