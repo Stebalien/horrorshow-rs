@@ -164,11 +164,13 @@ macro_rules! __append_html {
     ($tmpl:ident, @ if $($next:tt)+) => {
         __parse_if_chain!($tmpl, (), if $($next)*);
     };
+    /*
     ($tmpl:ident, @ for $p:pat in $e:expr { $($inner:tt)* } $($next:tt)*) => {
         for $p in $e {
             __append_html!($tmpl, $($inner)*);
         }
     };
+    */
     ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while let $p = $e {
             __append_html!($tmpl, $($inner)*);

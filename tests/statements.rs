@@ -60,6 +60,7 @@ fn test_if_else() {
     }.into_string().unwrap(), "<span>1</span>");
 }
 
+/*
 #[test]
 fn test_for() {
     assert_eq!(html! {
@@ -70,6 +71,7 @@ fn test_for() {
         }
     }.into_string().unwrap(), "<ol><li>0</li><li>1</li></ol>");
 }
+*/
 
 #[test]
 fn test_while() {
