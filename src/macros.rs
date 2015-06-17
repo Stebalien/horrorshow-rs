@@ -286,3 +286,58 @@ macro_rules! __append_html {
     };
     ($tmpl:ident,) => {};
 }
+
+#[macro_export]
+macro_rules! template {
+    ($name:ident ($($field:ident : &$typ:ty),*) { $($tmpl:tt)* } $($rest:tt)*) => {
+        struct $name<'a> { $( $field: &'a $typ),* }
+        impl<'a> $name<'a> {
+            pub fn new($($field: &'a $typ),*) -> Self {
+                $name { $( $field: $field),* }
+            }
+        }
+        impl<'a> $crate::RenderOnce for $name<'a> {
+            fn render_once(self, tmpl: &mut $crate::TemplateBuffer) {
+                $crate::Render::render(&self, tmpl);
+            }
+        }
+        impl<'a> $crate::RenderMut for $name<'a> {
+            fn render_mut(&mut self, tmpl: &mut $crate::TemplateBuffer) {
+                $crate::Render::render(self, tmpl);
+            }
+        }
+        impl<'a> $crate::Render for $name<'a> {
+            fn render(&self, tmpl: &mut $crate::TemplateBuffer) {
+                let &$name { $($field),* } = self;
+                tmpl << html! { $($tmpl)* };
+            }
+        }
+        template!($($rest)*);
+    };
+    (pub $name:ident ($($field:ident : &$typ:ty),*) { $($tmpl:tt)* } $($rest:tt)*) => {
+        struct $name<'a> { $( $field: &'a $typ),* }
+        impl<'a> $name<'a> {
+            pub fn new($($field: &'a $typ),*) -> Self {
+                $name { $( $field: $field),* }
+            }
+        }
+        impl<'a> $crate::RenderOnce for $name<'a> {
+            fn render_once(self, tmpl: &mut $crate::TemplateBuffer) {
+                $crate::Render::render(&self, tmpl);
+            }
+        }
+        impl<'a> $crate::RenderMut for $name<'a> {
+            fn render_mut(&mut self, tmpl: &mut $crate::TemplateBuffer) {
+                $crate::Render::render(self, tmpl);
+            }
+        }
+        impl<'a> $crate::Render for $name<'a> {
+            fn render(&self, tmpl: &mut $crate::TemplateBuffer) {
+                let &$name { $($field),* } = self; 
+                tmpl << html! { $($tmpl)* };
+            }
+        }
+        template!($($rest)*);
+    };
+    () => {}
+}
