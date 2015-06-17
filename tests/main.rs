@@ -3,24 +3,24 @@ extern crate horrorshow;
 
 use horrorshow::Template;
 
-/* Wait for 1.2
+/* TODO: Implement
 #[test]
 fn test_multi() {
     assert_eq!(&html! {
         html body p : "Some content";
-    }.into_string(), "<html><body><p>Some content</p></body></html>");
+    }.into_string().unwrap(), "<html><body><p>Some content</p></body></html>");
 
     assert_eq!(&html! {
         html(lang="en") body p : "Some content";
-    }.into_string(), "<html lang=\"en\"><body><p>Some content</p></body></html>");
+    }.into_string().unwrap(), "<html lang=\"en\"><body><p>Some content</p></body></html>");
 
     assert_eq!(&html! {
         html(lang="en") body p(id="test") : "Some content";
-    }.into_string(), "<html lang=\"en\"><body><p id=\"test\">Some content</p></body></html>");
+    }.into_string().unwrap(), "<html lang=\"en\"><body><p id=\"test\">Some content</p></body></html>");
 
     assert_eq!(&html! {
         html(lang="en") body(class="body") p(id="test") { : "Some content" }
-    }.into_string(), "<html lang=\"en\"><body class=\"body\"><p id=\"test\">Some content</p></body></html>");
+    }.into_string().unwrap(), "<html lang=\"en\"><body class=\"body\"><p id=\"test\">Some content</p></body></html>");
 }
 */
 

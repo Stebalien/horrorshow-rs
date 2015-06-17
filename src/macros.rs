@@ -164,16 +164,7 @@ macro_rules! __append_html {
     ($tmpl:ident, @ if $($next:tt)+) => {
         __parse_if_chain!($tmpl, (), if $($next)*);
     };
-    /*
     ($tmpl:ident, @ for $p:pat in $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        for $p in $e {
-            __append_html!($tmpl, $($inner)*);
-        }
-    };
-    */
-    // In 1.2, replace $p:ident with $p:pat. Currently, this doesn't allow all forloop constructs.
-    // See above ^^
-    ($tmpl:ident, @ for $p:ident in $e:expr { $($inner:tt)* } $($next:tt)*) => {
         for $p in $e {
             __append_html!($tmpl, $($inner)*);
         }
@@ -280,7 +271,7 @@ macro_rules! __append_html {
     ($tmpl:ident, $tag:ident : $e:expr) => {
         __append_html!($tmpl, $tag { : $e; });
     };
-    /* Wait for 1.2
+    /* FIXME: doesn't work
     ($tmpl:ident, $tag:ident($($attrs:tt)+) $tag2:ident $($next:tt)* ) => {
         __append_html!($tmpl, $tag($($attrs)*) { $tag2 $($next)* });
     };
