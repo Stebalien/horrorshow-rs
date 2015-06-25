@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-306' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-307' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="horrorshow" class='section-header'><a
                            href="#horrorshow">Horrorshow</a></h1>
@@ -70,22 +70,21 @@
                 : <span class='macro'>raw</span><span class='macro'>!</span>(<span class='string'>&quot;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&quot;</span>)
             }
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
-                <span class='comment'>// run some inline code...</span>
-                <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
-                    <span class='comment'>// append to the current template.</span>
-                    <span class='comment'>// store output because rust bug #25753</span>
-                    <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='macro'>html</span><span class='macro'>!</span> {
-                        <span class='ident'>li</span>(<span class='ident'>first</span>? <span class='op'>=</span> (<span class='ident'>i</span> <span class='op'>==</span> <span class='number'>0</span>)) {
-                            <span class='comment'>// Format some text.</span>
-                            : <span class='macro'>format_args</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)
-                        }
-                    };
+                <span class='comment'>// You can embed for loops, while loops, and if statements.</span>
+                <span class='kw-2'>@</span> <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
+                    <span class='ident'>li</span>(<span class='ident'>first</span>? <span class='op'>=</span> (<span class='ident'>i</span> <span class='op'>==</span> <span class='number'>0</span>)) {
+                        <span class='comment'>// Format some text.</span>
+                        : <span class='macro'>format_args</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)
+                    }
                 }
             }
             <span class='comment'>// You need semi-colons for tags without children.</span>
             <span class='ident'>br</span>; <span class='ident'>br</span>;
             <span class='ident'>p</span> {
-                : <span class='string'>&quot;Easy!&quot;</span>
+                <span class='comment'>// You can also embed closures.</span>
+                <span class='op'>|</span><span class='ident'>tmpl</span><span class='op'>|</span> {
+                    <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='string'>&quot;Easy!&quot;</span>;
+                }
             }
         }
     }
@@ -137,6 +136,7 @@ current position. To insert literal html, mark it as raw with the <code>raw!</co
 <li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
 actually a closure so the block/expression can append to the current template through <code>tmpl</code>
 (of type <code>&amp;mut TemplateBuffer</code>).</p></li>
+<li><p><code>@ for ...</code>, <code>@ while ...</code>, <code>@ if ...</code> -- you can embed basic control flow expressions.</p></li>
 </ul>
 
 <h2 id="traits,-traits-oh-my!" class='section-header'><a
