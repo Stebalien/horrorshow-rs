@@ -171,6 +171,13 @@ macro_rules! __append_html {
         }
     };
     */
+    // In 1.2, replace $p:ident with $p:pat. Currently, this doesn't allow all forloop constructs.
+    // See above ^^
+    ($tmpl:ident, @ for $p:ident in $e:expr { $($inner:tt)* } $($next:tt)*) => {
+        for $p in $e {
+            __append_html!($tmpl, $($inner)*);
+        }
+    };
     ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while let $p = $e {
             __append_html!($tmpl, $($inner)*);
@@ -288,7 +295,7 @@ macro_rules! __append_html {
 }
 
 /// Create a new template.
-///
+/// 
 /// This allows you to declare a template as follows:
 ///
 /// ```norun
