@@ -287,6 +287,32 @@ macro_rules! __append_html {
     ($tmpl:ident,) => {};
 }
 
+/// Create a new template.
+///
+/// This allows you to declare a template as follows:
+///
+/// ```norun
+/// template! {
+///     MyTemplate(name: &str, age: &u32) {
+///         p {
+///            : "Hello, my name is ";
+///            : name;
+///            : " and I am ";
+///            : age;
+///            : " years old.";
+///         }
+///     }
+/// }
+/// ```
+///
+/// You can instantiate these templates by calling `new` on them:
+///
+/// ```norun
+/// let tmpl = MyTemplate::new("Not Me", &42);
+/// ```
+///
+/// These templates never own their content, they just borrow it. This is one of the reasons I call
+/// this feature "experimental".
 #[macro_export]
 macro_rules! template {
     ($name:ident ($($field:ident : &$typ:ty),*) { $($tmpl:tt)* } $($rest:tt)*) => {
