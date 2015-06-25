@@ -24,22 +24,21 @@
 //!                 : raw!("Let's <i>count</i> to 10!")
 //!             }
 //!             ol(id="count") {
-//!                 // run some inline code...
-//!                 |tmpl| for i in 0..10 {
-//!                     // append to the current template.
-//!                     // store output because rust bug #25753
-//!                     &mut *tmpl << html! {
-//!                         li(first? = (i == 0)) {
-//!                             // Format some text.
-//!                             : format_args!("{}", i+1)
-//!                         }
-//!                     };
+//!                 // You can embed for loops, while loops, and if statements.
+//!                 @ for i in 0..10 {
+//!                     li(first? = (i == 0)) {
+//!                         // Format some text.
+//!                         : format_args!("{}", i+1)
+//!                     }
 //!                 }
 //!             }
 //!             // You need semi-colons for tags without children.
 //!             br; br;
 //!             p {
-//!                 : "Easy!"
+//!                 // You can also embed closures.
+//!                 |tmpl| {
+//!                     tmpl << "Easy!";
+//!                 }
 //!             }
 //!         }
 //!     }
@@ -100,6 +99,8 @@
 //! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
 //! actually a closure so the block/expression can append to the current template through `tmpl`
 //! (of type `&mut TemplateBuffer`).
+//!
+//! * `@ for ...`, `@ while ...`, `@ if ...` -- you can embed basic control flow expressions.
 //!
 //! ## Traits, traits oh-my!
 //!
