@@ -45,7 +45,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-3660' class='srclink' href='../src/horrorshow/macros.rs.html#291-343' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-3660' class='srclink' href='../src/horrorshow/macros.rs.html#317-369' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>template</span> {
     (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>name</span>:<span class='ident'>ident</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>field</span>:<span class='ident'>ident</span> : <span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>typ</span>:<span class='ident'>ty</span>),<span class='op'>*</span>) { $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>tt</span>)<span class='op'>*</span> } $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rest</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {
@@ -101,7 +101,31 @@
     () <span class='op'>=&gt;</span> {}
 }
 </pre>
-</section>
+<div class='docblock'><p>Create a new template.</p>
+
+<p>This allows you to declare a template as follows:</p>
+
+<pre><code class="language-norun">template! {
+    MyTemplate(name: &amp;str, age: &amp;u32) {
+        p {
+           : &quot;Hello, my name is &quot;;
+           : name;
+           : &quot; and I am &quot;;
+           : age;
+           : &quot; years old.&quot;;
+        }
+    }
+}
+</code></pre>
+
+<p>You can instantiate these templates by calling <code>new</code> on them:</p>
+
+<pre><code class="language-norun">let tmpl = MyTemplate::new(&quot;Not Me&quot;, &amp;42);
+</code></pre>
+
+<p>These templates never own their content, they just borrow it. This is one of the reasons I call
+this feature &quot;experimental&quot;.</p>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
