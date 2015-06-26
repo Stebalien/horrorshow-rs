@@ -10,16 +10,11 @@ fn render_post(post: Post) -> Box<RenderBox> {
             header(class="post-header") {
                 h1 : title;
                 ul {
-                    |t| tags.iter().fold(t, |t, tag| t << html! {
+                    // FIXME: shouldn't need ().
+                    // Rust refuses to parse idents as expressions!. 
+                    @ for tag in (tags) {
                         li : tag
-                    });
-                    /*
-
-                    // You should  be able to write the following but gh#25753 prevents this.
-                    |t| for tag in tags {
-                        t << html! { li : tag };
                     }
-                    */
                 }
             }
             section(class="post-body") : body;
@@ -38,7 +33,11 @@ fn render<I: Iterator<Item=Post>>(title: &str, posts: I) -> String {
                 main {
                     header { h1 : title }
                     section(id="posts") {
-                        |t| posts.fold(t, |t, post| t << render_post(post));
+                        // FIXME: shouldn't need ().
+                        // Rust refuses to parse idents as expressions!. 
+                        @ for post in (posts) {
+                            : render_post(post)
+                        }
                     }
                 }
             }

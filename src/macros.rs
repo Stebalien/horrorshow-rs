@@ -37,12 +37,12 @@ macro_rules! html {
 ///     html {
 ///         body {
 ///             : post("First Post");
-///             |t| (0..10).fold(t, |t, i| {
+///             |t| for i in 0..10 {
 ///                 // Waiting for non-lexical borrows!!!!
 ///                 let tmp = format!("Spam post {}", i);
 ///                 let post = post(&tmp);
-///                 t << post
-///             })
+///                 &mut *t << post;
+///             };
 ///         }
 ///     }
 /// });

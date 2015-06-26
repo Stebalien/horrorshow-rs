@@ -60,18 +60,20 @@ fn test_if_else() {
     }.into_string().unwrap(), "<span>1</span>");
 }
 
-/*
 #[test]
 fn test_for() {
     assert_eq!(html! {
+        p : "before";
         ol {
             @ for a in 0..2 {
-                li : a
+                li {
+                    : a
+                }
             }
         }
-    }.into_string().unwrap(), "<ol><li>0</li><li>1</li></ol>");
+        p : "after";
+    }.into_string().unwrap(), "<p>before</p><ol><li>0</li><li>1</li></ol><p>after</p>");
 }
-*/
 
 #[test]
 fn test_while() {

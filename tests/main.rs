@@ -78,7 +78,8 @@ fn test_embed_twice() {
     let r = html! {
         |tmpl| {
             let sub = html! { : "abcde" };
-            tmpl << &sub << &sub;
+            &mut *tmpl << &sub;
+            &mut *tmpl << &sub;
         }
     };
     assert_eq!(r.into_string().unwrap(), "abcdeabcde");
