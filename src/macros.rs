@@ -5,7 +5,7 @@ macro_rules! html {
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
         let f = |tmpl: &mut $crate::TemplateBuffer| -> () {
-            __append_html!(tmpl, $($inner)*);
+            __horrorshow__append_html!(tmpl, $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
         $crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f)
@@ -54,7 +54,7 @@ macro_rules! box_html {
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
         let f = move |tmpl: &mut $crate::TemplateBuffer| -> () {
-            __append_html!(tmpl, $($inner)*);
+            __horrorshow__append_html!(tmpl, $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
         Box::new($crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f))
@@ -87,25 +87,25 @@ macro_rules! __horrorshow_block_identity {
 /// Don't call this manually.
 #[macro_export]
 #[doc(hidden)]
-macro_rules! __append_attrs {
+macro_rules! __horrorshow__append_attrs {
     ($tmpl:ident, $($($attr:ident)-+):+ ?= $value:expr, $($rest:tt)+) => {
-        __append_attrs!($tmpl, $($($attr)-+):+ ?= $value);
-        __append_attrs!($tmpl, $($rest)+);
+        __horrorshow__append_attrs!($tmpl, $($($attr)-+):+ ?= $value);
+        __horrorshow__append_attrs!($tmpl, $($rest)+);
     };
     ($tmpl:ident, $($($attr:ident)-+):+ ?= $value:expr) => {
         match $crate::BoolOption::bool_option($value) {
             (_, None) => {},
-            (true, Some(_)) => { __append_attrs!($tmpl, $($($attr)-+):+); }
-            (false, Some(v)) => { __append_attrs!($tmpl, $($($attr)-+):+ = v); }
+            (true, Some(_)) => { __horrorshow__append_attrs!($tmpl, $($($attr)-+):+); }
+            (false, Some(v)) => { __horrorshow__append_attrs!($tmpl, $($($attr)-+):+ = v); }
         };
     };
     ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr, $($rest:tt)+) => {
-        __append_attrs!($tmpl, $($($attr)-+):+ = $value);
-        __append_attrs!($tmpl, $($rest)+);
+        __horrorshow__append_attrs!($tmpl, $($($attr)-+):+ = $value);
+        __horrorshow__append_attrs!($tmpl, $($rest)+);
     };
     ($tmpl:ident, $($($attr:ident)-+):+, $($rest:tt)+) => {
-        __append_attrs!($tmpl, $($($attr)-+):+);
-        __append_attrs!($tmpl, $($rest)+);
+        __horrorshow__append_attrs!($tmpl, $($($attr)-+):+);
+        __horrorshow__append_attrs!($tmpl, $($rest)+);
     };
     ($tmpl:ident, $($($attr:ident)-+):+ = $value:expr) => {
         $tmpl.write_raw(concat!(" ", stringify_compressed!($($($attr)-+):+), "=\""));
@@ -124,46 +124,46 @@ macro_rules! __append_attrs {
 /// And this is how I handle if versus if let... Fuuuuu...
 #[doc(hidden)]
 #[macro_export]
-macro_rules! __parse_if_chain {
+macro_rules! __horrorshow_parse_if_chain {
     ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt { $($inner:tt)* } else $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)*), if let $p = __horrorshow_block_identity!({$e}) { $($inner)* } else $($next)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)*), if let $p = __horrorshow_block_identity!({$e}) { $($inner)* } else $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } else $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
-            __append_html!($tmpl, $($inner)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
+            __horrorshow__append_html!($tmpl, $($inner)*);
         } else ), $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)*), if let $p = __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)*), if let $p = __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
-            __append_html!($tmpl, $($inner)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }));
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if $e:tt { $($inner:tt)* } else $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)*), if __horrorshow_block_identity!({$e}) { $($inner)* } else $($next)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)*), if __horrorshow_block_identity!({$e}) { $($inner)* } else $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } else $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)* if $e {
-            __append_html!($tmpl, $($inner)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)* if $e {
+            __horrorshow__append_html!($tmpl, $($inner)*);
         } else ), $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)*), if __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)*), if __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)* if $e {
-            __append_html!($tmpl, $($inner)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)* if $e {
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }));
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), { $($inner:tt)* } $($next:tt)*) => {
-        __parse_if_chain!($tmpl, ($($prefix)* {
-            __append_html!($tmpl, $($inner)*);
+        __horrorshow_parse_if_chain!($tmpl, ($($prefix)* {
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }));
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, ($chain:stmt)) => {
         $chain
@@ -175,59 +175,59 @@ macro_rules! __parse_if_chain {
 /// Don't call this manually.
 #[doc(hidden)]
 #[macro_export]
-macro_rules! __append_html {
+macro_rules! __horrorshow__append_html {
     ($tmpl:ident, @ if $($next:tt)+) => {
-        __parse_if_chain!($tmpl, (), if $($next)*);
+        __horrorshow_parse_if_chain!($tmpl, (), if $($next)*);
     };
     /*
     ($tmpl:ident, @ for $p:pat in $e:expr { $($inner:tt)* } $($next:tt)*) => {
         for $p in $e {
-            __append_html!($tmpl, $($inner)*);
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }
     };
     */
     // In 1.2, replace $p:ident with $p:pat. Currently, this doesn't allow all forloop constructs.
     // See above ^^
     ($tmpl:ident, @ for $p:ident in $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        __append_html!($tmpl, @ for $p in __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
+        __horrorshow__append_html!($tmpl, @ for $p in __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
     };
     ($tmpl:ident, @ for $p:ident in $e:expr { $($inner:tt)* } $($next:tt)*) => {
         for $p in $e {
-            __append_html!($tmpl, $($inner)*);
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, @ while let $p:pat = $e:tt { $($inner:tt)* } $($next:tt)*) => {
         while let $p = $e {
-            __append_html!($tmpl, $($inner)*);
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while let $p = $e {
-            __append_html!($tmpl, $($inner)*);
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, @ while $e:tt { $($inner:tt)* } $($next:tt)*) => {
         while $e {
-            __append_html!($tmpl, $($inner)*);
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, @ while $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while $e {
-            __append_html!($tmpl, $($inner)*);
+            __horrorshow__append_html!($tmpl, $($inner)*);
         }
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {
         $crate::RenderOnce::render_once({$($code)*}, $tmpl);
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, : $code:expr; $($next:tt)* ) => {
         $crate::RenderOnce::render_once($code, $tmpl);
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, : $code:expr ) => {
         $crate::RenderOnce::render_once($code, $tmpl);
@@ -236,25 +236,25 @@ macro_rules! __append_html {
         (|$var: &mut $crate::TemplateBuffer| {
             __horrorshow_block_identity!({$($code)*})
         })($tmpl);
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |mut $var:ident| {$($code:tt)*} $($next:tt)*) => {
         (|mut $var: &mut $crate::TemplateBuffer| {
             __horrorshow_block_identity!({$($code)*})
         })($tmpl);
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |$var:ident| $code:stmt; $($next:tt)* ) => {
         (|$var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |mut $var:ident| $code:stmt; $($next:tt)* ) => {
         (|mut $var: &mut $crate::TemplateBuffer| {
             $code;
         })($tmpl);
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |$var:ident| $code:stmt ) => {
         (|$var: &mut $crate::TemplateBuffer| {
@@ -268,57 +268,57 @@ macro_rules! __append_html {
     };
     ($tmpl:ident, $tag:ident($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
-        __append_attrs!($tmpl, $($attrs)+);
+        __horrorshow__append_attrs!($tmpl, $($attrs)+);
         $tmpl.write_raw(">");
-        __append_html!($tmpl, $($children)*);
+        __horrorshow__append_html!($tmpl, $($children)*);
         $tmpl.write_raw(concat!("</", stringify!($tag), ">"));
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr; $($next:tt)* ) => {
-        __append_html!($tmpl, $tag($($attr)+) { : $e; } $($next)* );
+        __horrorshow__append_html!($tmpl, $tag($($attr)+) { : $e; } $($next)* );
     };
     ($tmpl:ident, $tag:ident($($attr:tt)+) : $e:expr) => {
-        __append_html!($tmpl, $tag($($attr)+) { : $e });
+        __horrorshow__append_html!($tmpl, $tag($($attr)+) { : $e });
     };
     ($tmpl:ident, $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next)* ) => {
-        __append_html!($tmpl, $tag($($attr)+) { : {$($code)*} } $($next)* );
+        __horrorshow__append_html!($tmpl, $tag($($attr)+) { : {$($code)*} } $($next)* );
     };
     ($tmpl:ident, $tag:ident($($attrs:tt)+); $($next:tt)*) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
-        __append_attrs!($tmpl, $($attrs)+);
+        __horrorshow__append_attrs!($tmpl, $($attrs)+);
         $tmpl.write_raw(" />");
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, $tag:ident($($attrs:tt)+)) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
-        __append_attrs!($tmpl, $($attrs)+);
+        __horrorshow__append_attrs!($tmpl, $($attrs)+);
         $tmpl.write_raw(" />");
     };
     ($tmpl:ident, $tag:ident { $($children:tt)* } $($next:tt)* ) => {
         $tmpl.write_raw(concat!("<", stringify!($tag), ">"));
-        __append_html!($tmpl, $($children)*);
+        __horrorshow__append_html!($tmpl, $($children)*);
         $tmpl.write_raw(concat!("</", stringify!($tag), ">"));
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, $tag:ident : $e:expr; $($next:tt)* ) => {
-        __append_html!($tmpl, $tag { : $e; } $($next)* );
+        __horrorshow__append_html!($tmpl, $tag { : $e; } $($next)* );
     };
     ($tmpl:ident, $tag:ident : {$($code:tt)*} $($next:tt)* ) => {
-        __append_html!($tmpl, $tag { : {$($code)*} } $($next)* );
+        __horrorshow__append_html!($tmpl, $tag { : {$($code)*} } $($next)* );
     };
     ($tmpl:ident, $tag:ident; $($next:tt)*) => {
         $tmpl.write_raw(concat!("<", stringify!($tag), " />"));
-        __append_html!($tmpl, $($next)*);
+        __horrorshow__append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, $tag:ident : $e:expr) => {
-        __append_html!($tmpl, $tag { : $e; });
+        __horrorshow__append_html!($tmpl, $tag { : $e; });
     };
     /* Wait for 1.2
     ($tmpl:ident, $tag:ident($($attrs:tt)+) $tag2:ident $($next:tt)* ) => {
-        __append_html!($tmpl, $tag($($attrs)*) { $tag2 $($next)* });
+        __horrorshow__append_html!($tmpl, $tag($($attrs)*) { $tag2 $($next)* });
     };
     ($tmpl:ident, $tag:ident $tag2:ident $($next:tt)* ) => {
-        __append_html!($tmpl, $tag { $tag2 $($next)* });
+        __horrorshow__append_html!($tmpl, $tag { $tag2 $($next)* });
     };
     */
     ($tmpl:ident, $tag:ident) => {
