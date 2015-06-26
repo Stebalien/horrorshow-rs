@@ -177,16 +177,19 @@ macro_rules! __append_html {
         for $p in $e {
             __append_html!($tmpl, $($inner)*);
         }
+        __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while let $p = $e {
             __append_html!($tmpl, $($inner)*);
         }
+        __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, @ while $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while $e {
             __append_html!($tmpl, $($inner)*);
         }
+        __append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {
         $crate::RenderOnce::render_once({$($code)*}, $tmpl);
