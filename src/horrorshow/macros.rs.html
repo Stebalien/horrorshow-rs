@@ -459,12 +459,12 @@
 <span class='doccomment'>///     html {</span>
 <span class='doccomment'>///         body {</span>
 <span class='doccomment'>///             : post(&quot;First Post&quot;);</span>
-<span class='doccomment'>///             |t| (0..10).fold(t, |t, i| {</span>
+<span class='doccomment'>///             |t| for i in 0..10 {</span>
 <span class='doccomment'>///                 // Waiting for non-lexical borrows!!!!</span>
 <span class='doccomment'>///                 let tmp = format!(&quot;Spam post {}&quot;, i);</span>
 <span class='doccomment'>///                 let post = post(&amp;tmp);</span>
-<span class='doccomment'>///                 t &lt;&lt; post</span>
-<span class='doccomment'>///             })</span>
+<span class='doccomment'>///                 &amp;mut *t &lt;&lt; post;</span>
+<span class='doccomment'>///             };</span>
 <span class='doccomment'>///         }</span>
 <span class='doccomment'>///     }</span>
 <span class='doccomment'>/// });</span>

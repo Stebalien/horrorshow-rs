@@ -57,7 +57,6 @@
 <span id="15">15</span>
 <span id="16">16</span>
 <span id="17">17</span>
-<span id="18">18</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Shl</span>;
 <span class='kw'>use</span> <span class='ident'>template</span>::<span class='ident'>TemplateBuffer</span>;
@@ -66,15 +65,14 @@
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='lifetime'>&#39;b</span>, <span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>Shl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>TemplateBuffer</span><span class='op'>&lt;</span><span class='lifetime'>&#39;b</span><span class='op'>&gt;</span>
     <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>RenderOnce</span>
 {
-    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>TemplateBuffer</span><span class='op'>&lt;</span><span class='lifetime'>&#39;b</span><span class='op'>&gt;</span>;
+    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> ();
     <span class='doccomment'>/// Render the component into the template.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// Note: If writing to the template fails, this method will neither panic nor return errors.</span>
     <span class='doccomment'>/// Instead, no more data will be written to the template and horrorshow abort template</span>
     <span class='doccomment'>/// rendering (return an error) when it re-gains control.</span>
-    <span class='kw'>fn</span> <span class='ident'>shl</span>(<span class='self'>self</span>, <span class='ident'>component</span>: <span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>TemplateBuffer</span><span class='op'>&lt;</span><span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>shl</span>(<span class='self'>self</span>, <span class='ident'>component</span>: <span class='ident'>T</span>) {
         <span class='ident'>component</span>.<span class='ident'>render_once</span>(<span class='self'>self</span>);
-        <span class='self'>self</span>
     }
 }
 </pre>
