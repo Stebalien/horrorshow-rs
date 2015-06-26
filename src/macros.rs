@@ -118,14 +118,23 @@ macro_rules! __append_attrs {
 
 }
 
+// NOTE: You may notice a lot of $e:tt, and then $e:expr. This is because rust seems to parse
+// `ident {` as a struct declaration when using `$e:expr`.
+
 /// And this is how I handle if versus if let... Fuuuuu...
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __parse_if_chain {
+    ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt { $($inner:tt)* } else $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)*), if let $p = __horrorshow_block_identity!({$e}) { $($inner)* } else $($next)*);
+    };
     ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } else $($next:tt)*) => {
         __parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
             __append_html!($tmpl, $($inner)*);
         } else ), $($next)*);
+    };
+    ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt { $($inner:tt)* } $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)*), if let $p = __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
         __parse_if_chain!($tmpl, ($($prefix)* if let $p = $e {
@@ -133,10 +142,16 @@ macro_rules! __parse_if_chain {
         }));
         __append_html!($tmpl, $($next)*);
     };
+    ($tmpl:ident, ($($prefix:tt)*), if $e:tt { $($inner:tt)* } else $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)*), if __horrorshow_block_identity!({$e}) { $($inner)* } else $($next)*);
+    };
     ($tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } else $($next:tt)*) => {
         __parse_if_chain!($tmpl, ($($prefix)* if $e {
             __append_html!($tmpl, $($inner)*);
         } else ), $($next)*);
+    };
+    ($tmpl:ident, ($($prefix:tt)*), if $e:tt { $($inner:tt)* } $($next:tt)*) => {
+        __parse_if_chain!($tmpl, ($($prefix)*), if __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
     };
     ($tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } $($next:tt)*) => {
         __parse_if_chain!($tmpl, ($($prefix)* if $e {
@@ -173,14 +188,29 @@ macro_rules! __append_html {
     */
     // In 1.2, replace $p:ident with $p:pat. Currently, this doesn't allow all forloop constructs.
     // See above ^^
+    ($tmpl:ident, @ for $p:ident in $e:tt { $($inner:tt)* } $($next:tt)*) => {
+        __append_html!($tmpl, @ for $p in __horrorshow_block_identity!({$e}) { $($inner)* } $($next)*);
+    };
     ($tmpl:ident, @ for $p:ident in $e:expr { $($inner:tt)* } $($next:tt)*) => {
         for $p in $e {
             __append_html!($tmpl, $($inner)*);
         }
         __append_html!($tmpl, $($next)*);
     };
+    ($tmpl:ident, @ while let $p:pat = $e:tt { $($inner:tt)* } $($next:tt)*) => {
+        while let $p = $e {
+            __append_html!($tmpl, $($inner)*);
+        }
+        __append_html!($tmpl, $($next)*);
+    };
     ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
         while let $p = $e {
+            __append_html!($tmpl, $($inner)*);
+        }
+        __append_html!($tmpl, $($next)*);
+    };
+    ($tmpl:ident, @ while $e:tt { $($inner:tt)* } $($next:tt)*) => {
+        while $e {
             __append_html!($tmpl, $($inner)*);
         }
         __append_html!($tmpl, $($next)*);

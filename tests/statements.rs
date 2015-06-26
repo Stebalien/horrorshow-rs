@@ -14,8 +14,9 @@ fn test_if() {
 
 #[test]
 fn test_if_let() {
+    let s = Some(1);
     assert_eq!(html! {
-        @ if let Some(v) = Some(1) {
+        @ if let Some(v) = s {
             span : v
         }
     }.into_string().unwrap(), "<span>1</span>");
