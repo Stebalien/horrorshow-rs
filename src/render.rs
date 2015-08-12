@@ -105,7 +105,7 @@ impl<'b> RenderOnce for Box<RenderMut + 'b> {
 impl<'b> RenderMut for Box<RenderMut + 'b> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
-        RenderMut::render_mut(&mut *self, tmpl);
+        RenderMut::render_mut(&mut **self, tmpl);
     }
 }
 
@@ -133,7 +133,7 @@ impl<'b> RenderMut for Box<Render + 'b> {
 impl<'b> Render for Box<Render + 'b> {
     #[inline]
     fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
-        Render::render(&*self, tmpl);
+        Render::render(&**self, tmpl);
     }
 }
 
