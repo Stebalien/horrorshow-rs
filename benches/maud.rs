@@ -43,7 +43,7 @@ fn bench_short(b: &mut test::Bencher) {
 
 
 #[bench]
-fn bench(b: &mut test::Bencher) {
+fn bench_long(b: &mut test::Bencher) {
     let count = test::black_box(100);
     b.iter(|| {
         let mut s = String::new();

@@ -7,7 +7,7 @@ extern crate horrorshow;
 use horrorshow::Template;
 
 #[bench]
-fn bench_fmt(b: &mut test::Bencher) {
+fn bench_short_fmt(b: &mut test::Bencher) {
     b.iter(|| {
         let mut s = String::new();
         let template = html! {
@@ -18,17 +18,15 @@ fn bench_fmt(b: &mut test::Bencher) {
                 body {
                     // attributes
                     h1(id="heading") {
-                        // Insert escaped text (actually, anything that defines Display)
+                        // Insert escaped text 
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |tmpl| for i in 0..10 {
-                            &mut *tmpl << html! {
-                                li : format_args!("{}", i+1)
-                            };
+                        @ for i in 0..10 {
+                            li : format_args!("{}", i+1)
                         }
                     }
                     // You need semi-colons for tags without children.
@@ -53,19 +51,15 @@ fn bench_short(b: &mut test::Bencher) {
                 body {
                     // attributes
                     h1(id="heading") {
-                        // Insert escaped text (actually, anything that defines Display)
+                        // Insert escaped text 
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |tmpl| for i in 0..10 {
-                            // append to the current template.
-                            // store output because rust bug #25753
-                            &mut *tmpl << html! {
-                                li : format_args!("{}", i+1)
-                            };
+                        @ for i in 0..10 {
+                            li : format_args!("{}", i+1)
                         }
                     }
                     // You need semi-colons for tags without children.
@@ -89,19 +83,15 @@ fn bench_long(b: &mut test::Bencher) {
                 body {
                     // attributes
                     h1(id="heading") {
-                        // Insert escaped text (actually, anything that defines Display)
+                        // Insert escaped text 
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        |tmpl| for i in 0..count {
-                            // append to the current template.
-                            // store output because rust bug #25753
-                            &mut *tmpl << html! {
-                                li : format_args!("{}", i+1)
-                            };
+                        @ for i in (0..count) {
+                            li : format_args!("{}", i+1)
                         }
                     }
                     // You need semi-colons for tags without children.
