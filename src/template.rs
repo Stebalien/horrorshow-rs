@@ -187,21 +187,13 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                 }
             },
             Fmt(ref mut writer) => {
-                let mut s = String::with_capacity(4);
                 for c in text.chars() {
                     if (match c {
                         '&' => writer.write_str("&amp;"),
                         '"' => writer.write_str("&quot;"),
                         '<' => writer.write_str("&lt;"),
                         '>' => writer.write_str("&gt;"),
-                        _ => {
-                            // TODO: Use fmt::Write::write_char once beta stabalizes. This is very
-                            // slow!
-                            s.push(c);
-                            let r = writer.write_str(&s);
-                            s.clear();
-                            r
-                        }
+                        _ => writer.write_char(c),
                     }).is_err() {
                         self.0.error.write = Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
                         break;
