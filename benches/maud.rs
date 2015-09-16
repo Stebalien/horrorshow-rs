@@ -8,7 +8,7 @@ extern crate maud;
 fn bench_short(b: &mut test::Bencher) {
     b.iter(|| {
         let mut s = String::new();
-        let template = html! {
+        html!(s, {
             html {
                 head {
                     title { "Hello world!" }
@@ -21,7 +21,7 @@ fn bench_short(b: &mut test::Bencher) {
                         $$"Let's <i>count</i> to 10!"
                     }
                     ol id="count" {
-                        $ for i in 0..10 {
+                        #for i in 0..10 {
                             li {
                                 // format some text
                                 $(i+1)
@@ -35,8 +35,7 @@ fn bench_short(b: &mut test::Bencher) {
                     }
                 }
             }
-        };
-        template.render_fmt(&mut s).unwrap();
+        }).unwrap();
         test::black_box(s);
     });
 }
@@ -48,7 +47,7 @@ fn bench(b: &mut test::Bencher) {
     let count = test::black_box(100);
     b.iter(|| {
         let mut s = String::new();
-        let template = html! {
+        html!(s, {
             html {
                 head {
                     title { "Hello world!" }
@@ -61,7 +60,7 @@ fn bench(b: &mut test::Bencher) {
                         $$"Let's <i>count</i> to 10!"
                     }
                     ol id="count" {
-                        $ for i in 0..count {
+                        #for i in 0..count {
                             li {
                                 // format some text
                                 $(i+1)
@@ -75,8 +74,7 @@ fn bench(b: &mut test::Bencher) {
                     }
                 }
             }
-        };
-        template.render_fmt(&mut s).unwrap();
+        }).unwrap();
         test::black_box(s);
     });
 }
