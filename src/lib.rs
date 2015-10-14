@@ -75,6 +75,11 @@
 //!
 //! ## Usage
 //!
+//! ```
+//! #[macro_use]
+//! extern crate horrorshow;
+//! ```
+//!
 //! Inside an html template, the following expressions are valid:
 //!
 //! * `some_tag;` -- Insert a the tag `some_tag`.
