@@ -75,7 +75,7 @@
 //!
 //! ## Usage
 //!
-//! ```
+//! ```norun
 //! #[macro_use]
 //! extern crate horrorshow;
 //! ```
