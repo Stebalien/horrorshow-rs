@@ -9,6 +9,7 @@
 
     <title>horrorshow::html! - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'html!', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,18 +46,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-3634' class='srclink' href='../src/horrorshow/macros.rs.html#3-13' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-671' class='srclink' href='../src/horrorshow/macros.rs.html#3-13' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>html</span> {
-    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> {{
-        <span class='comment'>// Define this up here to prevent rust from saying:</span>
-        <span class='comment'>// Hey look, it&#39;s an FnOnce (this could be Fn/FnMut).</span>
-        <span class='kw'>let</span> <span class='ident'>f</span> <span class='op'>=</span> <span class='op'>|</span><span class='ident'>tmpl</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>TemplateBuffer</span><span class='op'>|</span> <span class='op'>-&gt;</span> () {
-            <span class='macro'>__horrorshow__append_html</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>);
-        };
-        <span class='comment'>// Stringify the template content to get a hint at how much we should allocate...</span>
-        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>crate</span>::<span class='ident'>FnRenderer</span>::<span class='ident'>with_capacity</span>(<span class='macro'>stringify</span><span class='macro'>!</span>($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>)<span class='op'>*</span>).<span class='ident'>len</span>(), <span class='ident'>f</span>)
-    }}
+    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>inner</span>:<span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>Crate a new html template</p>
 </div></section>
@@ -64,10 +57,12 @@
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -84,7 +79,7 @@
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -104,7 +99,7 @@
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -116,6 +111,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

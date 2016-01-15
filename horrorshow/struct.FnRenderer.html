@@ -9,6 +9,7 @@
 
     <title>horrorshow::FnRenderer - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'FnRenderer', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,26 +46,28 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-1468' class='srclink' href='../src/horrorshow/render.rs.html#141-144' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-263' class='srclink' href='../src/horrorshow/render.rs.html#141-144' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct FnRenderer&lt;F&gt; {
     // some fields omitted
 }</pre><div class='docblock'><p>A template renderer. The <code>html! {}</code> macro returns a <code>FnRenderer</code>.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(f: F) -&gt; Self</code></h4>
-<h4 id='method.with_capacity' class='method'><code>fn <a href='#method.with_capacity' class='fnname'>with_capacity</a>(expected_size: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, f: F) -&gt; Self</code></h4>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.RenderOnce.html' title='horrorshow::RenderOnce'>RenderOnce</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_once' class='method'><code>fn <a href='../horrorshow/trait.RenderOnce.html#method.render_once' class='fnname'>render_once</a>(self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
-<h4 id='method.size_hint' class='method'><code>fn <a href='../horrorshow/trait.RenderOnce.html#method.size_hint' class='fnname'>size_hint</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
-</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.RenderMut.html' title='horrorshow::RenderMut'>RenderMut</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_mut' class='method'><code>fn <a href='../horrorshow/trait.RenderMut.html#method.render_mut' class='fnname'>render_mut</a>(&amp;mut self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
-</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/trait.Render.html' title='horrorshow::Render'>Render</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render' class='method'><code>fn <a href='../horrorshow/trait.Render.html#method.render' class='fnname'>render</a>(&amp;self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
-</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Display.html' title='core::fmt::Display'>Display</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt;: <a class='trait' href='../horrorshow/trait.Render.html' title='horrorshow::Render'>Render</a></span></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/fmt/trait.Display.html#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(f: F) -&gt; Self</code></h4>
+<h4 id='method.with_capacity' class='method'><code>fn <a href='#method.with_capacity' class='fnname'>with_capacity</a>(expected_size: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, f: F) -&gt; Self</code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/prelude/trait.RenderOnce.html' title='horrorshow::prelude::RenderOnce'>RenderOnce</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_once' class='method'><code>fn <a href='../horrorshow/prelude/trait.RenderOnce.html#method.render_once' class='fnname'>render_once</a>(self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
+<h4 id='method.size_hint' class='method'><code>fn <a href='../horrorshow/prelude/trait.RenderOnce.html#method.size_hint' class='fnname'>size_hint</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/prelude/trait.RenderMut.html' title='horrorshow::prelude::RenderMut'>RenderMut</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render_mut' class='method'><code>fn <a href='../horrorshow/prelude/trait.RenderMut.html#method.render_mut' class='fnname'>render_mut</a>(&amp;mut self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
+</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></h3><div class='impl-items'><h4 id='method.render' class='method'><code>fn <a href='../horrorshow/prelude/trait.Render.html#method.render' class='fnname'>render</a>(&amp;self, tmpl: &amp;mut <a class='struct' href='../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</code></h4>
+</div><h3 class='impl'><code>impl&lt;F&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html' title='core::fmt::Display'>Display</a> for <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where <a class='struct' href='../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt;: <a class='trait' href='../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a></span></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -81,7 +84,7 @@
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -101,7 +104,7 @@
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -113,6 +116,6 @@
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

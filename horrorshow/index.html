@@ -9,6 +9,7 @@
 
     <title>horrorshow - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'></p><script>window.sidebarCurrent = {name: 'horrorshow', ty: 'mod', relpath: '../'};</script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,14 +46,12 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-307' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/horrorshow/lib.rs.html#1-312' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
-<h1 id="horrorshow" class='section-header'><a
-                           href="#horrorshow">Horrorshow</a></h1>
+<h1 id='horrorshow' class='section-header'><a href='#horrorshow'>Horrorshow</a></h1>
 <p>An html templating library.</p>
 
-<h2 id="example:" class='section-header'><a
-                           href="#example:">Example:</a></h2><pre class='rust rust-example-rendered'>
+<h2 id='example' class='section-header'><a href='#example'>Example:</a></h2><pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>horrorshow</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 <span class='kw'>let</span> <span class='ident'>actual</span> <span class='op'>=</span> <span class='macro'>html</span><span class='macro'>!</span> {
     <span class='ident'>html</span> {
@@ -117,8 +116,11 @@
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
 </pre>
 
-<h2 id="usage" class='section-header'><a
-                           href="#usage">Usage</a></h2>
+<h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
+<pre><code class="language-norun">#[macro_use]
+extern crate horrorshow;
+</code></pre>
+
 <p>Inside an html template, the following expressions are valid:</p>
 
 <ul>
@@ -139,8 +141,7 @@ actually a closure so the block/expression can append to the current template th
 <li><p><code>@ for ...</code>, <code>@ while ...</code>, <code>@ if ...</code> -- you can embed basic control flow expressions.</p></li>
 </ul>
 
-<h2 id="traits,-traits-oh-my!" class='section-header'><a
-                           href="#traits,-traits-oh-my!">Traits, traits oh-my!</a></h2>
+<h2 id='traits-traits-oh-my' class='section-header'><a href='#traits-traits-oh-my'>Traits, traits oh-my!</a></h2>
 <p>You will likely notice that there are four render traits:</p>
 
 <ol>
@@ -156,8 +157,7 @@ environment (<code>RenderOnce</code>).</p>
 
 <p>In general, just import <code>Template</code> into your environment (or import the prelude).</p>
 
-<h2 id="error-handling" class='section-header'><a
-                           href="#error-handling">Error Handling</a></h2>
+<h2 id='error-handling' class='section-header'><a href='#error-handling'>Error Handling</a></h2>
 <p>Both render and IO errors are handled in the background. If an io (or fmt) error occurs,
 template rendering will continue but no more data will be written and the original <code>write_to_*</code>
 call will return the error when rendering terminates. If you need to record a render error, use
@@ -166,8 +166,7 @@ aborted. Instead, all recorded errors (if any) are returned when rendering compl
 
 <p>TL;DR: There is no way to abort rendering but you can report errors.</p>
 
-<h2 id="escaping" class='section-header'><a
-                           href="#escaping">Escaping</a></h2>
+<h2 id='escaping' class='section-header'><a href='#escaping'>Escaping</a></h2>
 <p>This library does HTML escaping by default. However, it doesn&#39;t do any javascript/URL escaping.
 Furthermore, it will do html escaping in any literal javascript you might include.</p>
 
@@ -201,8 +200,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
 <pre><code class="language-html">&amp;lt;script&amp;gt;alert(&amp;quot;hello&amp;quot;);&amp;lt;/script&amp;gt;
 </code></pre>
 
-<h2 id="returning-templates" class='section-header'><a
-                           href="#returning-templates">Returning Templates</a></h2>
+<h2 id='returning-templates' class='section-header'><a href='#returning-templates'>Returning Templates</a></h2>
 <p>To return a template directly, you have to create it using the <code>box_html!</code> macro instead of the
 <code>html!</code> macro. The template type will be one of <code>Box&lt;RenderBox&gt;</code> (can be rendered once),
 <code>Box&lt;RenderMut&gt;</code>, or <code>Box&lt;Render&gt;</code> depending on how the template affects its environment.</p>
@@ -287,8 +285,7 @@ template:</p>
               &lt;/article&gt;&quot;</span>);
 }</pre>
 
-<h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1>
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
 <p>See the test cases.</p>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
@@ -424,10 +421,12 @@ template:</p>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -444,7 +443,7 @@ template:</p>
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -464,7 +463,7 @@ template:</p>
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -476,6 +475,6 @@ template:</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>
