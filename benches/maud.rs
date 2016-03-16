@@ -4,6 +4,8 @@
 extern crate test;
 extern crate maud;
 
+use maud::PreEscaped;
+
 #[bench]
 fn bench_short(b: &mut test::Bencher) {
     b.iter(|| {
@@ -18,13 +20,13 @@ fn bench_short(b: &mut test::Bencher) {
                         "Hello! This is <html />"
                     }
                     p {
-                        $$"Let's <i>count</i> to 10!"
+                        ^PreEscaped("Let's <i>count</i> to 10!")
                     }
                     ol id="count" {
-                        #for i in 0..10 {
+                        @for i in 0..10 {
                             li {
                                 // format some text
-                                $(i+1)
+                                ^(i+1)
                             }
                         }
                     }
@@ -57,13 +59,13 @@ fn bench_long(b: &mut test::Bencher) {
                         "Hello! This is <html />"
                     }
                     p {
-                        $$"Let's <i>count</i> to 10!"
+                        ^PreEscaped("Let's <i>count</i> to 100!")
                     }
                     ol id="count" {
-                        #for i in 0..count {
+                        @for i in 0..count {
                             li {
                                 // format some text
-                                $(i+1)
+                                ^(i+1)
                             }
                         }
                     }

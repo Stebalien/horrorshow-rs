@@ -87,7 +87,7 @@ fn bench_long(b: &mut test::Bencher) {
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
-                    p : raw!("Let's <i>count</i> to 10!");
+                    p : raw!("Let's <i>count</i> to 100!");
                     ol(id="count") {
                         // run some inline code...
                         @ for i in 0..count {
