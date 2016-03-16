@@ -11,7 +11,10 @@ pub trait Template: RenderOnce + Sized {
     /// Render this into a new String.
     fn into_string(self) -> Result<String, Error> {
         let mut string = String::with_capacity(self.size_hint());
-        self.write_to_string(&mut string).and(Ok(string))
+        self.write_to_string(&mut string).map(|_| {
+            string.shrink_to_fit();
+            string
+        })
     }
 
     /// Render this into an existing String.
@@ -86,6 +89,7 @@ impl<'a> TemplateBuffer<'a> {
     }
 
     /// Write a raw string to the template output.
+    // NEVER REMOVE THIS INLINE!
     #[inline(always)]
     pub fn write_raw(&mut self, text: &str) {
         use std::fmt::Write;
@@ -167,6 +171,8 @@ pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>) where 'a: 'b;
 
 impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
     fn write_str(&mut self, text: &str) -> fmt::Result {
+        // NOTE to future self: don't try to be fancy here. This optimizes well
+        // and all you're fancy algorithms are actually slower.
         use self::InnerTemplateWriter::*;
         if !error::is_empty(&self.0.error) {
             return Ok(())
@@ -175,10 +181,10 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
             Io(ref mut writer) => {
                 for b in text.bytes() {
                     if let Err(e) = match b {
-                        b'&' => writer.write_all("&amp;".as_bytes()),
-                        b'"' => writer.write_all("&quot;".as_bytes()),
-                        b'<' => writer.write_all("&lt;".as_bytes()),
-                        b'>' => writer.write_all("&gt;".as_bytes()),
+                        b'&' => writer.write_all(b"&amp;"),
+                        b'"' => writer.write_all(b"&quot;"),
+                        b'<' => writer.write_all(b"&lt;"),
+                        b'>' => writer.write_all(b"&gt;"),
                         _ => writer.write_all(&[b] as &[u8]),
                     } {
                         self.0.error.write = Some(e);
@@ -201,8 +207,6 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                 }
             },
             Str(ref mut writer) => {
-                // TODO: Consider using a indexing. LLVM isn't optimizing this quite as well as it
-                // could 0.96x slowdown.
                 for b in text.bytes() {
                     match b {
                         b'&' => writer.push_str("&amp;"),

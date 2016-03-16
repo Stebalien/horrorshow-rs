@@ -38,18 +38,22 @@ impl From<io::Error> for Error {
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // TODO: Display both write/render errors at the same time.
+        let mut displayed = false;
         if let Some(e) = self.write.as_ref() {
-            write!(f, "Write Error: {}", e)
-        } else if !self.render.is_empty() {
-            try!(write!(f, "Render Errors: "));
+            displayed = true;
+            try!(write!(f, "write error: {}", e))
+        }
+        if !self.render.is_empty() {
+            displayed = true;
+            try!(write!(f, "render errors: "));
             for i in 0..(self.render.len()-1) {
                 try!(write!(f, "{}, ", self.render[i]));
             }
-            write!(f, "{}", self.render.last().unwrap())
-        } else {
-            // Panic?
-            write!(f, "Empty Error")
+            try!(write!(f, "{}", self.render.last().unwrap()))
         }
+        if !displayed {
+            try!(write!(f, "unspecified error"));
+        }
+        Ok(())
     }
 }
