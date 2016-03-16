@@ -10,9 +10,7 @@ fn render_post(post: Post) -> Box<RenderBox> {
             header(class="post-header") {
                 h1 : title;
                 ul {
-                    // FIXME: shouldn't need ().
-                    // Rust refuses to parse idents as expressions!. 
-                    @ for tag in (tags) {
+                    @ for tag in tags {
                         li : tag
                     }
                 }
@@ -33,9 +31,7 @@ fn render<I: Iterator<Item=Post>>(title: &str, posts: I) -> String {
                 main {
                     header { h1 : title }
                     section(id="posts") {
-                        // FIXME: shouldn't need ().
-                        // Rust refuses to parse idents as expressions!. 
-                        @ for post in (posts) {
+                        @ for post in posts {
                             : render_post(post)
                         }
                     }

@@ -78,7 +78,16 @@ macro_rules! append_html {
     };
 
     (@block_identity $b:block) => { $b };
-    
+    (@cont $tmpl:ident, ($s:stmt), $($next:tt)*) => {
+        $s;
+        append_html!($tmpl, $($next)*);
+    };
+    (@expr_and_block $tmpl:ident, $goto:ident, ($($prefix:tt)*), {$($inner:tt)*} $($next:tt)*) => {
+        append_html!(@$goto $tmpl, ($($prefix)* {append_html!($tmpl, $($inner)*);}), $($next)*);
+    };
+    (@expr_and_block $tmpl:ident, $goto:ident, ($($prefix:tt)*), $first:tt $($next:tt)*) => {
+        append_html!(@expr_and_block $tmpl, $goto, ($($prefix)* $first), $($next)*);
+    };
     (@append_attrs $tmpl:ident, $($($attr:ident)-+):+ ?= $value:expr, $($rest:tt)+) => {
         append_html!(@append_attrs $tmpl, $($($attr)-+):+ ?= $value);
         append_html!(@append_attrs $tmpl, $($rest)+);
@@ -106,56 +115,30 @@ macro_rules! append_html {
     (@append_attrs $tmpl:ident, $($($attr:ident)-+):+) => {
         $tmpl.write_raw(concat!(" ", append_html!(@stringify_compressed $($($attr)-+):+)));
     };
-
-
-    // NOTE: You may notice a lot of $e:tt, and then $e:expr. This is because rust seems to parse
-    // `ident {` as a struct declaration when using `$e:expr`.
-
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt { $($inner:tt)* } else $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)*), if let $p = append_html!(@block_identity {$e}) { $($inner)* } else $($next)*);
+    //////// IF CHAINS
+    //// Begin
+    (@parse_if $tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt $($next:tt)+) => {
+        append_html!(@expr_and_block $tmpl, parse_if_block, ($($prefix)* if let $p = $e), $($next)+);
     };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } else $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)* if let $p = $e {
-            append_html!($tmpl, $($inner)*);
-        } else ), $($next)*);
+    (@parse_if $tmpl:ident, ($($prefix:tt)*), if $e:tt $($next:tt)+) => {
+        append_html!(@expr_and_block $tmpl, parse_if_block, ($($prefix)* if $e), $($next)+);
     };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)*), if let $p = append_html!(@block_identity {$e}) { $($inner)* } $($next)*);
+    //// End
+    // Else if
+    (@parse_if_block $tmpl:ident, ($($prefix:tt)*), else if $($next:tt)*) => {
+        append_html!(@parse_if $tmpl, ($($prefix)* else), if $($next)*);
     };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)* if let $p = $e {
-            append_html!($tmpl, $($inner)*);
-        }));
-        append_html!($tmpl, $($next)*);
+    // Else
+    (@parse_if_block $tmpl:ident, ($($prefix:tt)*), else {$($inner:tt)*} $($next:tt)*) => {
+        append_html!(@cont $tmpl, ($($prefix)* else {append_html!($tmpl, $($inner)*);}), $($next)*);
     };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if $e:tt { $($inner:tt)* } else $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)*), if append_html!(@block_identity {$e}) { $($inner)* } else $($next)*);
+    // No else.
+    (@parse_if_block $tmpl:ident, ($($prefix:tt)*), $($next:tt)*) => {
+        append_html!(@cont $tmpl, ($($prefix)*), $($next)*);
     };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } else $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)* if $e {
-            append_html!($tmpl, $($inner)*);
-        } else ), $($next)*);
-    };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)*), if append_html!(@block_identity {$e}) { $($inner)* } $($next)*);
-    };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), if $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)* if $e {
-            append_html!($tmpl, $($inner)*);
-        }));
-        append_html!($tmpl, $($next)*);
-    };
-    (@parse_if_chain $tmpl:ident, ($($prefix:tt)*), { $($inner:tt)* } $($next:tt)*) => {
-        append_html!(@parse_if_chain $tmpl, ($($prefix)* {
-            append_html!($tmpl, $($inner)*);
-        }));
-        append_html!($tmpl, $($next)*);
-    };
-    (@parse_if_chain $tmpl:ident, ($chain:stmt)) => {
-        $chain
-    };
+    //// Condition
     ($tmpl:ident, @ if $($next:tt)+) => {
-        append_html!(@parse_if_chain $tmpl, (), if $($next)*);
+        append_html!(@parse_if $tmpl, (), if $($next)*);
     };
     /*
     ($tmpl:ident, @ for $p:pat in $e:expr { $($inner:tt)* } $($next:tt)*) => {
@@ -166,38 +149,14 @@ macro_rules! append_html {
     */
     // In 1.2, replace $p:ident with $p:pat. Currently, this doesn't allow all forloop constructs.
     // See above ^^
-    ($tmpl:ident, @ for $p:ident in $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        append_html!($tmpl, @ for $p in append_html!(@block_identity {$e}) { $($inner)* } $($next)*);
+    ($tmpl:ident, @ for $p:ident in $e:tt $($next:tt)*) => {
+        append_html!(@expr_and_block $tmpl, cont, (for $p in $e), $($next)*);
     };
-    ($tmpl:ident, @ for $p:ident in $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        for $p in $e {
-            append_html!($tmpl, $($inner)*);
-        }
-        append_html!($tmpl, $($next)*);
+    ($tmpl:ident, @ while let $p:pat = $e:tt $($next:tt)*) => {
+        append_html!(@expr_and_block $tmpl, cont, (while let $p = $e), $($next)*);
     };
-    ($tmpl:ident, @ while let $p:pat = $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        while let $p = $e {
-            append_html!($tmpl, $($inner)*);
-        }
-        append_html!($tmpl, $($next)*);
-    };
-    ($tmpl:ident, @ while let $p:pat = $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        while let $p = $e {
-            append_html!($tmpl, $($inner)*);
-        }
-        append_html!($tmpl, $($next)*);
-    };
-    ($tmpl:ident, @ while $e:tt { $($inner:tt)* } $($next:tt)*) => {
-        while $e {
-            append_html!($tmpl, $($inner)*);
-        }
-        append_html!($tmpl, $($next)*);
-    };
-    ($tmpl:ident, @ while $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        while $e {
-            append_html!($tmpl, $($inner)*);
-        }
-        append_html!($tmpl, $($next)*);
+    ($tmpl:ident, @ while $e:tt $($next:tt)*) => {
+        append_html!(@expr_and_block $tmpl, cont, (while $e), $($next)*);
     };
     ($tmpl:ident, : {$($code:tt)*} $($next:tt)*) => {
         $crate::RenderOnce::render_once({$($code)*}, $tmpl);
