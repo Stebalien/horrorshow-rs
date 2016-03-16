@@ -90,7 +90,7 @@ fn bench_long(b: &mut test::Bencher) {
                     p : raw!("Let's <i>count</i> to 10!");
                     ol(id="count") {
                         // run some inline code...
-                        @ for i in (0..count) {
+                        @ for i in 0..count {
                             li : format_args!("{}", i+1)
                         }
                     }
