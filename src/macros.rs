@@ -325,7 +325,7 @@ macro_rules! template {
         }
         impl<'a> $crate::Render for $name<'a> {
             fn render(&self, tmpl: &mut $crate::TemplateBuffer) {
-                let &$name { $($field),* } = self; 
+                let &$name { $($field),* } = self;
                 tmpl << html! { $($tmpl)* };
             }
         }
