@@ -140,16 +140,7 @@ macro_rules! append_html {
     ($tmpl:ident, @ if $($next:tt)+) => {
         append_html!(@parse_if $tmpl, (), if $($next)*);
     };
-    /*
-    ($tmpl:ident, @ for $p:pat in $e:expr { $($inner:tt)* } $($next:tt)*) => {
-        for $p in $e {
-            append_html!($tmpl, $($inner)*);
-        }
-    };
-    */
-    // In 1.2, replace $p:ident with $p:pat. Currently, this doesn't allow all forloop constructs.
-    // See above ^^
-    ($tmpl:ident, @ for $p:ident in $e:tt $($next:tt)*) => {
+    ($tmpl:ident, @ for $p:pat in $e:tt $($next:tt)*) => {
         append_html!(@expr_and_block $tmpl, cont, (for $p in $e), $($next)*);
     };
     ($tmpl:ident, @ while let $p:pat = $e:tt $($next:tt)*) => {
