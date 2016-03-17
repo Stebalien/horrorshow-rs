@@ -241,12 +241,6 @@ macro_rules! append_html {
     ($tmpl:ident, $tag:ident : $e:expr) => {
         append_html!($tmpl, $tag { : $e; });
     };
-    ($tmpl:ident, $tag:ident($($attrs:tt)+) $tag2:ident $($next:tt)* ) => {
-        append_html!($tmpl, $tag($($attrs)*) { $tag2 $($next)* });
-    };
-    ($tmpl:ident, $tag:ident $tag2:ident $($next:tt)* ) => {
-        append_html!($tmpl, $tag { $tag2 $($next)* });
-    };
     ($tmpl:ident, $tag:ident) => {
         $tmpl.write_raw(concat!("<", stringify!($tag), "/>"));
     };
