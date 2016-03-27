@@ -28,20 +28,21 @@ let actual = html! {
                 : raw!("Let's <i>count</i> to 10!")
             }
             ol(id="count") {
-                // run some inline code...
-                |tmpl| for i in 0..10 {
-                    &mut *tmpl << html! {
-                        li {
-                            // format some text
-                            : format_args!("{}", i+1)
-                        }
-                    };
+                // You can embed for loops, while loops, and if statements.
+                @ for i in 0..10 {
+                    li(first? = (i == 0)) {
+                        // Format some text.
+                        : format_args!("{}", i+1)
+                    }
                 }
             }
             // You need semi-colons for tags without children.
             br; br;
             p {
-                : "Easy!"
+                // You can also embed closures.
+                |tmpl| {
+                    tmpl << "Easy!";
+                }
             }
         }
     }
@@ -56,7 +57,7 @@ let expected = "\
     <h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1>\
     <p>Let's <i>count</i> to 10!</p>\
     <ol id=\"count\">\
-      <li>1</li>\
+      <li first>1</li>\
       <li>2</li>\
       <li>3</li>\
       <li>4</li>\
