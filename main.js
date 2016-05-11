@@ -742,8 +742,6 @@
                 if ($(this).val().length === 0) {
                     if (browserSupportsHistoryApi()) {
                         history.replaceState("", "std - Rust", "?search=");
-                    } else {
-                        location.replace("?search=");
                     }
                     $('#main.content').removeClass('hidden');
                     $('#search.content').addClass('hidden');
@@ -983,7 +981,7 @@
         $(".method").each(function() {
             if ($(this).next().is(".docblock") ||
                 ($(this).next().is(".stability") && $(this).next().next().is(".docblock"))) {
-                    $(this).children().first().after(toggle.clone());
+                    $(this).children().last().after(toggle.clone());
             }
         });
 

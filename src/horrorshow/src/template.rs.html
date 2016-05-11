@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
 
     
     
@@ -263,7 +264,6 @@
 <span id="220">220</span>
 <span id="221">221</span>
 <span id="222">222</span>
-<span id="223">223</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>render</span>::<span class='ident'>RenderOnce</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
@@ -290,7 +290,7 @@
     <span class='kw'>fn</span> <span class='ident'>write_to_string</span>(<span class='self'>self</span>, <span class='ident'>string</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>buffer</span> <span class='op'>=</span> <span class='ident'>TemplateBuffer</span> {
             <span class='ident'>writer</span>: <span class='ident'>InnerTemplateWriter</span>::<span class='ident'>Str</span>(<span class='ident'>string</span>),
-            <span class='ident'>error</span>: <span class='ident'>Error</span>::<span class='ident'>new</span>(),
+            <span class='ident'>error</span>: <span class='ident'>Default</span>::<span class='ident'>default</span>(),
         };
         <span class='self'>self</span>.<span class='ident'>render_once</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buffer</span>);
         <span class='ident'>buffer</span>.<span class='ident'>into_result</span>()
@@ -302,7 +302,7 @@
     <span class='kw'>fn</span> <span class='ident'>write_to_fmt</span>(<span class='self'>self</span>, <span class='ident'>writer</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>buffer</span> <span class='op'>=</span> <span class='ident'>TemplateBuffer</span> {
             <span class='ident'>writer</span>: <span class='ident'>InnerTemplateWriter</span>::<span class='ident'>Fmt</span>(<span class='ident'>writer</span>),
-            <span class='ident'>error</span>: <span class='ident'>Error</span>::<span class='ident'>new</span>(),
+            <span class='ident'>error</span>: <span class='ident'>Default</span>::<span class='ident'>default</span>(),
         };
         <span class='self'>self</span>.<span class='ident'>render_once</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buffer</span>);
         <span class='ident'>buffer</span>.<span class='ident'>into_result</span>()
@@ -316,7 +316,7 @@
     <span class='kw'>fn</span> <span class='ident'>write_to_io</span>(<span class='self'>self</span>, <span class='ident'>writer</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>io</span>::<span class='ident'>Write</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>Error</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>buffer</span> <span class='op'>=</span> <span class='ident'>TemplateBuffer</span> {
             <span class='ident'>writer</span>: <span class='ident'>InnerTemplateWriter</span>::<span class='ident'>Io</span>(<span class='ident'>writer</span>),
-            <span class='ident'>error</span>: <span class='ident'>Error</span>::<span class='ident'>new</span>(),
+            <span class='ident'>error</span>: <span class='ident'>Default</span>::<span class='ident'>default</span>(),
         };
         <span class='self'>self</span>.<span class='ident'>render_once</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buffer</span>);
         <span class='ident'>buffer</span>.<span class='ident'>into_result</span>()
@@ -412,7 +412,6 @@
     <span class='attribute'>#[<span class='ident'>inline</span>(<span class='ident'>always</span>)]</span>
     <span class='kw'>fn</span> <span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>text</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>InnerTemplateWriter</span>::<span class='op'>*</span>;
-        <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Write</span>;
         <span class='kw'>if</span> <span class='op'>!</span><span class='ident'>error</span>::<span class='ident'>is_empty</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>error</span>) {
             <span class='kw'>return</span> <span class='prelude-val'>Ok</span>(())
         }

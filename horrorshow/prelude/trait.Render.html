@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
+    
 
     
     
@@ -46,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-193' class='srclink' href='../../src/horrorshow/src/render.rs.html#23-26' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-183' class='srclink' href='../../src/horrorshow/src/render.rs.html#23-26' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait Render: <a class='trait' href='../../horrorshow/prelude/trait.RenderMut.html' title='horrorshow::prelude::RenderMut'>RenderMut</a> {
     fn <a href='#tymethod.render' class='fnname'>render</a>&lt;'a&gt;(&amp;self, tmpl: &amp;mut <a class='struct' href='../../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>&lt;'a&gt;);
 }</pre><div class='docblock'><p>Something that can be rendered by reference.</p>
@@ -57,26 +58,26 @@
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;'b&gt; <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> + 'b&gt;</code></li>
-<li><code>impl&lt;F&gt; <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='struct' href='../../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut <a class='struct' href='../../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></li>
-<li><code>impl&lt;S&gt; <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='struct' href='../../horrorshow/struct.Raw.html' title='horrorshow::Raw'>Raw</a>&lt;S&gt; <span class='where'>where S: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</span></code></li>
-<li><code>impl&lt;'a&gt; <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></li>
-<li><code>impl&lt;T&gt; <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a></span></code></li>
-<li><code>impl&lt;'a&gt; <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Arguments.html' title='core::fmt::Arguments'>Arguments</a>&lt;'a&gt;</code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a></code></li>
-<li><code>impl <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a></code></li>
+    <li><code>impl&lt;'b&gt; Render for <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a> + 'b&gt;</code></li>
+<li><code>impl&lt;F&gt; Render for <a class='struct' href='../../horrorshow/struct.FnRenderer.html' title='horrorshow::FnRenderer'>FnRenderer</a>&lt;F&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut <a class='struct' href='../../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>)</span></code></li>
+<li><code>impl&lt;S&gt; Render for <a class='struct' href='../../horrorshow/struct.Raw.html' title='horrorshow::Raw'>Raw</a>&lt;S&gt; <span class='where'>where S: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</span></code></li>
+<li><code>impl&lt;'a&gt; Render for &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></li>
+<li><code>impl Render for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></li>
+<li><code>impl&lt;T&gt; Render for <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../horrorshow/prelude/trait.Render.html' title='horrorshow::prelude::Render'>Render</a></span></code></li>
+<li><code>impl&lt;'a&gt; Render for <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Arguments.html' title='core::fmt::Arguments'>Arguments</a>&lt;'a&gt;</code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a></code></li>
+<li><code>impl Render for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a></code></li>
 </ul><script type="text/javascript" async
                          src="../../implementors/horrorshow/prelude/trait.Render.js">
                  </script></section>
