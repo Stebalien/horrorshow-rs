@@ -86,7 +86,7 @@
 //!
 //! * `some_tag(attr=rust_expresion,...);` -- Insert a the tag `some_tag` with the specified
 //!    attributes. The attribute values will be evaluated as rust expressions at runtime and they
-//!    must implement RenderOnce (already implemented on &str, String, other templates, etc.).
+//!    must implement `RenderOnce` (already implemented on &str, String, other templates, etc.).
 //!
 //! * `some_tag(attr,...);` -- You can also omit the value.
 //!
@@ -295,7 +295,7 @@ pub trait BoolOption: Sized {
 
 impl<T> BoolOption for Option<T> {
     type Value = T;
-    #[inline(always)]
+    #[inline]
     fn bool_option(self) -> (bool, Option<T>) {
         (false, self)
     }
@@ -305,7 +305,7 @@ impl<T> BoolOption for Option<T> {
 // it...)
 impl BoolOption for bool {
     type Value = &'static str;
-    #[inline(always)]
+    #[inline]
     fn bool_option(self) -> (bool, Option<&'static str>) {
         (true, if self { Some("") } else { None })
     }

@@ -23,7 +23,7 @@ pub trait Template: RenderOnce + Sized {
     fn write_to_string(self, string: &mut String) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Str(string),
-            error: Error::new(),
+            error: Default::default(),
         };
         self.render_once(&mut buffer);
         buffer.into_result()
@@ -35,7 +35,7 @@ pub trait Template: RenderOnce + Sized {
     fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Fmt(writer),
-            error: Error::new(),
+            error: Default::default(),
         };
         self.render_once(&mut buffer);
         buffer.into_result()
@@ -49,7 +49,7 @@ pub trait Template: RenderOnce + Sized {
     fn write_to_io(self, writer: &mut io::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Io(writer),
-            error: Error::new(),
+            error: Default::default(),
         };
         self.render_once(&mut buffer);
         buffer.into_result()
@@ -145,7 +145,6 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     #[inline(always)]
     fn write_str(&mut self, text: &str) -> fmt::Result {
         use self::InnerTemplateWriter::*;
-        use std::fmt::Write;
         if !error::is_empty(&self.0.error) {
             return Ok(())
         }

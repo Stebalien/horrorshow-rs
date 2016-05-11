@@ -1,22 +1,13 @@
 use std::io;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Error {
     pub write: Option<io::Error>,
     pub render: Vec<Box<::std::error::Error + Send + Sync>>
 }
 
-impl Error {
-    pub fn new() -> Error {
-        Error {
-            write: None,
-            render: Vec::new(),
-        }
-    }
-}
-
-#[inline(always)]
+#[inline]
 pub fn is_empty(e: &Error) -> bool {
     e.write.is_none() && e.render.is_empty()
 }

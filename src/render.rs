@@ -7,7 +7,7 @@ use template::{TemplateBuffer, Template};
 /// Something that can be rendered once.
 pub trait RenderOnce {
     /// Render this into a template buffer.
-    fn render_once<'a>(self, tmpl: &mut TemplateBuffer<'a>) where Self: Sized;
+    fn render_once(self, tmpl: &mut TemplateBuffer) where Self: Sized;
 
     /// Returns a (very) rough estimate of how many bytes this Render will use.
     fn size_hint(&self) -> usize { 0 }
@@ -56,7 +56,7 @@ impl<'a, T: ?Sized> RenderOnce for &'a T where T: Render {
 pub trait RenderBox {
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>
     #[doc(hidden)]
-    fn render_box<'a>(self: Box<Self>, tmpl: &mut TemplateBuffer<'a>);
+    fn render_box(self: Box<Self>, tmpl: &mut TemplateBuffer);
 
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>
     #[doc(hidden)]
@@ -65,7 +65,7 @@ pub trait RenderBox {
 
 
 impl<T> RenderBox for T where T: RenderOnce {
-    fn render_box<'a>(self: Box<T>, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_box(self: Box<T>, tmpl: &mut TemplateBuffer) {
         (*self).render_once(tmpl);
     }
 
@@ -78,7 +78,7 @@ impl<T> RenderBox for T where T: RenderOnce {
 
 impl<'b> RenderOnce for Box<RenderBox + 'b> {
     #[inline]
-    fn render_once<'a>(self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_once(self, tmpl: &mut TemplateBuffer) {
         RenderBox::render_box(self, tmpl);
     }
 
@@ -92,7 +92,7 @@ impl<'b> RenderOnce for Box<RenderBox + 'b> {
 
 impl<'b> RenderOnce for Box<RenderMut + 'b> {
     #[inline]
-    fn render_once<'a>(mut self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_once(mut self, tmpl: &mut TemplateBuffer) {
         RenderMut::render_mut(&mut *self, tmpl);
     }
 
@@ -113,7 +113,7 @@ impl<'b> RenderMut for Box<RenderMut + 'b> {
 
 impl<'b> RenderOnce for Box<Render + 'b> {
     #[inline]
-    fn render_once<'a>(self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_once(self, tmpl: &mut TemplateBuffer) {
         Render::render(&*self, tmpl);
     }
 
