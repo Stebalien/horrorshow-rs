@@ -248,7 +248,7 @@ macro_rules! append_html {
 }
 
 /// Create a new template.
-/// 
+///
 /// This allows you to declare a template as follows:
 ///
 /// ```
@@ -346,4 +346,156 @@ macro_rules! template {
         template!($($rest)*);
     };
     () => {}
+}
+
+/// Utility macro for generating a space-delimited string from a set of labels;
+/// some of which may be conditionally included into the final string.
+/// Labels are anything that implements the `RenderOnce` trait (e.g. `String` or `&str`).
+///
+/// This macro is an alias of: `labels_sep_by!(" "; maybe_label,...)`
+///
+/// Usage: `labels!(maybe_label,...)`
+///
+/// * `maybe_label` -- Either `label_expression`, or `label_expression => cond_test`.
+///
+/// * `label_expression` -- An expression that returns a label that implements
+///   the `RenderOnce` trait (e.g. `String` or `&str`).
+///
+/// * `label_expression => cond_test` -- Conditionally include `label_expression` whenever `cond_test` is `true`.
+///   `cond_test` is an expression that returns either `true` or `false`.
+///
+/// This useful in generating class attribute as follows:
+///
+/// ```
+/// # #[macro_use]
+/// # extern crate horrorshow;
+/// # fn main() {
+/// html! {
+///     div(class = labels!("active" => true, "button-style")) {
+///         : "This is a button"
+///     }
+/// }
+/// # ;
+/// # }
+/// ```
+///
+#[macro_export]
+macro_rules! labels {
+
+    ($($tail:tt)+) => (
+        labels_sep_by!(" "; $($tail)*)
+    );
+
+}
+
+/// Utility macro for generating a delimited string from a set of labels;
+/// some of which may be conditionally included into the final string.
+/// The delimiter/seperator and labels are anything that implements
+/// the `RenderOnce` trait (e.g. `String` or `&str`).
+///
+///
+/// Usage: `labels_sep_by!(seperator; maybe_label,...)`
+///
+/// * `seperator` -- Delimiter/seperator that implements the `RenderOnce` trait (e.g. `String` or `&str`).
+///
+/// * `maybe_label` -- Either `label_expression`, or `label_expression => cond_test`.
+///
+/// * `label_expression` -- An expression that returns a label that implements
+///   the `RenderOnce` trait (e.g. `String` or `&str`).
+///
+/// * `label_expression => cond_test` -- Conditionally include `label_expression` whenever `cond_test` is `true`.
+///   `cond_test` is an expression that returns either `true` or `false`.
+///
+/// This useful in generating style attribute as follows:
+///
+/// ```
+/// # #[macro_use]
+/// # extern crate horrorshow;
+/// # fn main() {
+/// html! {
+///     div(style = labels_sep_by!(";"; "color: #000" => true, "font-weight: bold")) {
+///         : "This is a button"
+///     }
+/// }
+/// # ;
+/// # }
+/// ```
+///
+#[macro_export]
+macro_rules! labels_sep_by {
+
+    (@inner_expand $has_before:expr; $sep:expr; $tmpl:ident $item:expr) => {
+        if $has_before {
+            $crate::RenderOnce::render_once($sep, $tmpl);
+        }
+        $crate::RenderOnce::render_once($item, $tmpl);
+    };
+
+    (@inner_expand $has_before:expr; $sep:expr; $tmpl:ident $item:expr => $should_include:expr) => {
+        if $should_include {
+            if $has_before {
+                $crate::RenderOnce::render_once($sep, $tmpl);
+            }
+            $crate::RenderOnce::render_once($item, $tmpl);
+        }
+    };
+
+    (@inner_expand $has_before:expr; $sep:expr; $tmpl:ident $item:expr, $($tail:tt)+) => {
+        if $has_before {
+            $crate::RenderOnce::render_once($sep, $tmpl);
+        }
+        $crate::RenderOnce::render_once($item, $tmpl);
+        labels_sep_by!(@inner_expand true; $sep; $tmpl $($tail)*);
+    };
+
+    (@inner_expand $has_before:expr; $sep:expr; $tmpl:ident $item:expr => $should_include:expr, $($tail:tt)+) => {
+        if $should_include {
+            if $has_before {
+                $crate::RenderOnce::render_once($sep, $tmpl);
+            }
+            $crate::RenderOnce::render_once($item, $tmpl);
+        }
+        labels_sep_by!(@inner_expand $has_before || $should_include; $sep; $tmpl $($tail)*);
+    };
+
+    // entries
+
+    ($sep:expr; $item:expr) => {
+
+        $crate::FnRenderer::new(|tmpl| {
+            $crate::RenderOnce::render_once($item, tmpl);
+        })
+
+    };
+
+    ($sep:expr; $item:expr => $should_include:expr) => {
+
+        $crate::FnRenderer::new(|tmpl| {
+            if $should_include {
+                $crate::RenderOnce::render_once($item, tmpl);
+            }
+        })
+
+    };
+
+    ($sep:expr; $item:expr, $($tail:tt)+) => {
+
+        $crate::FnRenderer::new(|tmpl| {
+            $crate::RenderOnce::render_once($item, tmpl);
+            labels_sep_by!(@inner_expand true; $sep; tmpl $($tail)*);
+        })
+
+    };
+
+    ($sep:expr; $item:expr => $should_include:expr, $($tail:tt)+) => {
+
+        $crate::FnRenderer::new(|tmpl| {
+            if $should_include {
+                $crate::RenderOnce::render_once($item, tmpl);
+            }
+            labels_sep_by!(@inner_expand $should_include; $sep; tmpl $($tail)*);
+        })
+
+    };
+
 }
