@@ -1,7 +1,5 @@
 #[macro_use]
 extern crate horrorshow;
-use std::error::Error;
-
 use horrorshow::Template;
 
 #[test]

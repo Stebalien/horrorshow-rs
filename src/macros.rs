@@ -251,7 +251,9 @@ macro_rules! append_html {
 /// 
 /// This allows you to declare a template as follows:
 ///
-/// ```norun
+/// ```
+/// # #[macro_use]
+/// # extern crate horrorshow;
 /// template! {
 ///     MyTemplate(name: &str, age: &u32) {
 ///         p {
@@ -263,12 +265,30 @@ macro_rules! append_html {
 ///         }
 ///     }
 /// }
+/// # fn main() { }
 /// ```
 ///
 /// You can instantiate these templates by calling `new` on them:
 ///
-/// ```norun
-/// let tmpl = MyTemplate::new("Not Me", &42);
+/// ```
+/// # #[macro_use]
+/// # extern crate horrorshow;
+/// # template! {
+/// #     MyTemplate(name: &str, age: &u32) {
+/// #         p {
+/// #            : "Hello, my name is ";
+/// #            : name;
+/// #            : " and I am ";
+/// #            : age;
+/// #            : " years old.";
+/// #         }
+/// #     }
+/// # }
+///
+/// # fn main() {
+/// let age = 42;
+/// let tmpl = MyTemplate::new("Not Me", &age);
+/// # }
 /// ```
 ///
 /// These templates never own their content, they just borrow it. This is one of the reasons I call

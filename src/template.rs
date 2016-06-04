@@ -100,8 +100,17 @@ impl<'a> TemplateBuffer<'a> {
     ///
     /// Example:
     ///
-    /// ```norun
+    /// ```
+    /// # #[macro_use] extern crate horrorshow;
+    /// # use horrorshow::prelude::*;
+    /// # fn main() {
+    /// #     let result = html! {
+    /// #         |tmpl| {
     /// write!(tmpl, "{} + {}", 0, 1);
+    /// #         }
+    /// #     };
+    /// #     assert_eq!(result.into_string().unwrap(), "0 + 1");
+    /// # }
     /// ```
     #[inline]
     pub fn write_fmt(&mut self, args: fmt::Arguments) {

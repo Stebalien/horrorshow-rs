@@ -75,9 +75,10 @@
 //!
 //! ## Usage
 //!
-//! ```norun
+//! ```
 //! #[macro_use]
 //! extern crate horrorshow;
+//! # fn main() {}
 //! ```
 //!
 //! Inside an html template, the following expressions are valid:
@@ -139,30 +140,45 @@
 //!
 //! For example, the following will display an alert:
 //!
-//! ```norun
+//! ```
+//! # #[macro_use]
+//! # extern crate horrorshow;
+//! # fn main() {
 //! html! {
 //!   script {
 //!     : "alert('hello');"
 //!   }
 //! }
+//! # ;
+//! # }
 //! ```
 //!
 //! The following will break due to html escaping (the `"` will be escaped to `&quot;`):
 //!
-//! ```norun
+//! ```
+//! # #[macro_use]
+//! # extern crate horrorshow;
+//! # fn main() {
 //! html! {
 //!   script {
-//!     : 'alert("hello");'
+//!     : "alert(\"hello\");"
 //!   }
 //! }
+//! # ;
+//! # }
 //! ```
 //!
 //! And the following will display as-is (but won't run any javascript) due to the HTML escaping:
 //!
-//! ```norun
+//! ```
+//! # #[macro_use]
+//! # extern crate horrorshow;
+//! # fn main() {
 //! html! {
-//!     : '<script>alert("hello");</script>'
+//!     : "<script>alert(\"hello\");</script>"
 //! }
+//! # ;
+//! # }
 //! ```
 //!
 //! Output:
