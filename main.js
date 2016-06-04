@@ -124,6 +124,11 @@
             focusSearchBar();
             break;
 
+        case "+":
+            ev.preventDefault();
+            toggleAllDocs();
+            break;
+
         case "?":
             if (ev.shiftKey && $("#help").hasClass("hidden")) {
                 ev.preventDefault();
@@ -931,7 +936,7 @@
         return "\u2212"; // "\u2212" is '−' minus sign
     }
 
-    $("#toggle-all-docs").on("click", function() {
+    function toggleAllDocs() {
         var toggle = $("#toggle-all-docs");
         if (toggle.hasClass("will-expand")) {
             toggle.removeClass("will-expand");
@@ -950,7 +955,9 @@
             $(".toggle-wrapper").addClass("collapsed");
             $(".collapse-toggle").children(".inner").text(labelForToggleButton(true));
         }
-    });
+    }
+
+    $("#toggle-all-docs").on("click", toggleAllDocs);
 
     $(document).on("click", ".collapse-toggle", function() {
         var toggle = $(this);

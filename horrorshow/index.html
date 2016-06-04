@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/horrorshow/src/lib.rs.html#1-312' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-0' class='srclink' href='../src/horrorshow/src/lib.rs.html#1-328' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id='horrorshow' class='section-header'><a href='#horrorshow'>Horrorshow</a></h1>
 <p>An html templating library.</p>
@@ -119,9 +119,9 @@
 </pre>
 
 <h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
-<pre><code class="language-norun">#[macro_use]
-extern crate horrorshow;
-</code></pre>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;</pre>
 
 <p>Inside an html template, the following expressions are valid:</p>
 
@@ -174,28 +174,28 @@ Furthermore, it will do html escaping in any literal javascript you might includ
 
 <p>For example, the following will display an alert:</p>
 
-<pre><code class="language-norun">html! {
-  script {
-    : &quot;alert(&#39;hello&#39;);&quot;
+<pre class='rust rust-example-rendered'>
+<span class='macro'>html</span><span class='macro'>!</span> {
+  <span class='ident'>script</span> {
+    : <span class='string'>&quot;alert(&#39;hello&#39;);&quot;</span>
   }
-}
-</code></pre>
+}</pre>
 
 <p>The following will break due to html escaping (the <code>&quot;</code> will be escaped to <code>&amp;quot;</code>):</p>
 
-<pre><code class="language-norun">html! {
-  script {
-    : &#39;alert(&quot;hello&quot;);&#39;
+<pre class='rust rust-example-rendered'>
+<span class='macro'>html</span><span class='macro'>!</span> {
+  <span class='ident'>script</span> {
+    : <span class='string'>&quot;alert(\&quot;hello\&quot;);&quot;</span>
   }
-}
-</code></pre>
+}</pre>
 
 <p>And the following will display as-is (but won&#39;t run any javascript) due to the HTML escaping:</p>
 
-<pre><code class="language-norun">html! {
-    : &#39;&lt;script&gt;alert(&quot;hello&quot;);&lt;/script&gt;&#39;
-}
-</code></pre>
+<pre class='rust rust-example-rendered'>
+<span class='macro'>html</span><span class='macro'>!</span> {
+    : <span class='string'>&quot;&lt;script&gt;alert(\&quot;hello\&quot;);&lt;/script&gt;&quot;</span>
+}</pre>
 
 <p>Output:</p>
 
@@ -416,6 +416,8 @@ template:</p>
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

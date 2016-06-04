@@ -264,6 +264,15 @@
 <span id="220">220</span>
 <span id="221">221</span>
 <span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>render</span>::<span class='ident'>RenderOnce</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
@@ -367,8 +376,17 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// Example:</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// ```norun</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// # #[macro_use] extern crate horrorshow;</span>
+    <span class='doccomment'>/// # use horrorshow::prelude::*;</span>
+    <span class='doccomment'>/// # fn main() {</span>
+    <span class='doccomment'>/// #     let result = html! {</span>
+    <span class='doccomment'>/// #         |tmpl| {</span>
     <span class='doccomment'>/// write!(tmpl, &quot;{} + {}&quot;, 0, 1);</span>
+    <span class='doccomment'>/// #         }</span>
+    <span class='doccomment'>/// #     };</span>
+    <span class='doccomment'>/// #     assert_eq!(result.into_string().unwrap(), &quot;0 + 1&quot;);</span>
+    <span class='doccomment'>/// # }</span>
     <span class='doccomment'>/// ```</span>
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write_fmt</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>args</span>: <span class='ident'>fmt</span>::<span class='ident'>Arguments</span>) {
@@ -511,6 +529,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 

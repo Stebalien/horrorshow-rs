@@ -356,6 +356,22 @@
 <span id="312">312</span>
 <span id="313">313</span>
 <span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -434,9 +450,10 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Usage</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ```norun</span>
+<span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! #[macro_use]</span>
 <span class='doccomment'>//! extern crate horrorshow;</span>
+<span class='doccomment'>//! # fn main() {}</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! Inside an html template, the following expressions are valid:</span>
@@ -498,30 +515,45 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! For example, the following will display an alert:</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ```norun</span>
+<span class='doccomment'>//! ```</span>
+<span class='doccomment'>//! # #[macro_use]</span>
+<span class='doccomment'>//! # extern crate horrorshow;</span>
+<span class='doccomment'>//! # fn main() {</span>
 <span class='doccomment'>//! html! {</span>
 <span class='doccomment'>//!   script {</span>
 <span class='doccomment'>//!     : &quot;alert(&#39;hello&#39;);&quot;</span>
 <span class='doccomment'>//!   }</span>
 <span class='doccomment'>//! }</span>
+<span class='doccomment'>//! # ;</span>
+<span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! The following will break due to html escaping (the `&quot;` will be escaped to `&amp;quot;`):</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ```norun</span>
+<span class='doccomment'>//! ```</span>
+<span class='doccomment'>//! # #[macro_use]</span>
+<span class='doccomment'>//! # extern crate horrorshow;</span>
+<span class='doccomment'>//! # fn main() {</span>
 <span class='doccomment'>//! html! {</span>
 <span class='doccomment'>//!   script {</span>
-<span class='doccomment'>//!     : &#39;alert(&quot;hello&quot;);&#39;</span>
+<span class='doccomment'>//!     : &quot;alert(\&quot;hello\&quot;);&quot;</span>
 <span class='doccomment'>//!   }</span>
 <span class='doccomment'>//! }</span>
+<span class='doccomment'>//! # ;</span>
+<span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! And the following will display as-is (but won&#39;t run any javascript) due to the HTML escaping:</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ```norun</span>
+<span class='doccomment'>//! ```</span>
+<span class='doccomment'>//! # #[macro_use]</span>
+<span class='doccomment'>//! # extern crate horrorshow;</span>
+<span class='doccomment'>//! # fn main() {</span>
 <span class='doccomment'>//! html! {</span>
-<span class='doccomment'>//!     : &#39;&lt;script&gt;alert(&quot;hello&quot;);&lt;/script&gt;&#39;</span>
+<span class='doccomment'>//!     : &quot;&lt;script&gt;alert(\&quot;hello\&quot;);&lt;/script&gt;&quot;</span>
 <span class='doccomment'>//! }</span>
+<span class='doccomment'>//! # ;</span>
+<span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! Output:</span>
@@ -695,6 +727,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
