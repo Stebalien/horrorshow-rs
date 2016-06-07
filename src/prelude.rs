@@ -1,1 +1,7 @@
-pub use ::{Template, Render, RenderMut, RenderOnce, RenderBox, FnRenderer, TemplateBuffer};
+pub use Template;
+pub use Render;
+pub use RenderMut;
+pub use RenderOnce;
+pub use RenderBox;
+pub use FnRenderer;
+pub use TemplateBuffer;
