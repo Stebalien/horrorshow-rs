@@ -10,7 +10,9 @@ pub trait RenderOnce {
     fn render_once(self, tmpl: &mut TemplateBuffer) where Self: Sized;
 
     /// Returns a (very) rough estimate of how many bytes this Render will use.
-    fn size_hint(&self) -> usize { 0 }
+    fn size_hint(&self) -> usize {
+        0
+    }
 }
 
 /// Something that can be rendered by mutable reference.
@@ -27,7 +29,9 @@ pub trait Render: RenderMut {
 
 // RenderOnce is the trait we really care about.
 
-impl<'a, T: ?Sized> RenderOnce for &'a mut T where T: RenderMut {
+impl<'a, T: ?Sized> RenderOnce for &'a mut T
+    where T: RenderMut
+{
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         RenderMut::render_mut(self, tmpl)
     }
@@ -36,7 +40,9 @@ impl<'a, T: ?Sized> RenderOnce for &'a mut T where T: RenderMut {
     }
 }
 
-impl<'a, T: ?Sized> RenderOnce for &'a T where T: Render {
+impl<'a, T: ?Sized> RenderOnce for &'a T
+    where T: Render
+{
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         Render::render(self, tmpl)
     }
@@ -64,7 +70,9 @@ pub trait RenderBox {
 }
 
 
-impl<T> RenderBox for T where T: RenderOnce {
+impl<T> RenderBox for T
+    where T: RenderOnce
+{
     fn render_box(self: Box<T>, tmpl: &mut TemplateBuffer) {
         (*self).render_once(tmpl);
     }
@@ -143,7 +151,9 @@ pub struct FnRenderer<F> {
     expected_size: usize,
 }
 
-impl<F> FnRenderer<F> where F: FnOnce(&mut TemplateBuffer) {
+impl<F> FnRenderer<F>
+    where F: FnOnce(&mut TemplateBuffer)
+{
     pub fn new(f: F) -> Self {
         FnRenderer {
             renderer: f,
@@ -159,7 +169,9 @@ impl<F> FnRenderer<F> where F: FnOnce(&mut TemplateBuffer) {
     }
 }
 
-impl<F> RenderOnce for FnRenderer<F> where F: FnOnce(&mut TemplateBuffer) {
+impl<F> RenderOnce for FnRenderer<F>
+    where F: FnOnce(&mut TemplateBuffer)
+{
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         (self.renderer)(tmpl)
     }
@@ -169,20 +181,26 @@ impl<F> RenderOnce for FnRenderer<F> where F: FnOnce(&mut TemplateBuffer) {
     }
 }
 
-impl<F> RenderMut for FnRenderer<F> where F: FnMut(&mut TemplateBuffer) {
+impl<F> RenderMut for FnRenderer<F>
+    where F: FnMut(&mut TemplateBuffer)
+{
     fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
         (self.renderer)(tmpl)
     }
 }
 
-impl<F> Render for FnRenderer<F> where F: Fn(&mut TemplateBuffer) {
+impl<F> Render for FnRenderer<F>
+    where F: Fn(&mut TemplateBuffer)
+{
     fn render(&self, tmpl: &mut TemplateBuffer) {
         (self.renderer)(tmpl)
     }
 }
 
 // I'd like to be able to say impl Display for T where T: Render but coherence.
-impl<F> fmt::Display for FnRenderer<F> where FnRenderer<F>: Render {
+impl<F> fmt::Display for FnRenderer<F>
+    where FnRenderer<F>: Render
+{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         struct Adapter<'a, 'b>(&'a mut fmt::Formatter<'b>) where 'b: 'a;
         impl<'a, 'b> fmt::Write for Adapter<'a, 'b> {
@@ -205,7 +223,9 @@ impl<F> fmt::Display for FnRenderer<F> where FnRenderer<F>: Render {
 #[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
 pub struct Raw<S: AsRef<str>>(S);
 
-impl<S> Deref for Raw<S> where S: AsRef<str> {
+impl<S> Deref for Raw<S>
+    where S: AsRef<str>
+{
     type Target = S;
     fn deref(&self) -> &S {
         &self.0
@@ -214,14 +234,18 @@ impl<S> Deref for Raw<S> where S: AsRef<str> {
 
 // No DerefMut for safety. Once you mark something as Raw, don't change it.
 
-impl<S> Raw<S> where S: AsRef<str> {
+impl<S> Raw<S>
+    where S: AsRef<str>
+{
     /// Mark as raw.
     pub fn new(content: S) -> Raw<S> {
         Raw(content)
     }
 }
 
-impl<S> RenderOnce for Raw<S> where S: AsRef<str> {
+impl<S> RenderOnce for Raw<S>
+    where S: AsRef<str>
+{
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         tmpl.write_raw(self.0.as_ref())
     }
@@ -230,13 +254,17 @@ impl<S> RenderOnce for Raw<S> where S: AsRef<str> {
     }
 }
 
-impl<S> RenderMut for Raw<S> where S: AsRef<str> {
+impl<S> RenderMut for Raw<S>
+    where S: AsRef<str>
+{
     fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
         tmpl.write_raw(self.0.as_ref())
     }
 }
 
-impl<S> Render for Raw<S> where S: AsRef<str> {
+impl<S> Render for Raw<S>
+    where S: AsRef<str>
+{
     fn render(&self, tmpl: &mut TemplateBuffer) {
         tmpl.write_raw(self.0.as_ref())
     }
@@ -293,7 +321,9 @@ impl Render for String {
     }
 }
 
-impl<T> RenderOnce for Option<T> where T: RenderOnce {
+impl<T> RenderOnce for Option<T>
+    where T: RenderOnce
+{
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         if let Some(v) = self {
@@ -302,7 +332,9 @@ impl<T> RenderOnce for Option<T> where T: RenderOnce {
     }
 }
 
-impl<T> RenderMut for Option<T> where T: RenderMut {
+impl<T> RenderMut for Option<T>
+    where T: RenderMut
+{
     #[inline]
     fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
         if let Some(v) = self.as_mut() {
@@ -311,7 +343,9 @@ impl<T> RenderMut for Option<T> where T: RenderMut {
     }
 }
 
-impl<T> Render for Option<T> where T: Render {
+impl<T> Render for Option<T>
+    where T: Render
+{
     #[inline]
     fn render(&self, tmpl: &mut TemplateBuffer) {
         if let Some(v) = self.as_ref() {
@@ -320,7 +354,10 @@ impl<T> Render for Option<T> where T: Render {
     }
 }
 
-impl<T, E> RenderOnce for Result<T, E> where T: RenderOnce, E: Into<Box<::std::error::Error + Send + Sync>> {
+impl<T, E> RenderOnce for Result<T, E>
+    where T: RenderOnce,
+          E: Into<Box<::std::error::Error + Send + Sync>>
+{
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         match self {

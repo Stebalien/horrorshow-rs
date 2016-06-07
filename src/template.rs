@@ -56,7 +56,7 @@ pub trait Template: RenderOnce + Sized {
     }
 }
 
-impl<T: RenderOnce + Sized> Template for T { }
+impl<T: RenderOnce + Sized> Template for T {}
 
 
 /// A template buffer. This is the type that gets passed to closures inside templates.
@@ -155,20 +155,20 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     fn write_str(&mut self, text: &str) -> fmt::Result {
         use self::InnerTemplateWriter::*;
         if !error::is_empty(&self.0.error) {
-            return Ok(())
+            return Ok(());
         }
         match self.0.writer {
             Io(ref mut writer) => {
                 self.0.error.write = writer.write_all(text.as_bytes()).err();
-            },
+            }
             Fmt(ref mut writer) => {
                 if writer.write_str(text).is_err() {
                     self.0.error.write = Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
                 }
-            },
+            }
             Str(ref mut writer) => {
                 let _ = writer.write_str(text);
-            },
+            }
         }
         Ok(())
     }
@@ -183,7 +183,7 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
         // and all you're fancy algorithms are actually slower.
         use self::InnerTemplateWriter::*;
         if !error::is_empty(&self.0.error) {
-            return Ok(())
+            return Ok(());
         }
         match self.0.writer {
             Io(ref mut writer) => {
@@ -199,7 +199,7 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                         break;
                     }
                 }
-            },
+            }
             Fmt(ref mut writer) => {
                 for c in text.chars() {
                     if (match c {
@@ -213,7 +213,7 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                         break;
                     }
                 }
-            },
+            }
             Str(ref mut writer) => {
                 for b in text.bytes() {
                     match b {

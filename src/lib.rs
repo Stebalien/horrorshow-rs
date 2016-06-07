@@ -326,5 +326,3 @@ impl BoolOption for bool {
         (true, if self { Some("") } else { None })
     }
 }
-
-
