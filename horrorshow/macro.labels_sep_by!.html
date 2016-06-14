@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-676' class='srclink' href='../src/horrorshow/src/macros.rs.html#425-501' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-670' class='srclink' href='../src/horrorshow/src/macros.rs.html#425-501' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>labels_sep_by</span> {
     (@<span class='ident'>inner_expand</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>has_before</span>:<span class='ident'>expr</span>; <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>sep</span>:<span class='ident'>expr</span>; <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tmpl</span>:<span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>item</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
@@ -79,7 +79,7 @@ the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</c
 
 <pre class='rust rust-example-rendered'>
 <span class='macro'>html</span><span class='macro'>!</span> {
-    <span class='ident'>div</span>(<span class='ident'>style</span> <span class='op'>=</span> <span class='macro'>labels_sep_by</span><span class='macro'>!</span>(<span class='string'>&quot;;&quot;</span>; <span class='string'>&quot;color: #000&quot;</span> <span class='op'>=&gt;</span> <span class='boolvalue'>true</span>, <span class='string'>&quot;font-weight: bold&quot;</span>)) {
+    <span class='ident'>div</span>(<span class='ident'>style</span> <span class='op'>=</span> <span class='macro'>labels_sep_by</span><span class='macro'>!</span>(<span class='string'>&quot;;&quot;</span>; <span class='string'>&quot;color: #000&quot;</span> <span class='op'>=&gt;</span> <span class='bool-val'>true</span>, <span class='string'>&quot;font-weight: bold&quot;</span>)) {
         : <span class='string'>&quot;This is a button&quot;</span>
     }
 }</pre>
