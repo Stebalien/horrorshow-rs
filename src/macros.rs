@@ -161,39 +161,41 @@ macro_rules! append_html {
         $crate::RenderOnce::render_once($code, $tmpl);
     };
     ($tmpl:ident, |$var:ident| {$($code:tt)*} $($next:tt)*) => {
-        (|$var: &mut $crate::TemplateBuffer| {
+        {
+            let $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
             append_html!(@block_identity {$($code)*})
-        })($tmpl);
+        }
         append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |mut $var:ident| {$($code:tt)*} $($next:tt)*) => {
-        (|mut $var: &mut $crate::TemplateBuffer| {
+        {
+            let mut $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
             append_html!(@block_identity {$($code)*})
-        })($tmpl);
+        }
         append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |$var:ident| $code:stmt; $($next:tt)* ) => {
-        (|$var: &mut $crate::TemplateBuffer| {
+        {
+            let $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
             $code;
-        })($tmpl);
+        }
         append_html!($tmpl, $($next)*);
     };
     ($tmpl:ident, |mut $var:ident| $code:stmt; $($next:tt)* ) => {
-        (|mut $var: &mut $crate::TemplateBuffer| {
+        {
+            let mut $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
             $code;
-        })($tmpl);
+        }
         append_html!($tmpl, $($next)*);
     };
-    ($tmpl:ident, |$var:ident| $code:stmt ) => {
-        (|$var: &mut $crate::TemplateBuffer| {
-            $code;
-        })($tmpl);
-    };
-    ($tmpl:ident, |mut $var:ident| $code:stmt ) => {
-        (|mut $var: &mut $crate::TemplateBuffer| {
-            $code;
-        })($tmpl);
-    };
+    ($tmpl:ident, |$var:ident| $code:stmt ) => {{
+        let $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
+        $code;
+    }};
+    ($tmpl:ident, |mut $var:ident| $code:stmt ) => {{
+        let mut $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
+        $code;
+    }};
     ($tmpl:ident, $tag:ident($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {
         $tmpl.write_raw(concat!("<", stringify!($tag)));
         append_html!(@append_attrs $tmpl, $($attrs)+);
