@@ -116,12 +116,12 @@
   &lt;/body&gt;\
 &lt;/html&gt;&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
-</pre>
+<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
 <pre class='rust rust-example-rendered'>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;</pre>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>Inside an html template, the following expressions are valid:</p>
 
@@ -179,7 +179,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
   <span class='ident'>script</span> {
     : <span class='string'>&quot;alert(&#39;hello&#39;);&quot;</span>
   }
-}</pre>
+}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>The following will break due to html escaping (the <code>&quot;</code> will be escaped to <code>&amp;quot;</code>):</p>
 
@@ -188,14 +188,14 @@ Furthermore, it will do html escaping in any literal javascript you might includ
   <span class='ident'>script</span> {
     : <span class='string'>&quot;alert(\&quot;hello\&quot;);&quot;</span>
   }
-}</pre>
+}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>And the following will display as-is (but won&#39;t run any javascript) due to the HTML escaping:</p>
 
 <pre class='rust rust-example-rendered'>
 <span class='macro'>html</span><span class='macro'>!</span> {
     : <span class='string'>&quot;&lt;script&gt;alert(\&quot;hello\&quot;);&lt;/script&gt;&quot;</span>
-}</pre>
+}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p>Output:</p>
 
@@ -242,7 +242,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
         }
     }
 }
-</pre>
+<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <p><em>Note</em>: To avoid allocating, you can implement render manually instead of returning a boxed
 template:</p>
@@ -287,7 +287,7 @@ template:</p>
                 &lt;header&gt;&lt;h1&gt;My title&lt;/h1&gt;&lt;/header&gt;\
                 &lt;section&gt;Some content.&lt;/section&gt;\
               &lt;/article&gt;&quot;</span>);
-}</pre>
+}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
 <p>See the test cases.</p>
@@ -296,38 +296,38 @@ template:</p>
                        <tr class=' module-item'>
                            <td><a class='mod' href='prelude/index.html'
                                   title='horrorshow::prelude'>prelude</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Traits that should always be imported.</p>
                            </td>
                        </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='macro' href='macro.box_html!.html'
-                                  title='horrorshow::box_html!'>box_html!</a></td>
-                           <td class='docblock short'>
+                           <td><a class='macro' href='macro.box_html.html'
+                                  title='horrorshow::box_html'>box_html</a></td>
+                           <td class='docblock-short'>
                                 <p>Crate a new owned html template.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='macro' href='macro.html!.html'
-                                  title='horrorshow::html!'>html!</a></td>
-                           <td class='docblock short'>
+                           <td><a class='macro' href='macro.html.html'
+                                  title='horrorshow::html'>html</a></td>
+                           <td class='docblock-short'>
                                 <p>Crate a new html template</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='macro' href='macro.labels!.html'
-                                  title='horrorshow::labels!'>labels!</a></td>
-                           <td class='docblock short'>
+                           <td><a class='macro' href='macro.labels.html'
+                                  title='horrorshow::labels'>labels</a></td>
+                           <td class='docblock-short'>
                                 <p>Utility macro for generating a space-delimited string from a set of labels;
 some of which may be conditionally included into the final string.
 Labels are anything that implements the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</code>).</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='macro' href='macro.labels_sep_by!.html'
-                                  title='horrorshow::labels_sep_by!'>labels_sep_by!</a></td>
-                           <td class='docblock short'>
+                           <td><a class='macro' href='macro.labels_sep_by.html'
+                                  title='horrorshow::labels_sep_by'>labels_sep_by</a></td>
+                           <td class='docblock-short'>
                                 <p>Utility macro for generating a delimited string from a set of labels;
 some of which may be conditionally included into the final string.
 The delimiter/seperator and labels are anything that implements
@@ -335,16 +335,16 @@ the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</c
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='macro' href='macro.raw!.html'
-                                  title='horrorshow::raw!'>raw!</a></td>
-                           <td class='docblock short'>
+                           <td><a class='macro' href='macro.raw.html'
+                                  title='horrorshow::raw'>raw</a></td>
+                           <td class='docblock-short'>
                                 <p>Mark a string as a raw. The string will not be rendered.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='macro' href='macro.template!.html'
-                                  title='horrorshow::template!'>template!</a></td>
-                           <td class='docblock short'>
+                           <td><a class='macro' href='macro.template.html'
+                                  title='horrorshow::template'>template</a></td>
+                           <td class='docblock-short'>
                                 <p>Create a new template.</p>
                            </td>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
@@ -352,28 +352,28 @@ the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</c
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.Error.html'
                                   title='horrorshow::Error'>Error</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.FnRenderer.html'
                                   title='horrorshow::FnRenderer'>FnRenderer</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A template renderer. The <code>html! {}</code> macro returns a <code>FnRenderer</code>.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.Raw.html'
                                   title='horrorshow::Raw'>Raw</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Raw content marker.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.TemplateBuffer.html'
                                   title='horrorshow::TemplateBuffer'>TemplateBuffer</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A template buffer. This is the type that gets passed to closures inside templates.</p>
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
@@ -381,35 +381,35 @@ the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</c
                        <tr class=' module-item'>
                            <td><a class='trait' href='trait.Render.html'
                                   title='horrorshow::Render'>Render</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Something that can be rendered by reference.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='trait' href='trait.RenderBox.html'
                                   title='horrorshow::RenderBox'>RenderBox</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Something that can be rendered once out of a box.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='trait' href='trait.RenderMut.html'
                                   title='horrorshow::RenderMut'>RenderMut</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Something that can be rendered by mutable reference.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='trait' href='trait.RenderOnce.html'
                                   title='horrorshow::RenderOnce'>RenderOnce</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>Something that can be rendered once.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='trait' href='trait.Template.html'
                                   title='horrorshow::Template'>Template</a></td>
-                           <td class='docblock short'>
+                           <td class='docblock-short'>
                                 <p>A template that can be rendered into something.</p>
                            </td>
                        </tr></table></section>

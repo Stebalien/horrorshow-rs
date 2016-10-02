@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `RenderBox` trait in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, RenderBox">
+    <meta name="description" content="API documentation for the Rust `labels` macro in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, labels">
 
-    <title>horrorshow::RenderBox - Rust</title>
+    <title>horrorshow::labels - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'RenderBox', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'labels', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,25 +42,41 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>horrorshow</a>::<wbr><a class='trait' href=''>RenderBox</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content macro">
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>labels</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-169' class='srclink' href='../src/horrorshow/src/render.rs.html#62-70' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait RenderBox { }</pre><div class='docblock'><p>Something that can be rendered once out of a box.</p>
+               </span><a id='src-707' class='srclink' href='../src/horrorshow/src/macros.rs.html#385-391' title='goto source code'>[src]</a></span></h1>
+<pre class='rust macro'>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>labels</span> {
+    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> { ... };
+}</pre>
+<div class='docblock'><p>Utility macro for generating a space-delimited string from a set of labels;
+some of which may be conditionally included into the final string.
+Labels are anything that implements the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</code>).</p>
 
-<p>This should only ever be used in the form <code>Box&lt;RenderBox&gt;</code> by casting <code>Box&lt;RenderOnce&gt;</code> to
-<code>Box&lt;RenderBox&gt;</code>. This trait has methods but I&#39;ve hidden them because you should never call
-them directly.  Instead, you should call the <code>RenderOnce</code> methods implemented on
-<code>Box&lt;RenderBox&gt;</code>.</p>
-</div>
-        <h2 id='implementors'>Implementors</h2>
-        <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T&gt; RenderBox for T <span class='where'>where T: <a class='trait' href='../horrorshow/prelude/trait.RenderOnce.html' title='horrorshow::prelude::RenderOnce'>RenderOnce</a></span></code></li>
-</ul><script type="text/javascript" async
-                         src="../implementors/horrorshow/trait.RenderBox.js">
-                 </script></section>
+<p>This macro is an alias of: <code>labels_sep_by!(&quot; &quot;; maybe_label,...)</code></p>
+
+<p>Usage: <code>labels!(maybe_label,...)</code></p>
+
+<ul>
+<li><p><code>maybe_label</code> -- Either <code>label_expression</code>, or <code>label_expression =&gt; cond_test</code>.</p></li>
+<li><p><code>label_expression</code> -- An expression that returns a label that implements
+the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</code>).</p></li>
+<li><p><code>label_expression =&gt; cond_test</code> -- Conditionally include <code>label_expression</code> whenever <code>cond_test</code> is <code>true</code>.
+<code>cond_test</code> is an expression that returns either <code>true</code> or <code>false</code>.</p></li>
+</ul>
+
+<p>This useful in generating class attribute as follows:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='macro'>html</span><span class='macro'>!</span> {
+    <span class='ident'>div</span>(<span class='ident'>class</span> <span class='op'>=</span> <span class='macro'>labels</span><span class='macro'>!</span>(<span class='string'>&quot;active&quot;</span> <span class='op'>=&gt;</span> <span class='bool-val'>true</span>, <span class='string'>&quot;button-style&quot;</span>)) {
+        : <span class='string'>&quot;This is a button&quot;</span>
+    }
+}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

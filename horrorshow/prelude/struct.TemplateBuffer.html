@@ -47,38 +47,36 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-90' class='srclink' href='../../src/horrorshow/src/template.rs.html#74-77' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct TemplateBuffer&lt;'a&gt; {
-    // some fields omitted
-}</pre><div class='docblock'><p>A template buffer. This is the type that gets passed to closures inside templates.</p>
+               </span><a id='src-60' class='srclink' href='../../src/horrorshow/src/template.rs.html#74-77' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct TemplateBuffer&lt;'a&gt; { /* fields omitted */ }</pre><div class='docblock'><p>A template buffer. This is the type that gets passed to closures inside templates.</p>
 
 <p>Example:</p>
 
 <pre class='rust rust-example-rendered'>
     <span class='macro'>html</span><span class='macro'>!</span> {
         <span class='op'>|</span><span class='ident'>tmpl</span> <span class='comment'>/*: &amp;mut TemplateBuffer */</span><span class='op'>|</span> <span class='ident'>tmpl</span> <span class='op'>&lt;&lt;</span> <span class='string'>&quot;Some String&quot;</span>;
-    };</pre>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='struct' href='../../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-102' class='srclink' href='../../src/horrorshow/src/template.rs.html#85-147' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.record_error' class='method'><code>fn <a href='#method.record_error' class='fnname'>record_error</a>&lt;E:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='https://doc.rust-lang.org/nightly/std/error/trait.Error.html' title='std::error::Error'>Error</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>&gt;&gt;&gt;(&amp;mut self, e: E)</code></h4>
-<h4 id='method.write_raw' class='method'><code>fn <a href='#method.write_raw' class='fnname'>write_raw</a>(&amp;mut self, text: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></h4>
+    };<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a&gt; <a class='struct' href='../../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>&lt;'a&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a id='src-72' class='srclink' href='../../src/horrorshow/src/template.rs.html#85-147' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.record_error' class='method'><span id='record_error.v' class='invisible'><code>fn <a href='#method.record_error' class='fnname'>record_error</a>&lt;E:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='https://doc.rust-lang.org/nightly/std/error/trait.Error.html' title='std::error::Error'>Error</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html' title='core::marker::Sync'>Sync</a>&gt;&gt;&gt;(&amp;mut self, e: E)</code></span></h4>
+<h4 id='method.write_raw' class='method'><span id='write_raw.v' class='invisible'><code>fn <a href='#method.write_raw' class='fnname'>write_raw</a>(&amp;mut self, text: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></h4>
 <div class='docblock'><p>Write a raw string to the template output.</p>
-</div><h4 id='method.write_fmt' class='method'><code>fn <a href='#method.write_fmt' class='fnname'>write_fmt</a>(&amp;mut self, args: <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Arguments.html' title='core::fmt::Arguments'>Arguments</a>)</code></h4>
+</div><h4 id='method.write_fmt' class='method'><span id='write_fmt.v' class='invisible'><code>fn <a href='#method.write_fmt' class='fnname'>write_fmt</a>(&amp;mut self, args: <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Arguments.html' title='core::fmt::Arguments'>Arguments</a>)</code></span></h4>
 <div class='docblock'><p>Escape and write the formatted arguments to the template output.</p>
 
 <p>Example:</p>
 
 <pre class='rust rust-example-rendered'>
-<span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, <span class='string'>&quot;{} + {}&quot;</span>, <span class='number'>0</span>, <span class='number'>1</span>);</pre>
-</div><h4 id='method.write_str' class='method'><code>fn <a href='#method.write_str' class='fnname'>write_str</a>(&amp;mut self, text: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></h4>
+<span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>tmpl</span>, <span class='string'>&quot;{} + {}&quot;</span>, <span class='number'>0</span>, <span class='number'>1</span>);<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+</div><h4 id='method.write_str' class='method'><span id='write_str.v' class='invisible'><code>fn <a href='#method.write_str' class='fnname'>write_str</a>(&amp;mut self, text: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></h4>
 <div class='docblock'><p>Escape and write a string to the template output.</p>
-</div><h4 id='method.as_writer' class='method'><code>fn <a href='#method.as_writer' class='fnname'>as_writer</a>&lt;'b&gt;(&amp;'b mut self) -&gt; TemplateWriter&lt;'a,&nbsp;'b&gt;</code></h4>
+</div><h4 id='method.as_writer' class='method'><span id='as_writer.v' class='invisible'><code>fn <a href='#method.as_writer' class='fnname'>as_writer</a>&lt;'b&gt;(&amp;'b mut self) -&gt; TemplateWriter&lt;'a,&nbsp;'b&gt;</code></span></h4>
 <div class='docblock'><p>Returns an escaping Write adapter.</p>
-</div><h4 id='method.as_raw_writer' class='method'><code>fn <a href='#method.as_raw_writer' class='fnname'>as_raw_writer</a>&lt;'b&gt;(&amp;'b mut self) -&gt; RawTemplateWriter&lt;'a,&nbsp;'b&gt;</code></h4>
+</div><h4 id='method.as_raw_writer' class='method'><span id='as_raw_writer.v' class='invisible'><code>fn <a href='#method.as_raw_writer' class='fnname'>as_raw_writer</a>&lt;'b&gt;(&amp;'b mut self) -&gt; RawTemplateWriter&lt;'a,&nbsp;'b&gt;</code></span></h4>
 <div class='docblock'><p>Returns a non-escaping Write adapter.</p>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'a,&nbsp;'b,&nbsp;T&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Shl.html' title='core::ops::Shl'>Shl</a>&lt;T&gt; for &amp;'a mut <a class='struct' href='../../horrorshow/struct.TemplateBuffer.html' title='horrorshow::TemplateBuffer'>TemplateBuffer</a>&lt;'b&gt; <span class='where'>where T: <a class='trait' href='../../horrorshow/prelude/trait.RenderOnce.html' title='horrorshow::prelude::RenderOnce'>RenderOnce</a></span></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-9' class='srclink' href='../../src/horrorshow/src/ops.rs.html#5-17' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='associatedtype.Output' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Shl.html#associatedtype.Output' class='type'>Output</a> = <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a></code></h4>
+<div class='impl-items'><h4 id='associatedtype.Output' class='type'><span id='Output.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Shl.html#associatedtype.Output' class='type'>Output</a> = <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a></code></span></h4>
 <div class='docblock'><p>The resulting type after applying the <code>&lt;&lt;</code> operator</p>
-</div><h4 id='method.shl' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Shl.html#tymethod.shl' class='fnname'>shl</a>(self, component: T)</code></h4>
+</div><h4 id='method.shl' class='method'><span id='shl.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Shl.html#tymethod.shl' class='fnname'>shl</a>(self, component: T)</code></span></h4>
 <div class='docblock'><p>Render the component into the template.</p>
 
 <p>Note: If writing to the template fails, this method will neither panic nor return errors.
