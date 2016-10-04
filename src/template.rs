@@ -181,18 +181,26 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
     fn write_str(&mut self, text: &str) -> fmt::Result {
         // NOTE to future self: don't try to be fancy here. This optimizes well
         // and all you're fancy algorithms are actually slower.
+        //
+        // Also, don't try short-circuiting entirely. That is, don't check if we
+        // need to escape and use write_raw otherwise. It's slower.
         use self::InnerTemplateWriter::*;
         if !error::is_empty(&self.0.error) {
             return Ok(());
         }
+
+        fn should_escape(b: u8) -> bool {
+            (b | 0x4) == 0x26 || (b | 0x2) == 0x3e
+        }
+
         match self.0.writer {
             Io(ref mut writer) => {
                 for b in text.bytes() {
-                    if let Err(e) = match b {
-                        b'&' => writer.write_all(b"&amp;"),
-                        b'"' => writer.write_all(b"&quot;"),
-                        b'<' => writer.write_all(b"&lt;"),
-                        b'>' => writer.write_all(b"&gt;"),
+                    if let Err(e) = match (should_escape(b), b) {
+                        (true, b'&') => writer.write_all(b"&amp;"),
+                        (true, b'"') => writer.write_all(b"&quot;"),
+                        (true, b'<') => writer.write_all(b"&lt;"),
+                        (true, b'>') => writer.write_all(b"&gt;"),
                         _ => writer.write_all(&[b] as &[u8]),
                     } {
                         self.0.error.write = Some(e);
@@ -202,11 +210,11 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
             }
             Fmt(ref mut writer) => {
                 for c in text.chars() {
-                    if (match c {
-                        '&' => writer.write_str("&amp;"),
-                        '"' => writer.write_str("&quot;"),
-                        '<' => writer.write_str("&lt;"),
-                        '>' => writer.write_str("&gt;"),
+                    if (match (should_escape(c as u8), c as u8) {
+                        (true, b'&') => writer.write_str("&amp;"),
+                        (true, b'"') => writer.write_str("&quot;"),
+                        (true, b'<') => writer.write_str("&lt;"),
+                        (true, b'>') => writer.write_str("&gt;"),
                         _ => writer.write_char(c),
                     }).is_err() {
                         self.0.error.write = Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
@@ -216,11 +224,12 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
             }
             Str(ref mut writer) => {
                 for b in text.bytes() {
-                    match b {
-                        b'&' => writer.push_str("&amp;"),
-                        b'"' => writer.push_str("&quot;"),
-                        b'<' => writer.push_str("&lt;"),
-                        b'>' => writer.push_str("&gt;"),
+                    match (should_escape(b), b) {
+                        (true, b'&') => writer.push_str("&amp;"),
+                        (true, b'"') => writer.push_str("&quot;"),
+                        (true, b'<') => writer.push_str("&lt;"),
+                        (true, b'>') => writer.push_str("&gt;"),
+                        // NOTE: Do not add an unreachable case. It makes this slower.
                         _ => unsafe { writer.as_mut_vec() }.push(b),
                     }
                 }
