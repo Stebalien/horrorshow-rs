@@ -190,7 +190,7 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
         }
 
         fn should_escape(b: u8) -> bool {
-            (b | 0x4) == 0x26 || (b | 0x2) == 0x3e
+            (b | 0x4) == b'&' || (b | 0x2) == b'>'
         }
 
         match self.0.writer {
