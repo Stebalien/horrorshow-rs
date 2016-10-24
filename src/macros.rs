@@ -161,7 +161,7 @@ macro_rules! append_html {
     };
     ($tmpl:ident, ($($p:expr),*), : {$($code:tt)*} $($next:tt)*) => {
         append_html!(@write_const, $tmpl, $($p),*);
-        $crate::RenderOnce::rende_once({$($code)*}, $tmpl);
+        $crate::RenderOnce::render_once({$($code)*}, $tmpl);
         append_html!($tmpl, (), $($next)*);
     };
     ($tmpl:ident, ($($p:expr),*), : $code:expr; $($next:tt)* ) => {
