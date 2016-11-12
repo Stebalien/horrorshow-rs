@@ -508,15 +508,6 @@
 <span id="464">464</span>
 <span id="465">465</span>
 <span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Deref</span>;
@@ -797,7 +788,7 @@
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// When rendered, raw content will not be escaped.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Eq</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Ord</span>, <span class='ident'>PartialOrd</span>, <span class='ident'>Clone</span>, <span class='ident'>Copy</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Raw</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;&gt;</span>(<span class='ident'>S</span>);
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Raw</span><span class='op'>&lt;</span><span class='ident'>S</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;&gt;</span>(<span class='kw'>pub</span> <span class='ident'>S</span>);
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span> <span class='ident'>Deref</span> <span class='kw'>for</span> <span class='ident'>Raw</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span>
     <span class='kw'>where</span> <span class='ident'>S</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;</span>
@@ -809,15 +800,6 @@
 }
 
 <span class='comment'>// No DerefMut for safety. Once you mark something as Raw, don&#39;t change it.</span>
-
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span> <span class='ident'>Raw</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>S</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;</span>
-{
-    <span class='doccomment'>/// Mark as raw.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>content</span>: <span class='ident'>S</span>) <span class='op'>-&gt;</span> <span class='ident'>Raw</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span> {
-        <span class='ident'>Raw</span>(<span class='ident'>content</span>)
-    }
-}
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span> <span class='ident'>RenderOnce</span> <span class='kw'>for</span> <span class='ident'>Raw</span><span class='op'>&lt;</span><span class='ident'>S</span><span class='op'>&gt;</span>
     <span class='kw'>where</span> <span class='ident'>S</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>str</span><span class='op'>&gt;</span>

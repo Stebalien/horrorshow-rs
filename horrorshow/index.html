@@ -68,7 +68,7 @@
             }
             <span class='ident'>p</span> {
                 <span class='comment'>// Insert raw text (unescaped)</span>
-                : <span class='macro'>raw</span><span class='macro'>!</span>(<span class='string'>&quot;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&quot;</span>)
+                : <span class='ident'>Raw</span>(<span class='string'>&quot;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&quot;</span>)
             }
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
                 <span class='comment'>// You can embed for loops, while loops, and if statements.</span>
@@ -332,13 +332,6 @@ Labels are anything that implements the <code>RenderOnce</code> trait (e.g. <cod
 some of which may be conditionally included into the final string.
 The delimiter/seperator and labels are anything that implements
 the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</code>).</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='macro' href='macro.raw.html'
-                                  title='horrorshow::raw'>raw</a></td>
-                           <td class='docblock-short'>
-                                <p>Mark a string as a raw. The string will not be rendered.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
