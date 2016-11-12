@@ -27,7 +27,7 @@ fn main() {
                 }
                 p {
                     // Insert raw text (unescaped)
-                    : raw!("Let's <i>count</i> to 10!")
+                    : Raw("Let's <i>count</i> to 10!")
                 }
                 ol(id="count") {
                     // You can embed for loops, while loops, and if statements.

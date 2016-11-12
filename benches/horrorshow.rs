@@ -4,7 +4,7 @@ extern crate test;
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::Template;
+use horrorshow::{Template, Raw};
 
 #[bench]
 fn bench_short_fmt(b: &mut test::Bencher) {
@@ -23,7 +23,7 @@ fn bench_short_fmt(b: &mut test::Bencher) {
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
-                    p : raw!("Let's <i>count</i>!");
+                    p : Raw("Let's <i>count</i>!");
                     ol(id="count") {
                         // run some inline code...
                         @ for i in 0..count {
@@ -56,7 +56,7 @@ fn bench_short(b: &mut test::Bencher) {
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
-                    p : raw!("Let's <i>count</i>!");
+                    p : Raw("Let's <i>count</i>!");
                     ol(id="count") {
                         // run some inline code...
                         @ for i in 0..count {
@@ -88,7 +88,7 @@ fn bench_long(b: &mut test::Bencher) {
                         : "Hello! This is <html />"
                     }
                     // Insert raw text (unescaped)
-                    p : raw!("Let's <i>count</i>!");
+                    p : Raw("Let's <i>count</i>!");
                     ol(id="count") {
                         // run some inline code...
                         @ for i in 0..count {

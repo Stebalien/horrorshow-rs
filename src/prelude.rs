@@ -1,3 +1,4 @@
+pub use Raw;
 pub use Template;
 pub use Render;
 pub use RenderMut;

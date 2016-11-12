@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::Template;
+use horrorshow::{Template, Raw};
 
 #[test]
 fn test_prim() {
@@ -27,7 +27,7 @@ fn test_reentrant() {
 
     assert_eq!(&html! {
         p {
-            : raw!(html! { a(href="abcde") }.into_string().unwrap());
+            : Raw(html! { a(href="abcde") }.into_string().unwrap());
         }
     }.into_string().unwrap(), "<p><a href=\"abcde\" /></p>");
 }

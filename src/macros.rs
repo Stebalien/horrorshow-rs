@@ -61,12 +61,6 @@ macro_rules! box_html {
     }}
 }
 
-/// Mark a string as a raw. The string will not be rendered.
-#[macro_export]
-macro_rules! raw {
-    ($e:expr) => { $crate::Raw::new($e) }
-}
-
 /// Append html to the current template.
 /// Don't call this manually.
 #[doc(hidden)]

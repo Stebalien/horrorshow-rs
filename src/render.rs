@@ -277,7 +277,7 @@ impl<F> fmt::Display for FnRenderer<F>
 ///
 /// When rendered, raw content will not be escaped.
 #[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
-pub struct Raw<S: AsRef<str>>(S);
+pub struct Raw<S: AsRef<str>>(pub S);
 
 impl<S> Deref for Raw<S>
     where S: AsRef<str>
@@ -289,15 +289,6 @@ impl<S> Deref for Raw<S>
 }
 
 // No DerefMut for safety. Once you mark something as Raw, don't change it.
-
-impl<S> Raw<S>
-    where S: AsRef<str>
-{
-    /// Mark as raw.
-    pub fn new(content: S) -> Raw<S> {
-        Raw(content)
-    }
-}
 
 impl<S> RenderOnce for Raw<S>
     where S: AsRef<str>

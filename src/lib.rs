@@ -21,7 +21,7 @@
 //!             }
 //!             p {
 //!                 // Insert raw text (unescaped)
-//!                 : raw!("Let's <i>count</i> to 10!")
+//!                 : Raw("Let's <i>count</i> to 10!")
 //!             }
 //!             ol(id="count") {
 //!                 // You can embed for loops, while loops, and if statements.
@@ -100,7 +100,7 @@
 //! * `some_tag(...) { ... }` -- Same as above but with custom attributes.
 //!
 //! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result
-//! current position. To insert literal html, mark it as raw with the `raw!` macro.
+//! current position. To insert a literal html (unescaped), mark it as raw with the `Raw` marker type.
 //!
 //! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is
 //! actually a closure so the block/expression can append to the current template through `tmpl`
