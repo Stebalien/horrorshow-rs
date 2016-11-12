@@ -279,16 +279,8 @@ impl<F> fmt::Display for FnRenderer<F>
 #[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
 pub struct Raw<S: AsRef<str>>(pub S);
 
-impl<S> Deref for Raw<S>
-    where S: AsRef<str>
-{
-    type Target = S;
-    fn deref(&self) -> &S {
-        &self.0
-    }
-}
-
-// No DerefMut for safety. Once you mark something as Raw, don't change it.
+// NOTE: Do not implement `Deref`. Otherwise, we can accidentally deref and
+// escape.
 
 impl<S> RenderOnce for Raw<S>
     where S: AsRef<str>
