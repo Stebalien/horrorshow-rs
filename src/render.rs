@@ -1,5 +1,4 @@
 use std::fmt;
-use std::ops::Deref;
 
 use template::{TemplateBuffer, Template};
 

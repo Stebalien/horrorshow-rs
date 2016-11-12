@@ -8,10 +8,12 @@
 //! # #[macro_use] extern crate horrorshow;
 //! # fn main() {
 //! use horrorshow::prelude::*;
+//! use horrorshow::helper::doctype;
 //! let actual = html! {
+//!     : doctype::HTML;
 //!     html {
 //!         head {
-//!             title { : "Hello world!" }
+//!             title : "Hello world!";
 //!         }
 //!         body {
 //!             // attributes
@@ -45,6 +47,7 @@
 //! }.into_string().unwrap();
 //!
 //! let expected = "\
+//! <!DOCTYPE html>\
 //! <html>\
 //!   <head>\
 //!     <title>Hello world!</title>\
@@ -298,6 +301,7 @@ pub use render::{RenderOnce, RenderMut, Render, RenderBox, FnRenderer, Raw};
 /// Traits that should always be imported.
 pub mod prelude;
 
+pub mod helper;
 
 /// Helper trait for dispatching `attr ?= `.
 ///

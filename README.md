@@ -12,12 +12,14 @@ Documentation: https://stebalien.github.io/horrorshow-rs/horrorshow/
 #[macro_use]
 extern crate horrorshow;
 use horrorshow::prelude::*;
+use horrorshow::doctype;
 
 fn main() {
     let actual = html! {
+        : doctype::HTML;
         html {
             head {
-                title { : "Hello world!" }
+                title : "Hello world!";
             }
             body {
                 // attributes
@@ -51,6 +53,7 @@ fn main() {
     }.into_string().unwrap();
 
     let expected = "\
+    <!DOCTYPE html>\
     <html>\
       <head>\
         <title>Hello world!</title>\
