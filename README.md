@@ -4,7 +4,10 @@
 
 A macro-based html templating library (1.0 compatible).
 
-Documentation: https://stebalien.github.io/horrorshow-rs/horrorshow/
+## Documentation
+
+* git: https://stebalien.github.io/horrorshow-rs/horrorshow/
+* release: https://docs.rs/horrorshow/
 
 ## Example:
 
