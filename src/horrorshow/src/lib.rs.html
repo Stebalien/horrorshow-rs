@@ -370,6 +370,10 @@
 <span id="326">326</span>
 <span id="327">327</span>
 <span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # Horrorshow</span>
 <span class='doccomment'>//!</span>
@@ -381,10 +385,12 @@
 <span class='doccomment'>//! # #[macro_use] extern crate horrorshow;</span>
 <span class='doccomment'>//! # fn main() {</span>
 <span class='doccomment'>//! use horrorshow::prelude::*;</span>
+<span class='doccomment'>//! use horrorshow::helper::doctype;</span>
 <span class='doccomment'>//! let actual = html! {</span>
+<span class='doccomment'>//!     : doctype::HTML;</span>
 <span class='doccomment'>//!     html {</span>
 <span class='doccomment'>//!         head {</span>
-<span class='doccomment'>//!             title { : &quot;Hello world!&quot; }</span>
+<span class='doccomment'>//!             title : &quot;Hello world!&quot;;</span>
 <span class='doccomment'>//!         }</span>
 <span class='doccomment'>//!         body {</span>
 <span class='doccomment'>//!             // attributes</span>
@@ -418,6 +424,7 @@
 <span class='doccomment'>//! }.into_string().unwrap();</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let expected = &quot;\</span>
+<span class='doccomment'>//! &lt;!DOCTYPE html&gt;\</span>
 <span class='doccomment'>//! &lt;html&gt;\</span>
 <span class='doccomment'>//!   &lt;head&gt;\</span>
 <span class='doccomment'>//!     &lt;title&gt;Hello world!&lt;/title&gt;\</span>
@@ -671,6 +678,7 @@
 <span class='doccomment'>/// Traits that should always be imported.</span>
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>prelude</span>;
 
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>helper</span>;
 
 <span class='doccomment'>/// Helper trait for dispatching `attr ?= `.</span>
 <span class='doccomment'>///</span>

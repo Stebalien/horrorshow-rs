@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["doctype","Helpers for inserting `DOCTYPE`s."]]});

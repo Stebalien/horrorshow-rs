@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `RenderBox` trait in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, RenderBox">
+    <meta name="description" content="API documentation for the Rust `Strict` constant in crate `horrorshow`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Strict">
 
-    <title>horrorshow::RenderBox - Rust</title>
+    <title>horrorshow::helper::doctype::HTML4::Strict - Rust</title>
 
-    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../main.css">
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
     
 
     
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'RenderBox', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../../../index.html'>horrorshow</a>::<wbr><a href='../../index.html'>helper</a>::<wbr><a href='../index.html'>doctype</a>::<wbr><a href='index.html'>HTML4</a></p><script>window.sidebarCurrent = {name: 'Strict', ty: 'constant', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,25 +42,13 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
-<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>horrorshow</a>::<wbr><a class='trait' href=''>RenderBox</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content constant">
+<h1 class='fqn'><span class='in-band'>Constant <a href='../../../index.html'>horrorshow</a>::<wbr><a href='../../index.html'>helper</a>::<wbr><a href='../index.html'>doctype</a>::<wbr><a href='index.html'>HTML4</a>::<wbr><a class='constant' href=''>Strict</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-170' class='srclink' href='../src/horrorshow/src/render.rs.html#61-69' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait RenderBox { }</pre><div class='docblock'><p>Something that can be rendered once out of a box.</p>
-
-<p>This should only ever be used in the form <code>Box&lt;RenderBox&gt;</code> by casting <code>Box&lt;RenderOnce&gt;</code> to
-<code>Box&lt;RenderBox&gt;</code>. This trait has methods but I&#39;ve hidden them because you should never call
-them directly.  Instead, you should call the <code>RenderOnce</code> methods implemented on
-<code>Box&lt;RenderBox&gt;</code>.</p>
-</div>
-        <h2 id='implementors'>Implementors</h2>
-        <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T&gt; RenderBox for T <span class='where'>where T: <a class='trait' href='../horrorshow/prelude/trait.RenderOnce.html' title='horrorshow::prelude::RenderOnce'>RenderOnce</a></span></code></li>
-</ul><script type="text/javascript" async
-                         src="../implementors/horrorshow/trait.RenderBox.js">
-                 </script></section>
+               </span><a id='src-699' class='srclink' href='../../../../src/horrorshow/src/helper.rs.html#6' title='goto source code'>[src]</a></span></h1>
+<pre class='rust const'>pub const Strict: <a class='struct' href='../../../../horrorshow/struct.Raw.html' title='horrorshow::Raw'>Raw</a>&lt;&amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;<code> = </code><code>$crate::render::Raw(&quot;&lt;!DOCTYPE HTML PUBLIC \&quot;-//W3C//DTD HTML 4.01//EN\&quot; \&quot;http://www.w3.org/TR/html4/strict.dtd\&quot;&gt;&quot;)</code></pre></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -114,11 +102,11 @@ them directly.  Instead, you should call the <code>RenderOnce</code> methods imp
     
 
     <script>
-        window.rootPath = "../";
+        window.rootPath = "../../../../";
         window.currentCrate = "horrorshow";
     </script>
-    <script src="../jquery.js"></script>
-    <script src="../main.js"></script>
-    <script defer src="../search-index.js"></script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    <script defer src="../../../../search-index.js"></script>
 </body>
 </html>
