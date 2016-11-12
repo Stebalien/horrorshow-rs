@@ -73,7 +73,7 @@
             <span class='ident'>ol</span>(<span class='ident'>id</span><span class='op'>=</span><span class='string'>&quot;count&quot;</span>) {
                 <span class='comment'>// You can embed for loops, while loops, and if statements.</span>
                 @ <span class='kw'>for</span> <span class='ident'>i</span> <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>10</span> {
-                    <span class='ident'>li</span>(<span class='ident'>first</span>? <span class='op'>=</span> (<span class='ident'>i</span> <span class='op'>==</span> <span class='number'>0</span>)) {
+                    <span class='ident'>li</span>(<span class='ident'>first</span><span class='question-mark'>?</span> <span class='op'>=</span> (<span class='ident'>i</span> <span class='op'>==</span> <span class='number'>0</span>)) {
                         <span class='comment'>// Format some text.</span>
                         : <span class='macro'>format_args</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>i</span><span class='op'>+</span><span class='number'>1</span>)
                     }
@@ -116,12 +116,12 @@
   &lt;/body&gt;\
 &lt;/html&gt;&quot;</span>;
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>expected</span>, <span class='ident'>actual</span>);
-<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+</pre>
 
 <h2 id='usage' class='section-header'><a href='#usage'>Usage</a></h2>
 <pre class='rust rust-example-rendered'>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>horrorshow</span>;</pre>
 
 <p>Inside an html template, the following expressions are valid:</p>
 
@@ -179,7 +179,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
   <span class='ident'>script</span> {
     : <span class='string'>&quot;alert(&#39;hello&#39;);&quot;</span>
   }
-}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+}</pre>
 
 <p>The following will break due to html escaping (the <code>&quot;</code> will be escaped to <code>&amp;quot;</code>):</p>
 
@@ -188,14 +188,14 @@ Furthermore, it will do html escaping in any literal javascript you might includ
   <span class='ident'>script</span> {
     : <span class='string'>&quot;alert(\&quot;hello\&quot;);&quot;</span>
   }
-}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+}</pre>
 
 <p>And the following will display as-is (but won&#39;t run any javascript) due to the HTML escaping:</p>
 
 <pre class='rust rust-example-rendered'>
 <span class='macro'>html</span><span class='macro'>!</span> {
     : <span class='string'>&quot;&lt;script&gt;alert(\&quot;hello\&quot;);&lt;/script&gt;&quot;</span>
-}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+}</pre>
 
 <p>Output:</p>
 
@@ -242,7 +242,7 @@ Furthermore, it will do html escaping in any literal javascript you might includ
         }
     }
 }
-<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+</pre>
 
 <p><em>Note</em>: To avoid allocating, you can implement render manually instead of returning a boxed
 template:</p>
@@ -287,7 +287,7 @@ template:</p>
                 &lt;header&gt;&lt;h1&gt;My title&lt;/h1&gt;&lt;/header&gt;\
                 &lt;section&gt;Some content.&lt;/section&gt;\
               &lt;/article&gt;&quot;</span>);
-}<a class='test-arrow' target='_blank' href=''>Run</a></pre>
+}</pre>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
 <p>See the test cases.</p>
@@ -468,11 +468,9 @@ the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</c
     <script>
         window.rootPath = "../";
         window.currentCrate = "horrorshow";
-        window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
-    
     <script defer src="../search-index.js"></script>
 </body>
 </html>
