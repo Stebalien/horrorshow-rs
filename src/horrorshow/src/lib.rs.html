@@ -473,7 +473,7 @@
 <span class='doccomment'>//! * `some_tag(...) { ... }` -- Same as above but with custom attributes.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `: rust_expression`, `: { rust_code }` -- Evaluate the expression or block and insert result</span>
-<span class='doccomment'>//! current position. To insert literal html, mark it as raw with the `raw!` macro.</span>
+<span class='doccomment'>//! current position. To insert a literal html (unescaped), mark it as raw with the `Raw` marker type.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * `|tmpl| rust_expression`, `|tmpl| { rust_code }` -- Evaluate the expression or block. This is</span>
 <span class='doccomment'>//! actually a closure so the block/expression can append to the current template through `tmpl`</span>

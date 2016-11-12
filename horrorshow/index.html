@@ -136,7 +136,7 @@ must implement <code>RenderOnce</code> (already implemented on &amp;str, String,
 <li><p><code>some_tag { ... }</code> -- Insert the tag <code>some_tag</code> and recursively evaluate the <code>...</code>.</p></li>
 <li><p><code>some_tag(...) { ... }</code> -- Same as above but with custom attributes.</p></li>
 <li><p><code>: rust_expression</code>, <code>: { rust_code }</code> -- Evaluate the expression or block and insert result
-current position. To insert literal html, mark it as raw with the <code>raw!</code> macro.</p></li>
+current position. To insert a literal html (unescaped), mark it as raw with the <code>Raw</code> marker type.</p></li>
 <li><p><code>|tmpl| rust_expression</code>, <code>|tmpl| { rust_code }</code> -- Evaluate the expression or block. This is
 actually a closure so the block/expression can append to the current template through <code>tmpl</code>
 (of type <code>&amp;mut TemplateBuffer</code>).</p></li>
