@@ -22,3 +22,17 @@ fn test_template() {
     }.into_string().unwrap(), "<span><span>32</span></span>");
 }
 
+
+mod submodule {
+  template! {
+     pub Test3(num: &u64) {
+        div : num
+     }
+  }
+}
+
+#[test]
+fn test_template_in_module() {
+   assert_eq!(html! {p : submodule::Test3::new(&42)}.into_string().unwrap(), "<p><div>42</div></p>");
+}
+

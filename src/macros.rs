@@ -329,7 +329,7 @@ macro_rules! template {
         template!($($rest)*);
     };
     (pub $name:ident ($($field:ident : &$typ:ty),*) { $($tmpl:tt)* } $($rest:tt)*) => {
-        struct $name<'a> { $( $field: &'a $typ),* }
+        pub struct $name<'a> { $( $field: &'a $typ),* }
         impl<'a> $name<'a> {
             pub fn new($($field: &'a $typ),*) -> Self {
                 $name { $( $field: $field),* }
