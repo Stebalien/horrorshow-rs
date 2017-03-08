@@ -220,7 +220,7 @@ macro_rules! append_html {
     ($tmpl:ident, ($($p:expr),*), $tag:ident($($attr:tt)+) : $e:expr) => {
         append_html!($tmpl, ($($p),*), $tag($($attr)+) { : $e });
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next)* ) => {
+    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next:tt)* ) => {
         append_html!($tmpl, ($($p),*), $tag($($attr)+) { : {$($code)*} } $($next)* );
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident($($attrs:tt)+); $($next:tt)*) => {
