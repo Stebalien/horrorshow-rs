@@ -9,6 +9,7 @@
 
     <title>horrorshow::labels - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
     
@@ -43,14 +44,14 @@
     </nav>
 
     <section id='main' class="content macro">
-<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>horrorshow</a>::<wbr><a class='macro' href=''>labels</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>horrorshow</a>::<wbr><a class="macro" href=''>labels</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-706' class='srclink' href='../src/horrorshow/src/macros.rs.html#391-397' title='goto source code'>[src]</a></span></h1>
-<pre class='rust macro'>
-<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>labels</span> {
-    ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) <span class='op'>=&gt;</span> { ... };
+               </span><a class='srclink' href='../src/horrorshow/macros.rs.html#391-397' title='goto source code'>[src]</a></span></h1>
+<pre class="rust macro">
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">labels</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=&gt;</span> { ... };
 }</pre>
 <div class='docblock'><p>Utility macro for generating a space-delimited string from a set of labels;
 some of which may be conditionally included into the final string.
@@ -70,10 +71,10 @@ the <code>RenderOnce</code> trait (e.g. <code>String</code> or <code>&amp;str</c
 
 <p>This useful in generating class attribute as follows:</p>
 
-<pre class='rust rust-example-rendered'>
-<span class='macro'>html</span><span class='macro'>!</span> {
-    <span class='ident'>div</span>(<span class='ident'>class</span> <span class='op'>=</span> <span class='macro'>labels</span><span class='macro'>!</span>(<span class='string'>&quot;active&quot;</span> <span class='op'>=&gt;</span> <span class='bool-val'>true</span>, <span class='string'>&quot;button-style&quot;</span>)) {
-        : <span class='string'>&quot;This is a button&quot;</span>
+<pre class="rust rust-example-rendered">
+<span class="macro">html</span><span class="macro">!</span> {
+    <span class="ident">div</span>(<span class="ident">class</span> <span class="op">=</span> <span class="macro">labels</span><span class="macro">!</span>(<span class="string">&quot;active&quot;</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>, <span class="string">&quot;button-style&quot;</span>)) {
+        : <span class="string">&quot;This is a button&quot;</span>
     }
 }</pre>
 </div></section>

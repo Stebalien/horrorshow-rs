@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `helper` mod in crate `horrorshow`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, helper">
+    <meta name="description" content="Source to the Rust file `src/prelude.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
 
-    <title>horrorshow::helper - Rust</title>
+    <title>prelude.rs.html -- source</title>
 
     <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'helper', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        
     </nav>
 
     <nav class="sub">
@@ -43,22 +43,25 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>horrorshow</a>::<wbr><a class="mod" href=''>helper</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a class='srclink' href='../../src/horrorshow/helper.rs.html#1-27' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>Helpers templates.</p>
-</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="doctype/index.html"
-                                  title='mod horrorshow::helper::doctype'>doctype</a></td>
-                           <td class='docblock-short'>
-                                <p>Helpers for inserting <code>DOCTYPE</code>s.</p>
-                           </td>
-                       </tr></table></section>
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+</pre><pre class="rust ">
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">Raw</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">Template</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">Render</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">RenderMut</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">RenderOnce</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">RenderBox</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">FnRenderer</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">TemplateBuffer</span>;
+</pre>
+</section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
