@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc trait">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'RenderMut', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait RenderMut</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'RenderMut', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content trait">
+    <section id='main' class="content">
 <h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>horrorshow</a>::<wbr><a class="trait" href=''>RenderMut</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
@@ -63,11 +63,11 @@
 <li><code>impl&lt;'b&gt; RenderMut for <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;<a class="trait" href="../horrorshow/prelude/trait.RenderMut.html" title="trait horrorshow::prelude::RenderMut">RenderMut</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'b&gt;</code></li>
 <li><code>impl&lt;'b&gt; RenderMut for <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;<a class="trait" href="../horrorshow/prelude/trait.Render.html" title="trait horrorshow::prelude::Render">Render</a> + 'b&gt;</code></li>
 <li><code>impl&lt;'b&gt; RenderMut for <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;<a class="trait" href="../horrorshow/prelude/trait.Render.html" title="trait horrorshow::prelude::Render">Render</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'b&gt;</code></li>
-<li><code>impl&lt;F&gt; RenderMut for <a class="struct" href="../horrorshow/struct.FnRenderer.html" title="struct horrorshow::FnRenderer">FnRenderer</a>&lt;F&gt; <span class="where fmt-newline">where F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html" title="trait core::ops::FnMut">FnMut</a>(&amp;mut <a class="struct" href="../horrorshow/struct.TemplateBuffer.html" title="struct horrorshow::TemplateBuffer">TemplateBuffer</a>)</span></code></li>
-<li><code>impl&lt;S&gt; RenderMut for <a class="struct" href="../horrorshow/struct.Raw.html" title="struct horrorshow::Raw">Raw</a>&lt;S&gt; <span class="where fmt-newline">where S: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;</span></code></li>
+<li><code>impl&lt;F&gt; RenderMut for <a class="struct" href="../horrorshow/struct.FnRenderer.html" title="struct horrorshow::FnRenderer">FnRenderer</a>&lt;F&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html" title="trait core::ops::FnMut">FnMut</a>(&amp;mut <a class="struct" href="../horrorshow/struct.TemplateBuffer.html" title="struct horrorshow::TemplateBuffer">TemplateBuffer</a>),&nbsp;</span></code></li>
+<li><code>impl&lt;S&gt; RenderMut for <a class="struct" href="../horrorshow/struct.Raw.html" title="struct horrorshow::Raw">Raw</a>&lt;S&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;S: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;,&nbsp;</span></code></li>
 <li><code>impl&lt;'a&gt; RenderMut for &amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a></code></li>
 <li><code>impl RenderMut for <a class="struct" href="https://doc.rust-lang.org/nightly/collections/string/struct.String.html" title="struct collections::string::String">String</a></code></li>
-<li><code>impl&lt;T&gt; RenderMut for <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt; <span class="where fmt-newline">where T: <a class="trait" href="../horrorshow/prelude/trait.RenderMut.html" title="trait horrorshow::prelude::RenderMut">RenderMut</a></span></code></li>
+<li><code>impl&lt;T&gt; RenderMut for <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../horrorshow/prelude/trait.RenderMut.html" title="trait horrorshow::prelude::RenderMut">RenderMut</a>,&nbsp;</span></code></li>
 <li><code>impl&lt;'a&gt; RenderMut for <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Arguments.html" title="struct core::fmt::Arguments">Arguments</a>&lt;'a&gt;</code></li>
 <li><code>impl RenderMut for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i8.html">i8</a></code></li>
 <li><code>impl RenderMut for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i16.html">i16</a></code></li>
