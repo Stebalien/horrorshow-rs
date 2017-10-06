@@ -10,8 +10,8 @@ keywords = ["html", "template"]
 license = "MIT/Apache-2.0"
 
 [dev-dependencies]
-maud = "0.16" # target: nightly
-maud_macros = "0.16" # target: nightly
+maud = "0.17" # target: nightly
+maud_macros = "0.17" # target: nightly
 
 [features]
 default = ["ops"]

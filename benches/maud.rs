@@ -21,10 +21,7 @@ fn count(count: u32) -> String {
                 }
                 ol id="count" {
                     @for i in 0..count {
-                        li {
-                            // format some text
-                            (i+1)
-                        }
+                        li ({i+1})
                     }
                 }
                 br /
