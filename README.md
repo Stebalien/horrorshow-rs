@@ -15,7 +15,7 @@ A macro-based html templating library (1.0 compatible).
 #[macro_use]
 extern crate horrorshow;
 use horrorshow::prelude::*;
-use horrorshow::doctype;
+use horrorshow::helper::doctype;
 
 fn main() {
     let actual = html! {
