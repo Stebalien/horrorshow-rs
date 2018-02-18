@@ -9,26 +9,30 @@
 //! # fn main() {
 //! use horrorshow::prelude::*;
 //! use horrorshow::helper::doctype;
+//!
+//! let my_title = "Hello world!";
 //! let actual = format!("{}", html! {
 //!     : doctype::HTML;
 //!     html {
 //!         head {
-//!             title : "Hello world!";
+//!             // Use a variable
+//!             title : my_title;
 //!         }
 //!         body {
 //!             // attributes
-//!             h1(id="heading") {
+//!             h1(id="heading", class="title") : my_title;
+//!             p {
 //!                 // Insert escaped text
-//!                 : "Hello! This is <html />"
+//!                 : "Hello! This is <html />";
 //!             }
 //!             p {
 //!                 // Insert raw text (unescaped)
-//!                 : Raw("Let's <i>count</i> to 10!")
+//!                 : Raw("Let's <i>count</i> to 10!");
 //!             }
 //!             ol(id="count") {
 //!                 // You can embed for loops, while loops, and if statements.
 //!                 @ for i in 0..10 {
-//!                     li(first? = (i == 0)) {
+//!                     li(first? = (i == 0), class="item") {
 //!                         // Format some text.
 //!                         : format_args!("{}", i+1)
 //!                     }
@@ -53,19 +57,20 @@
 //!     <title>Hello world!</title>\
 //!   </head>\
 //!   <body>\
-//!     <h1 id=\"heading\">Hello! This is &lt;html /&gt;</h1>\
+//!     <h1 id=\"heading\" class=\"title\">Hello world!</h1>\
+//!     <p>Hello! This is &lt;html /&gt;</p>\
 //!     <p>Let's <i>count</i> to 10!</p>\
 //!     <ol id=\"count\">\
-//!       <li first>1</li>\
-//!       <li>2</li>\
-//!       <li>3</li>\
-//!       <li>4</li>\
-//!       <li>5</li>\
-//!       <li>6</li>\
-//!       <li>7</li>\
-//!       <li>8</li>\
-//!       <li>9</li>\
-//!       <li>10</li>\
+//!       <li first class=\"item\">1</li>\
+//!       <li class=\"item\">2</li>\
+//!       <li class=\"item\">3</li>\
+//!       <li class=\"item\">4</li>\
+//!       <li class=\"item\">5</li>\
+//!       <li class=\"item\">6</li>\
+//!       <li class=\"item\">7</li>\
+//!       <li class=\"item\">8</li>\
+//!       <li class=\"item\">9</li>\
+//!       <li class=\"item\">10</li>\
 //!     </ol>\
 //!     <br /><br />\
 //!     <p>Easy!</p>\
