@@ -386,6 +386,11 @@
 <span id="330">330</span>
 <span id="331">331</span>
 <span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! # Horrorshow</span>
 <span class="doccomment">//!</span>
@@ -398,26 +403,30 @@
 <span class="doccomment">//! # fn main() {</span>
 <span class="doccomment">//! use horrorshow::prelude::*;</span>
 <span class="doccomment">//! use horrorshow::helper::doctype;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! let my_title = &quot;Hello world!&quot;;</span>
 <span class="doccomment">//! let actual = format!(&quot;{}&quot;, html! {</span>
 <span class="doccomment">//!     : doctype::HTML;</span>
 <span class="doccomment">//!     html {</span>
 <span class="doccomment">//!         head {</span>
-<span class="doccomment">//!             title : &quot;Hello world!&quot;;</span>
+<span class="doccomment">//!             // Use a variable</span>
+<span class="doccomment">//!             title : my_title;</span>
 <span class="doccomment">//!         }</span>
 <span class="doccomment">//!         body {</span>
 <span class="doccomment">//!             // attributes</span>
-<span class="doccomment">//!             h1(id=&quot;heading&quot;) {</span>
+<span class="doccomment">//!             h1(id=&quot;heading&quot;, class=&quot;title&quot;) : my_title;</span>
+<span class="doccomment">//!             p {</span>
 <span class="doccomment">//!                 // Insert escaped text</span>
-<span class="doccomment">//!                 : &quot;Hello! This is &lt;html /&gt;&quot;</span>
+<span class="doccomment">//!                 : &quot;Hello! This is &lt;html /&gt;&quot;;</span>
 <span class="doccomment">//!             }</span>
 <span class="doccomment">//!             p {</span>
 <span class="doccomment">//!                 // Insert raw text (unescaped)</span>
-<span class="doccomment">//!                 : Raw(&quot;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&quot;)</span>
+<span class="doccomment">//!                 : Raw(&quot;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&quot;);</span>
 <span class="doccomment">//!             }</span>
 <span class="doccomment">//!             ol(id=&quot;count&quot;) {</span>
 <span class="doccomment">//!                 // You can embed for loops, while loops, and if statements.</span>
 <span class="doccomment">//!                 @ for i in 0..10 {</span>
-<span class="doccomment">//!                     li(first? = (i == 0)) {</span>
+<span class="doccomment">//!                     li(first? = (i == 0), class=&quot;item&quot;) {</span>
 <span class="doccomment">//!                         // Format some text.</span>
 <span class="doccomment">//!                         : format_args!(&quot;{}&quot;, i+1)</span>
 <span class="doccomment">//!                     }</span>
@@ -442,19 +451,20 @@
 <span class="doccomment">//!     &lt;title&gt;Hello world!&lt;/title&gt;\</span>
 <span class="doccomment">//!   &lt;/head&gt;\</span>
 <span class="doccomment">//!   &lt;body&gt;\</span>
-<span class="doccomment">//!     &lt;h1 id=\&quot;heading\&quot;&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/h1&gt;\</span>
+<span class="doccomment">//!     &lt;h1 id=\&quot;heading\&quot; class=\&quot;title\&quot;&gt;Hello world!&lt;/h1&gt;\</span>
+<span class="doccomment">//!     &lt;p&gt;Hello! This is &amp;lt;html /&amp;gt;&lt;/p&gt;\</span>
 <span class="doccomment">//!     &lt;p&gt;Let&#39;s &lt;i&gt;count&lt;/i&gt; to 10!&lt;/p&gt;\</span>
 <span class="doccomment">//!     &lt;ol id=\&quot;count\&quot;&gt;\</span>
-<span class="doccomment">//!       &lt;li first&gt;1&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;2&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;3&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;4&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;5&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;6&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;7&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;8&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;9&lt;/li&gt;\</span>
-<span class="doccomment">//!       &lt;li&gt;10&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li first class=\&quot;item\&quot;&gt;1&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;2&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;3&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;4&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;5&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;6&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;7&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;8&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;9&lt;/li&gt;\</span>
+<span class="doccomment">//!       &lt;li class=\&quot;item\&quot;&gt;10&lt;/li&gt;\</span>
 <span class="doccomment">//!     &lt;/ol&gt;\</span>
 <span class="doccomment">//!     &lt;br /&gt;&lt;br /&gt;\</span>
 <span class="doccomment">//!     &lt;p&gt;Easy!&lt;/p&gt;\</span>
