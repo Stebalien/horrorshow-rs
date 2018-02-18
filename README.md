@@ -18,7 +18,7 @@ use horrorshow::prelude::*;
 use horrorshow::doctype;
 
 fn main() {
-    let actual = html! {
+    let actual = format!("{}", html! {
         : doctype::HTML;
         html {
             head {
@@ -53,7 +53,7 @@ fn main() {
                 }
             }
         }
-    }.into_string().unwrap();
+    });
 
     let expected = "\
     <!DOCTYPE html>\
