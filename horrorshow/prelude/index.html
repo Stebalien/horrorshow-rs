@@ -10,8 +10,11 @@
     <title>horrorshow::prelude - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css" id="themeStyle">
+    <script src="../../storage.js"></script>
     
 
     
@@ -28,10 +31,18 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Module prelude</p><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'><a href='../index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'prelude', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'>Module prelude</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'><a href='../index.html'>horrorshow</a></p><script>window.sidebarCurrent = {name: 'prelude', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div>
     </nav>
 
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../theme.js"></script>
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
@@ -57,6 +68,7 @@
                                   title='struct horrorshow::prelude::FnRenderer'>FnRenderer</a></td>
                            <td class='docblock-short'>
                                 <p>A template renderer. The <code>html! {}</code> macro returns a <code>FnRenderer</code>.</p>
+
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -64,6 +76,7 @@
                                   title='struct horrorshow::prelude::Raw'>Raw</a></td>
                            <td class='docblock-short'>
                                 <p>Raw content marker.</p>
+
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -71,6 +84,7 @@
                                   title='struct horrorshow::prelude::TemplateBuffer'>TemplateBuffer</a></td>
                            <td class='docblock-short'>
                                 <p>A template buffer. This is the type that gets passed to closures inside templates.</p>
+
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
@@ -79,6 +93,7 @@
                                   title='trait horrorshow::prelude::Render'>Render</a></td>
                            <td class='docblock-short'>
                                 <p>Something that can be rendered by reference.</p>
+
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -86,6 +101,7 @@
                                   title='trait horrorshow::prelude::RenderBox'>RenderBox</a></td>
                            <td class='docblock-short'>
                                 <p>Something that can be rendered once out of a box.</p>
+
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -93,6 +109,7 @@
                                   title='trait horrorshow::prelude::RenderMut'>RenderMut</a></td>
                            <td class='docblock-short'>
                                 <p>Something that can be rendered by mutable reference.</p>
+
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -100,6 +117,7 @@
                                   title='trait horrorshow::prelude::RenderOnce'>RenderOnce</a></td>
                            <td class='docblock-short'>
                                 <p>Something that can be rendered once.</p>
+
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -107,6 +125,7 @@
                                   title='trait horrorshow::prelude::Template'>Template</a></td>
                            <td class='docblock-short'>
                                 <p>A template that can be rendered into something.</p>
+
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>
@@ -121,18 +140,22 @@
                 <h2>Keyboard Shortcuts</h2>
 
                 <dl>
-                    <dt>?</dt>
+                    <dt><kbd>?</kbd></dt>
                     <dd>Show this help dialog</dd>
-                    <dt>S</dt>
+                    <dt><kbd>S</kbd></dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt><kbd>↑</kbd></dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt><kbd>↓</kbd></dt>
                     <dd>Move down in search results</dd>
-                    <dt>&#9166;</dt>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
-                    <dd>Collapse/expand all sections</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
                 </dl>
             </div>
 

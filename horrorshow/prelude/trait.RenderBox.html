@@ -10,8 +10,11 @@
     <title>horrorshow::prelude::RenderBox - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css" id="themeStyle">
+    <script src="../../storage.js"></script>
     
 
     
@@ -28,10 +31,18 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Trait RenderBox</p><div class="block items"><ul><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='../index.html'>horrorshow</a>::<wbr><a href='index.html'>prelude</a></p><script>window.sidebarCurrent = {name: 'RenderBox', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait RenderBox</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#implementors">Implementors</a></div><p class='location'><a href='../index.html'>horrorshow</a>::<wbr><a href='index.html'>prelude</a></p><script>window.sidebarCurrent = {name: 'RenderBox', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../theme.js"></script>
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
@@ -50,9 +61,8 @@
                    </a>
                </span><a class='srclink' href='../../src/horrorshow/render.rs.html#61-69' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait RenderBox { }</pre><div class='docblock'><p>Something that can be rendered once out of a box.</p>
-
 <p>This should only ever be used in the form <code>Box&lt;RenderBox&gt;</code> by casting <code>Box&lt;RenderOnce&gt;</code> to
-<code>Box&lt;RenderBox&gt;</code>. This trait has methods but I&#39;ve hidden them because you should never call
+<code>Box&lt;RenderBox&gt;</code>. This trait has methods but I've hidden them because you should never call
 them directly.  Instead, you should call the <code>RenderOnce</code> methods implemented on
 <code>Box&lt;RenderBox&gt;</code>.</p>
 </div>
@@ -60,7 +70,7 @@ them directly.  Instead, you should call the <code>RenderOnce</code> methods imp
           Implementors<a href='#implementors' class='anchor'></a>
         </h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T&gt; RenderBox for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../../horrorshow/prelude/trait.RenderOnce.html" title="trait horrorshow::prelude::RenderOnce">RenderOnce</a>,&nbsp;</span></code></li>
+    <li><div class='out-of-band'><a class='srclink' href='../../src/horrorshow/render.rs.html#71-81' title='goto source code'>[src]</a></div><code>impl&lt;T&gt; RenderBox for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../../horrorshow/prelude/trait.RenderOnce.html" title="trait horrorshow::prelude::RenderOnce">RenderOnce</a>,&nbsp;</span></code></li>
 </ul><script type="text/javascript" async
                          src="../../implementors/horrorshow/prelude/trait.RenderBox.js">
                  </script></section>
@@ -76,18 +86,22 @@ them directly.  Instead, you should call the <code>RenderOnce</code> methods imp
                 <h2>Keyboard Shortcuts</h2>
 
                 <dl>
-                    <dt>?</dt>
+                    <dt><kbd>?</kbd></dt>
                     <dd>Show this help dialog</dd>
-                    <dt>S</dt>
+                    <dt><kbd>S</kbd></dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt><kbd>↑</kbd></dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt><kbd>↓</kbd></dt>
                     <dd>Move down in search results</dd>
-                    <dt>&#9166;</dt>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
-                    <dd>Collapse/expand all sections</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
                 </dl>
             </div>
 

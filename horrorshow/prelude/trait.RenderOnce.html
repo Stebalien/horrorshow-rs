@@ -10,8 +10,11 @@
     <title>horrorshow::prelude::RenderOnce - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css" id="themeStyle">
+    <script src="../../storage.js"></script>
     
 
     
@@ -28,10 +31,18 @@
     
 
     <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
         
-        <p class='location'>Trait RenderOnce</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#provided-methods">Provided Methods</a></li><li><a href="#foreign-impls">Implementations on Foreign Types</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='../index.html'>horrorshow</a>::<wbr><a href='index.html'>prelude</a></p><script>window.sidebarCurrent = {name: 'RenderOnce', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait RenderOnce</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#required-methods">Required Methods</a><div class="sidebar-links"><a href="#tymethod.render_once">render_once</a></div><a class="sidebar-title" href="#provided-methods">Provided Methods</a><div class="sidebar-links"><a href="#method.size_hint">size_hint</a></div><a class="sidebar-title" href="#foreign-impls">Implementations on Foreign Types</a><div class="sidebar-links"><a href="#impl-RenderOnce">&amp;&#39;a mut T</a><a href="#impl-RenderOnce">&amp;&#39;a T</a><a href="#impl-RenderOnce">Box&lt;RenderBox + &#39;b&gt;</a><a href="#impl-RenderOnce">Box&lt;RenderBox + Send + &#39;b&gt;</a><a href="#impl-RenderOnce">Box&lt;RenderMut + &#39;b&gt;</a><a href="#impl-RenderOnce">Box&lt;RenderMut + Send + &#39;b&gt;</a><a href="#impl-RenderOnce">Box&lt;Render + &#39;b&gt;</a><a href="#impl-RenderOnce">Box&lt;Render + Send + &#39;b&gt;</a><a href="#impl-RenderOnce">&amp;&#39;a str</a><a href="#impl-RenderOnce">String</a><a href="#impl-RenderOnce">Option&lt;T&gt;</a><a href="#impl-RenderOnce">Result&lt;T, E&gt;</a><a href="#impl-RenderOnce">Arguments&lt;&#39;a&gt;</a><a href="#impl-RenderOnce">i8</a><a href="#impl-RenderOnce">i16</a><a href="#impl-RenderOnce">i32</a><a href="#impl-RenderOnce">i64</a><a href="#impl-RenderOnce">isize</a><a href="#impl-RenderOnce">u8</a><a href="#impl-RenderOnce">u16</a><a href="#impl-RenderOnce">u32</a><a href="#impl-RenderOnce">u64</a><a href="#impl-RenderOnce">usize</a><a href="#impl-RenderOnce">f32</a><a href="#impl-RenderOnce">f64</a><a href="#impl-RenderOnce">char</a></div><a class="sidebar-title" href="#implementors">Implementors</a></div><p class='location'><a href='../index.html'>horrorshow</a>::<wbr><a href='index.html'>prelude</a></p><script>window.sidebarCurrent = {name: 'RenderOnce', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
     </nav>
 
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../theme.js"></script>
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
@@ -67,7 +78,7 @@
             <div class='methods'>
         <h3 id='method.size_hint' class='method'><span id='size_hint.v' class='invisible'><code>fn <a href='#method.size_hint' class='fnname'>size_hint</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code></span></h3><div class='docblock'><p>Returns a (very) rough estimate of how many bytes this Render will use.</p>
 </div></div>
-                <h2 id='foreign-impls' class='section-header'>
+                <h2 id='foreign-impls' class='small-section-header'>
                   Implementations on Foreign Types<a href='#foreign-impls' class='anchor'></a>
                 </h2>
             <h3 id='impl-RenderOnce' class='impl'><span class='in-band'><code>impl&lt;'a, T:&nbsp;?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>&gt; <a class="trait" href="../../horrorshow/prelude/trait.RenderOnce.html" title="trait horrorshow::prelude::RenderOnce">RenderOnce</a> for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;'a mut </a>T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../../horrorshow/prelude/trait.RenderMut.html" title="trait horrorshow::prelude::RenderMut">RenderMut</a>,&nbsp;</span></code><a href='#impl-RenderOnce' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/horrorshow/render.rs.html#31-40' title='goto source code'>[src]</a></span></h3>
@@ -170,18 +181,22 @@
                 <h2>Keyboard Shortcuts</h2>
 
                 <dl>
-                    <dt>?</dt>
+                    <dt><kbd>?</kbd></dt>
                     <dd>Show this help dialog</dd>
-                    <dt>S</dt>
+                    <dt><kbd>S</kbd></dt>
                     <dd>Focus the search field</dd>
-                    <dt>&larrb;</dt>
+                    <dt><kbd>↑</kbd></dt>
                     <dd>Move up in search results</dd>
-                    <dt>&rarrb;</dt>
+                    <dt><kbd>↓</kbd></dt>
                     <dd>Move down in search results</dd>
-                    <dt>&#9166;</dt>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
-                    <dd>Collapse/expand all sections</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
                 </dl>
             </div>
 
