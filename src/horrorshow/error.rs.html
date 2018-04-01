@@ -10,10 +10,11 @@
     <title>error.rs.html -- source</title>
 
     <link rel="stylesheet" type="text/css" href="../../normalize.css">
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css"
+          id="mainThemeStyle">
     
     <link rel="stylesheet" type="text/css" href="../../dark.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css" id="themeStyle">
+    <link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle">
     <script src="../../storage.js"></script>
     
 
@@ -139,18 +140,18 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">displayed</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">write</span>.<span class="ident">as_ref</span>() {
             <span class="ident">displayed</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            <span class="macro">try</span><span class="macro">!</span>(<span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;write error: {}&quot;</span>, <span class="ident">e</span>))
+            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;write error: {}&quot;</span>, <span class="ident">e</span>)<span class="question-mark">?</span>
         }
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">render</span>.<span class="ident">is_empty</span>() {
             <span class="ident">displayed</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            <span class="macro">try</span><span class="macro">!</span>(<span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;render errors: &quot;</span>));
+            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;render errors: &quot;</span>)<span class="question-mark">?</span>;
             <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..(<span class="self">self</span>.<span class="ident">render</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>) {
-                <span class="macro">try</span><span class="macro">!</span>(<span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}, &quot;</span>, <span class="self">self</span>.<span class="ident">render</span>[<span class="ident">i</span>]));
+                <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}, &quot;</span>, <span class="self">self</span>.<span class="ident">render</span>[<span class="ident">i</span>])<span class="question-mark">?</span>;
             }
-            <span class="macro">try</span><span class="macro">!</span>(<span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">render</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>()))
+            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">render</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>())<span class="question-mark">?</span>
         }
         <span class="kw">if</span> <span class="op">!</span><span class="ident">displayed</span> {
-            <span class="macro">try</span><span class="macro">!</span>(<span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;unspecified error&quot;</span>));
+            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;unspecified error&quot;</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
