@@ -1,8 +1,9 @@
-#![feature(plugin, test)]
-#![plugin(maud_macros)]
+#![feature(proc_macro, test)]
 
 extern crate maud;
 extern crate test;
+
+use maud::html;
 
 use maud::PreEscaped;
 
