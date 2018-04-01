@@ -1,7 +1,7 @@
+use error::{self, Error};
 use render::RenderOnce;
 use std::fmt;
 use std::io;
-use error::{self, Error};
 
 /// A template that can be rendered into something.
 ///
@@ -57,7 +57,6 @@ pub trait Template: RenderOnce + Sized {
 }
 
 impl<T: RenderOnce + Sized> Template for T {}
-
 
 /// A template buffer. This is the type that gets passed to closures inside templates.
 ///
@@ -146,7 +145,9 @@ impl<'a> TemplateBuffer<'a> {
     }
 }
 
-pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>) where 'a: 'b;
+pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>)
+where
+    'a: 'b;
 
 impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     // This is the fast-path.
@@ -174,8 +175,9 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     }
 }
 
-pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>) where 'a: 'b;
-
+pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>)
+where
+    'a: 'b;
 
 impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
     fn write_str(&mut self, text: &str) -> fmt::Result {
@@ -216,8 +218,10 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                         (true, b'<') => writer.write_str("&lt;"),
                         (true, b'>') => writer.write_str("&gt;"),
                         _ => writer.write_char(c),
-                    }).is_err() {
-                        self.0.error.write = Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
+                    }).is_err()
+                    {
+                        self.0.error.write =
+                            Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
                         break;
                     }
                 }

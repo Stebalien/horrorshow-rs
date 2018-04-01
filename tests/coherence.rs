@@ -11,13 +11,11 @@ impl RenderOnce for Test {
     }
 }
 
-
 impl RenderMut for Test {
     fn render_mut(&mut self, t: &mut TemplateBuffer) {
         self.render(t);
     }
 }
-
 
 impl Render for Test {
     fn render(&self, t: &mut TemplateBuffer) {
@@ -27,9 +25,13 @@ impl Render for Test {
 
 #[test]
 fn test_coherence() {
-    assert_eq!((html! {
-        |t| t << Test;
-        |t| t << &mut Test;
-        |t| t << &Test;
-    }).into_string().unwrap(), "TestTestTest");
+    assert_eq!(
+        (html! {
+            |t| t << Test;
+            |t| t << &mut Test;
+            |t| t << &Test;
+        }).into_string()
+            .unwrap(),
+        "TestTestTest"
+    );
 }

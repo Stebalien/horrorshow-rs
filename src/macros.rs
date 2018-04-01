@@ -1,3 +1,6 @@
+// rustfmt doesn't like this file (lines too long, too hard to fix)
+#![cfg_attr(rustfmt, rustfmt_skip)]  
+
 /// Crate a new html template
 #[macro_export]
 macro_rules! html {

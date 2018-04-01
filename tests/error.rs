@@ -10,7 +10,9 @@ fn test_result() {
         : Err::<&str, &str>("fail");
         : Ok::<&str, &str>("hidden");
         : Err::<&str, &str>("fail2");
-    }).write_to_string(&mut s).err().unwrap();
+    }).write_to_string(&mut s)
+        .err()
+        .unwrap();
     assert_eq!(s, "pass");
     assert!(e.write.is_none());
     assert_eq!(e.render.len(), 2);
@@ -24,7 +26,9 @@ fn test_record() {
         tag {
             |tmpl| tmpl.record_error("test");
         }
-    }).into_string().err().unwrap();
+    }).into_string()
+        .err()
+        .unwrap();
     assert!(e.write.is_none());
     assert_eq!(e.render.len(), 1);
     assert_eq!(e.render[0].description(), "test");

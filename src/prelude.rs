@@ -1,8 +1,8 @@
+pub use FnRenderer;
 pub use Raw;
-pub use Template;
 pub use Render;
+pub use RenderBox;
 pub use RenderMut;
 pub use RenderOnce;
-pub use RenderBox;
-pub use FnRenderer;
+pub use Template;
 pub use TemplateBuffer;

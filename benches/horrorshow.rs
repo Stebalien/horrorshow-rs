@@ -4,7 +4,7 @@ extern crate test;
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{Template, Raw};
+use horrorshow::{Raw, Template};
 
 #[bench]
 fn bench_short_fmt(b: &mut test::Bencher) {
@@ -68,7 +68,8 @@ fn bench_short(b: &mut test::Bencher) {
                     p : "Easy!"
                 }
             }
-        }).into_string().unwrap()
+        }).into_string()
+            .unwrap()
     });
 }
 
@@ -100,6 +101,7 @@ fn bench_long(b: &mut test::Bencher) {
                     p : "Easy!"
                 }
             }
-        }).into_string().unwrap()
+        }).into_string()
+            .unwrap()
     });
 }

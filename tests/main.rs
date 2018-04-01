@@ -1,46 +1,70 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{Template, Raw};
+use horrorshow::{Raw, Template};
 
 #[test]
 fn test_prim() {
-    assert_eq!(html! {
-        : 1.01;
-        : 2i32;
-        : 3usize;
-        : 'c'
-    }.into_string().unwrap(), "1.0123c");
+    assert_eq!(
+        html! {
+            : 1.01;
+            : 2i32;
+            : 3usize;
+            : 'c'
+        }.into_string()
+            .unwrap(),
+        "1.0123c"
+    );
 }
 
 #[test]
 fn test_reentrant() {
-    assert_eq!(&html! {
-        p : format_args!("{}", html! { a(href="abcde") }.into_string().unwrap())
-    }.into_string().unwrap(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
+    assert_eq!(
+        &html! {
+            p : format_args!("{}", html! { a(href="abcde") }.into_string().unwrap())
+        }.into_string()
+            .unwrap(),
+        "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>"
+    );
 
-    assert_eq!(&html! {
-        p {
-            |tmpl| tmpl << (html! { a(href="abcde") }).into_string().unwrap();
-        }
-    }.into_string().unwrap(), "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>");
+    assert_eq!(
+        &html! {
+            p {
+                |tmpl| tmpl << (html! { a(href="abcde") }).into_string().unwrap();
+            }
+        }.into_string()
+            .unwrap(),
+        "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>"
+    );
 
-    assert_eq!(&html! {
-        p {
-            : Raw(html! { a(href="abcde") }.into_string().unwrap());
-        }
-    }.into_string().unwrap(), "<p><a href=\"abcde\" /></p>");
+    assert_eq!(
+        &html! {
+            p {
+                : Raw(html! { a(href="abcde") }.into_string().unwrap());
+            }
+        }.into_string()
+            .unwrap(),
+        "<p><a href=\"abcde\" /></p>"
+    );
 }
 
 #[test]
 fn test_option() {
-    assert_eq!(html! {
-        tag : Some("testing")
-    }.into_string().unwrap(), "<tag>testing</tag>");
+    assert_eq!(
+        html! {
+            tag : Some("testing")
+        }.into_string()
+            .unwrap(),
+        "<tag>testing</tag>"
+    );
 
-    assert_eq!(html! {
-        tag : None::<&str>
-    }.into_string().unwrap(), "<tag></tag>");
+    assert_eq!(
+        html! {
+            tag : None::<&str>
+        }.into_string()
+            .unwrap(),
+        "<tag></tag>"
+    );
 }
 
 #[test]

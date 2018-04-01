@@ -1,9 +1,10 @@
+use render::RenderOnce;
 use std::ops::Shl;
 use template::TemplateBuffer;
-use render::RenderOnce;
 
 impl<'a, 'b, T> Shl<T> for &'a mut TemplateBuffer<'b>
-    where T: RenderOnce
+where
+    T: RenderOnce,
 {
     type Output = ();
     /// Render the component into the template.

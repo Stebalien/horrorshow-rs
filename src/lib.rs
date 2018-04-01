@@ -299,9 +299,9 @@ mod error;
 pub use error::Error;
 
 mod template;
-pub use template::{TemplateBuffer, Template};
+pub use template::{Template, TemplateBuffer};
 mod render;
-pub use render::{RenderOnce, RenderMut, Render, RenderBox, FnRenderer, Raw};
+pub use render::{FnRenderer, Raw, Render, RenderBox, RenderMut, RenderOnce};
 
 /// Traits that should always be imported.
 pub mod prelude;

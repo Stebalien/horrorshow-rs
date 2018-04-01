@@ -1,5 +1,5 @@
-use std::io;
 use std::fmt;
+use std::io;
 
 #[derive(Debug, Default)]
 pub struct Error {

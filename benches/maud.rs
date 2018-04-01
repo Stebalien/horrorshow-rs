@@ -1,8 +1,8 @@
 #![feature(plugin, test)]
 #![plugin(maud_macros)]
 
-extern crate test;
 extern crate maud;
+extern crate test;
 
 use maud::PreEscaped;
 
@@ -36,16 +36,10 @@ fn count(count: u32) -> String {
 
 #[bench]
 fn bench_short(b: &mut test::Bencher) {
-    b.iter(|| {
-        count(test::black_box(10))
-    });
+    b.iter(|| count(test::black_box(10)));
 }
-
-
 
 #[bench]
 fn bench_long(b: &mut test::Bencher) {
-    b.iter(|| {
-        count(test::black_box(100))
-    });
+    b.iter(|| count(test::black_box(100)));
 }

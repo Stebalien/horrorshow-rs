@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{RenderBox, Template, Raw};
+use horrorshow::{Raw, RenderBox, Template};
 
 fn render_post(post: Post) -> Box<RenderBox> {
     let Post { title, body, tags } = post;
@@ -20,7 +20,7 @@ fn render_post(post: Post) -> Box<RenderBox> {
     }
 }
 
-fn render<I: Iterator<Item=Post>>(title: &str, posts: I) -> String {
+fn render<I: Iterator<Item = Post>>(title: &str, posts: I) -> String {
     (html! {
         : Raw("<!DOCTYPE html>");
         html {
@@ -38,7 +38,8 @@ fn render<I: Iterator<Item=Post>>(title: &str, posts: I) -> String {
                 }
             }
         }
-    }).into_string().unwrap()
+    }).into_string()
+        .unwrap()
 }
 
 struct Post {

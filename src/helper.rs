@@ -4,7 +4,7 @@ macro_rules! c {
     ($name:ident $value:tt) => {
         #[allow(non_upper_case_globals)]
         pub const $name: $crate::render::Raw<&'static str> = $crate::render::Raw($value);
-    }
+    };
 }
 
 /// Helpers for inserting `DOCTYPE`s.

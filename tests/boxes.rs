@@ -1,8 +1,7 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{Template, RenderBox};
-
+use horrorshow::{RenderBox, Template};
 
 #[test]
 #[allow(unused_variables)]
