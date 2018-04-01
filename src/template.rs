@@ -11,10 +11,9 @@ pub trait Template: RenderOnce + Sized {
     /// Render this into a new String.
     fn into_string(self) -> Result<String, Error> {
         let mut string = String::with_capacity(self.size_hint());
-        self.write_to_string(&mut string).map(|_| {
-            string.shrink_to_fit();
-            string
-        })
+        self.write_to_string(&mut string)?;
+        string.shrink_to_fit();
+        Ok(string)
     }
 
     /// Render this into an existing String.
