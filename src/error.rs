@@ -32,18 +32,18 @@ impl fmt::Display for Error {
         let mut displayed = false;
         if let Some(e) = self.write.as_ref() {
             displayed = true;
-            try!(write!(f, "write error: {}", e))
+            write!(f, "write error: {}", e)?
         }
         if !self.render.is_empty() {
             displayed = true;
-            try!(write!(f, "render errors: "));
+            write!(f, "render errors: ")?;
             for i in 0..(self.render.len() - 1) {
-                try!(write!(f, "{}, ", self.render[i]));
+                write!(f, "{}, ", self.render[i])?;
             }
-            try!(write!(f, "{}", self.render.last().unwrap()))
+            write!(f, "{}", self.render.last().unwrap())?
         }
         if !displayed {
-            try!(write!(f, "unspecified error"));
+            write!(f, "unspecified error")?;
         }
         Ok(())
     }
