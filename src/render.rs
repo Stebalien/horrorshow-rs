@@ -94,7 +94,7 @@ impl<'b> RenderOnce for Box<RenderBox + 'b> {
 
     #[inline]
     fn size_hint(&self) -> usize {
-        RenderBox::size_hint_box(self)
+        RenderBox::size_hint_box(&**self)
     }
 }
 
@@ -106,7 +106,7 @@ impl<'b> RenderOnce for Box<RenderBox + 'b + Send> {
 
     #[inline]
     fn size_hint(&self) -> usize {
-        RenderBox::size_hint_box(self)
+        RenderBox::size_hint_box(&**self)
     }
 }
 
