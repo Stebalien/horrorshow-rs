@@ -470,18 +470,4 @@ macro_rules! impl_fmt_render {
     }
 }
 
-impl_fmt_render!(
-    i8,
-    i16,
-    i32,
-    i64,
-    isize,
-    u8,
-    u16,
-    u32,
-    u64,
-    usize,
-    f32,
-    f64,
-    char
-);
+impl_fmt_render!(i8, i16, i32, i64, isize, u8, u16, u32, u64, usize, f32, f64, char);
