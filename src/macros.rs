@@ -7,8 +7,8 @@ macro_rules! html {
     ($($inner:tt)*) => {{
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
-        let f = |tmpl: &mut $crate::TemplateBuffer| -> () {
-            append_html!(tmpl, (), $($inner)*);
+        let f = |__tmpl: &mut $crate::TemplateBuffer| -> () {
+            append_html!(__tmpl, (), $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
         $crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f)
@@ -56,8 +56,8 @@ macro_rules! box_html {
     ($($inner:tt)*) => {{
         // Define this up here to prevent rust from saying:
         // Hey look, it's an FnOnce (this could be Fn/FnMut).
-        let f = move |tmpl: &mut $crate::TemplateBuffer| -> () {
-            append_html!(tmpl, (), $($inner)*);
+        let f = move |__tmpl: &mut $crate::TemplateBuffer| -> () {
+            append_html!(__tmpl, (), $($inner)*);
         };
         // Stringify the template content to get a hint at how much we should allocate...
         Box::new($crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f))
