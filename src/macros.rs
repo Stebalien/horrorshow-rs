@@ -1,7 +1,7 @@
 // rustfmt doesn't like this file (lines too long, too hard to fix)
 #![cfg_attr(rustfmt, rustfmt_skip)]  
 
-/// Crate a new html template
+/// Create a new html template
 #[macro_export]
 macro_rules! html {
     ($($inner:tt)*) => {{
@@ -15,7 +15,7 @@ macro_rules! html {
     }}
 }
 
-/// Crate a new html template taking ownership of any variables used inside
+/// Create a new html template taking ownership of any variables used inside
 #[macro_export]
 macro_rules! owned_html {
     ($($inner:tt)*) => {{
@@ -29,7 +29,7 @@ macro_rules! owned_html {
     }}
 }
 
-/// Crate a new owned html template.
+/// Create a new owned html template.
 ///
 /// This template will be boxed and will own it's environment. If you need to return a template
 /// from a function, use this.
