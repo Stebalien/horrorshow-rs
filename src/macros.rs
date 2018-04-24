@@ -1,7 +1,7 @@
 // rustfmt doesn't like this file (lines too long, too hard to fix)
 #![cfg_attr(rustfmt, rustfmt_skip)]  
 
-/// Crate a new html template
+/// Create a new html template
 #[macro_export]
 macro_rules! html {
     ($($inner:tt)*) => {{
@@ -15,7 +15,21 @@ macro_rules! html {
     }}
 }
 
-/// Crate a new owned html template.
+/// Create a new html template taking ownership of any variables used inside
+#[macro_export]
+macro_rules! owned_html {
+    ($($inner:tt)*) => {{
+        // Define this up here to prevent rust from saying:
+        // Hey look, it's an FnOnce (this could be Fn/FnMut).
+        let f = move |__tmpl: &mut $crate::TemplateBuffer| -> () {
+            append_html!(__tmpl, (), $($inner)*);
+        };
+        // Stringify the template content to get a hint at how much we should allocate...
+        $crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f)
+    }}
+}
+
+/// Create a new owned html template.
 ///
 /// This template will be boxed and will own it's environment. If you need to return a template
 /// from a function, use this.
@@ -54,13 +68,7 @@ macro_rules! html {
 #[macro_export]
 macro_rules! box_html {
     ($($inner:tt)*) => {{
-        // Define this up here to prevent rust from saying:
-        // Hey look, it's an FnOnce (this could be Fn/FnMut).
-        let f = move |__tmpl: &mut $crate::TemplateBuffer| -> () {
-            append_html!(__tmpl, (), $($inner)*);
-        };
-        // Stringify the template content to get a hint at how much we should allocate...
-        Box::new($crate::FnRenderer::with_capacity(stringify!($($inner)*).len(), f))
+        Box::new(owned_html!($($inner)*))
     }}
 }
 
