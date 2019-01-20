@@ -38,8 +38,9 @@ fn render<I: Iterator<Item = Post>>(title: &str, posts: I) -> String {
                 }
             }
         }
-    }).into_string()
-        .unwrap()
+    })
+    .into_string()
+    .unwrap()
 }
 
 struct Post {

@@ -11,8 +11,9 @@ fn test_prim() {
             : 2i32;
             : 3usize;
             : 'c'
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "1.0123c"
     );
 }
@@ -22,8 +23,9 @@ fn test_reentrant() {
     assert_eq!(
         &html! {
             p : format_args!("{}", html! { a(href="abcde") }.into_string().unwrap())
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>"
     );
 
@@ -32,8 +34,9 @@ fn test_reentrant() {
             p {
                 |tmpl| tmpl << (html! { a(href="abcde") }).into_string().unwrap();
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>"
     );
 
@@ -42,8 +45,9 @@ fn test_reentrant() {
             p {
                 : Raw(html! { a(href="abcde") }.into_string().unwrap());
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<p><a href=\"abcde\" /></p>"
     );
 }
@@ -53,16 +57,18 @@ fn test_option() {
     assert_eq!(
         html! {
             tag : Some("testing")
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<tag>testing</tag>"
     );
 
     assert_eq!(
         html! {
             tag : None::<&str>
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<tag></tag>"
     );
 }

@@ -217,7 +217,8 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                         (true, b'<') => writer.write_str("&lt;"),
                         (true, b'>') => writer.write_str("&gt;"),
                         _ => writer.write_char(c),
-                    }).is_err()
+                    })
+                    .is_err()
                     {
                         self.0.error.write =
                             Some(io::Error::new(io::ErrorKind::Other, "Format Error"));

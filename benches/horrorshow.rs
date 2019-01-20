@@ -68,8 +68,9 @@ fn bench_short(b: &mut test::Bencher) {
                     p : "Easy!"
                 }
             }
-        }).into_string()
-            .unwrap()
+        })
+        .into_string()
+        .unwrap()
     });
 }
 
@@ -101,7 +102,8 @@ fn bench_long(b: &mut test::Bencher) {
                     p : "Easy!"
                 }
             }
-        }).into_string()
-            .unwrap()
+        })
+        .into_string()
+        .unwrap()
     });
 }

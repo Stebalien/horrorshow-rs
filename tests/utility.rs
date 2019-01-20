@@ -37,7 +37,7 @@ fn test_default_labels() {
 
     // usage
 
-    let example = html!{
+    let example = html! {
         div(class = labels!("active" => true, "button-style")) {
             : "foo"
         }
@@ -45,8 +45,9 @@ fn test_default_labels() {
         div(class = labels!("active" => false, "button-style")) {
             : "bar"
         }
-    }.into_string()
-        .unwrap();
+    }
+    .into_string()
+    .unwrap();
 
     assert_eq!(
         example,
@@ -99,7 +100,7 @@ fn test_labels_sep_by() {
 
     // usage
 
-    let example = html!{
+    let example = html! {
         div(style = labels_sep_by!(";"; "color: #000" => true, "font-weight: bold")) {
             : "foo"
         }
@@ -107,8 +108,9 @@ fn test_labels_sep_by() {
         div(style = labels_sep_by!(";"; "color: #000" => false, "font-weight: bold")) {
             : "bar"
         }
-    }.into_string()
-        .unwrap();
+    }
+    .into_string()
+    .unwrap();
 
     assert_eq!(example,
         "<div style=\"color: #000;font-weight: bold\">foo</div><div style=\"font-weight: bold\">bar</div>");

@@ -10,8 +10,9 @@ fn test_if() {
             @ if true {
                 span : "test"
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span>test</span>"
     );
 }
@@ -24,8 +25,9 @@ fn test_if_let() {
             @ if let Some(v) = s {
                 span : v
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span>1</span>"
     );
 }
@@ -39,8 +41,9 @@ fn test_if_else() {
             } else {
                 span : "no"
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span>yes</span>"
     );
 
@@ -51,8 +54,9 @@ fn test_if_else() {
             } else if true {
                 span : "yes"
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span>yes</span>"
     );
 
@@ -65,8 +69,9 @@ fn test_if_else() {
             } else {
                 span : "yes"
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span>yes</span>"
     );
 
@@ -79,8 +84,9 @@ fn test_if_else() {
             } else {
                 span : "yes"
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span>1</span>"
     );
 }
@@ -98,8 +104,9 @@ fn test_for() {
                 }
             }
             p : "after";
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<p>before</p><ol><li>0</li><li>1</li></ol><p>after</p>"
     );
 }
@@ -117,8 +124,9 @@ fn test_while() {
                     };
                 }
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<ol><li>1</li><li>0</li></ol>"
     );
 }
@@ -133,8 +141,9 @@ fn test_while_let() {
                     li : v
                 }
             }
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<ol><li>0</li><li>1</li></ol>"
     );
 }

@@ -17,15 +17,17 @@ fn test_template() {
     assert_eq!(
         html! {
             span : Test::new(&32);
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span><span>32</span></span>"
     );
     assert_eq!(
         html! {
             span : Test2::new(&32);
-        }.into_string()
-            .unwrap(),
+        }
+        .into_string()
+        .unwrap(),
         "<span><span>32</span></span>"
     );
 }
