@@ -211,7 +211,7 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
             }
             Fmt(ref mut writer) => {
                 for c in text.chars() {
-                    if (match (should_escape(c as u8), c as u8) {
+                    if (match (c.is_ascii() && should_escape(c as u8), c as u8) {
                         (true, b'&') => writer.write_str("&amp;"),
                         (true, b'"') => writer.write_str("&quot;"),
                         (true, b'<') => writer.write_str("&lt;"),
