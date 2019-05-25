@@ -5,9 +5,7 @@ use template::{Template, TemplateBuffer};
 /// Something that can be rendered once.
 pub trait RenderOnce {
     /// Render this into a template buffer.
-    fn render_once(self, tmpl: &mut TemplateBuffer)
-    where
-        Self: Sized;
+    fn render_once(self, tmpl: &mut TemplateBuffer);
 
     /// Returns a (very) rough estimate of how many bytes this Render will use.
     fn size_hint(&self) -> usize {
@@ -57,147 +55,43 @@ where
 
 /// Something that can be rendered once out of a box.
 ///
-/// This should only ever be used in the form `Box<RenderBox>` by casting `Box<RenderOnce>` to
-/// `Box<RenderBox>`. This trait has methods but I've hidden them because you should never call
-/// them directly.  Instead, you should call the `RenderOnce` methods implemented on
-/// `Box<RenderBox>`.
-pub trait RenderBox {
-    /// Do not call. Called by RenderOnce impl on Box<RenderBox>
-    #[doc(hidden)]
-    fn render_box(self: Box<Self>, tmpl: &mut TemplateBuffer);
+/// Deprecated: Just use RenderOnce
+pub trait RenderBox: RenderOnce {}
+impl<T: ?Sized> RenderBox for T where T: RenderOnce {}
 
-    /// Do not call. Called by RenderOnce impl on Box<RenderBox>
-    #[doc(hidden)]
-    fn size_hint_box(&self) -> usize;
-}
+// Box<RenderOnce>
 
-impl<T> RenderBox for T
+impl<T: ?Sized> RenderOnce for Box<T>
 where
     T: RenderOnce,
 {
-    fn render_box(self: Box<T>, tmpl: &mut TemplateBuffer) {
-        (*self).render_once(tmpl);
-    }
-
-    fn size_hint_box(&self) -> usize {
-        RenderOnce::size_hint(self)
-    }
-}
-
-// Box<RenderBox>
-
-impl<'b> RenderOnce for Box<RenderBox + 'b> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
-        RenderBox::render_box(self, tmpl);
+        RenderOnce::render_once(*self, tmpl);
     }
 
     #[inline]
     fn size_hint(&self) -> usize {
-        RenderBox::size_hint_box(&**self)
-    }
-}
-
-impl<'b> RenderOnce for Box<RenderBox + 'b + Send> {
-    #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
-        RenderBox::render_box(self, tmpl);
-    }
-
-    #[inline]
-    fn size_hint(&self) -> usize {
-        RenderBox::size_hint_box(&**self)
+        RenderOnce::size_hint(&**self)
     }
 }
 
 // Box<RenderMut>
 
-impl<'b> RenderOnce for Box<RenderMut + 'b> {
-    #[inline]
-    fn render_once(mut self, tmpl: &mut TemplateBuffer) {
-        RenderMut::render_mut(&mut *self, tmpl);
-    }
-
-    #[inline]
-    fn size_hint(&self) -> usize {
-        RenderMut::size_hint(&**self)
-    }
-}
-
-impl<'b> RenderMut for Box<RenderMut + 'b> {
+impl<T: ?Sized> RenderMut for Box<T>
+where
+    T: RenderMut,
+{
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
         RenderMut::render_mut(&mut **self, tmpl);
     }
 }
 
-impl<'b> RenderOnce for Box<RenderMut + 'b + Send> {
-    #[inline]
-    fn render_once(mut self, tmpl: &mut TemplateBuffer) {
-        RenderMut::render_mut(&mut *self, tmpl);
-    }
-
-    #[inline]
-    fn size_hint(&self) -> usize {
-        RenderMut::size_hint(&**self)
-    }
-}
-
-impl<'b> RenderMut for Box<RenderMut + 'b + Send> {
-    #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
-        RenderMut::render_mut(&mut **self, tmpl);
-    }
-}
-
-// Box<Render>
-
-impl<'b> RenderOnce for Box<Render + 'b> {
-    #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
-        Render::render(&*self, tmpl);
-    }
-
-    #[inline]
-    fn size_hint(&self) -> usize {
-        Render::size_hint(&**self)
-    }
-}
-
-impl<'b> RenderMut for Box<Render + 'b> {
-    #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
-        Render::render(&*self, tmpl);
-    }
-}
-
-impl<'b> Render for Box<Render + 'b> {
-    #[inline]
-    fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
-        Render::render(&**self, tmpl);
-    }
-}
-
-impl<'b> RenderOnce for Box<Render + 'b + Send> {
-    #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
-        Render::render(&*self, tmpl);
-    }
-
-    #[inline]
-    fn size_hint(&self) -> usize {
-        Render::size_hint(&**self)
-    }
-}
-
-impl<'b> RenderMut for Box<Render + 'b + Send> {
-    #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
-        Render::render(&*self, tmpl);
-    }
-}
-
-impl<'b> Render for Box<Render + 'b + Send> {
+impl<T: ?Sized> Render for Box<T>
+where
+    T: Render,
+{
     #[inline]
     fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
         Render::render(&**self, tmpl);
