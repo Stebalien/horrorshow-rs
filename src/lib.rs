@@ -289,6 +289,8 @@
 //! # Examples
 //!
 //! See the test cases.
+#![feature(unsized_locals)]
+
 #[macro_use]
 mod macros;
 
