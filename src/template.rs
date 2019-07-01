@@ -31,7 +31,7 @@ pub trait Template: RenderOnce + Sized {
     /// Render this into something that implements fmt::Write.
     ///
     /// FnRenderer also implements Display but that's about twice as slow...
-    fn write_to_fmt(self, writer: &mut fmt::Write) -> Result<(), Error> {
+    fn write_to_fmt(self, writer: &mut dyn fmt::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Fmt(writer),
             error: Default::default(),
@@ -45,7 +45,7 @@ pub trait Template: RenderOnce + Sized {
     /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
     /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
     /// system calls.
-    fn write_to_io(self, writer: &mut io::Write) -> Result<(), Error> {
+    fn write_to_io(self, writer: &mut dyn io::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Io(writer),
             error: Default::default(),
@@ -75,14 +75,14 @@ pub struct TemplateBuffer<'a> {
 }
 
 enum InnerTemplateWriter<'a> {
-    Io(&'a mut io::Write),
-    Fmt(&'a mut fmt::Write),
+    Io(&'a mut dyn io::Write),
+    Fmt(&'a mut dyn fmt::Write),
     Str(&'a mut String),
 }
 
 impl<'a> TemplateBuffer<'a> {
     #[cold]
-    pub fn record_error<E: Into<Box<::std::error::Error + Send + Sync>>>(&mut self, e: E) {
+    pub fn record_error<E: Into<Box<dyn std::error::Error + Send + Sync>>>(&mut self, e: E) {
         self.error.render.push(e.into());
     }
 

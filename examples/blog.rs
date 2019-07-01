@@ -3,7 +3,7 @@ extern crate horrorshow;
 
 use horrorshow::{Raw, RenderBox, Template};
 
-fn render_post(post: Post) -> Box<RenderBox> {
+fn render_post(post: Post) -> Box<dyn RenderBox> {
     let Post { title, body, tags } = post;
     box_html! {
         article {

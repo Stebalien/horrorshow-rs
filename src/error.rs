@@ -4,7 +4,7 @@ use std::io;
 #[derive(Debug, Default)]
 pub struct Error {
     pub write: Option<io::Error>,
-    pub render: Vec<Box<::std::error::Error + Send + Sync>>,
+    pub render: Vec<Box<dyn std::error::Error + Send + Sync>>,
 }
 
 #[inline]

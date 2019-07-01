@@ -86,7 +86,7 @@ where
 
 // Box<RenderBox>
 
-impl<'b> RenderOnce for Box<RenderBox + 'b> {
+impl<'b> RenderOnce for Box<dyn RenderBox + 'b> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         RenderBox::render_box(self, tmpl);
@@ -98,7 +98,7 @@ impl<'b> RenderOnce for Box<RenderBox + 'b> {
     }
 }
 
-impl<'b> RenderOnce for Box<RenderBox + 'b + Send> {
+impl<'b> RenderOnce for Box<dyn RenderBox + 'b + Send> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         RenderBox::render_box(self, tmpl);
@@ -112,7 +112,7 @@ impl<'b> RenderOnce for Box<RenderBox + 'b + Send> {
 
 // Box<RenderMut>
 
-impl<'b> RenderOnce for Box<RenderMut + 'b> {
+impl<'b> RenderOnce for Box<dyn RenderMut + 'b> {
     #[inline]
     fn render_once(mut self, tmpl: &mut TemplateBuffer) {
         RenderMut::render_mut(&mut *self, tmpl);
@@ -124,14 +124,14 @@ impl<'b> RenderOnce for Box<RenderMut + 'b> {
     }
 }
 
-impl<'b> RenderMut for Box<RenderMut + 'b> {
+impl<'b> RenderMut for Box<dyn RenderMut + 'b> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
         RenderMut::render_mut(&mut **self, tmpl);
     }
 }
 
-impl<'b> RenderOnce for Box<RenderMut + 'b + Send> {
+impl<'b> RenderOnce for Box<dyn RenderMut + 'b + Send> {
     #[inline]
     fn render_once(mut self, tmpl: &mut TemplateBuffer) {
         RenderMut::render_mut(&mut *self, tmpl);
@@ -143,7 +143,7 @@ impl<'b> RenderOnce for Box<RenderMut + 'b + Send> {
     }
 }
 
-impl<'b> RenderMut for Box<RenderMut + 'b + Send> {
+impl<'b> RenderMut for Box<dyn RenderMut + 'b + Send> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
         RenderMut::render_mut(&mut **self, tmpl);
@@ -152,7 +152,7 @@ impl<'b> RenderMut for Box<RenderMut + 'b + Send> {
 
 // Box<Render>
 
-impl<'b> RenderOnce for Box<Render + 'b> {
+impl<'b> RenderOnce for Box<dyn Render + 'b> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         Render::render(&*self, tmpl);
@@ -164,21 +164,21 @@ impl<'b> RenderOnce for Box<Render + 'b> {
     }
 }
 
-impl<'b> RenderMut for Box<Render + 'b> {
+impl<'b> RenderMut for Box<dyn Render + 'b> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
         Render::render(&*self, tmpl);
     }
 }
 
-impl<'b> Render for Box<Render + 'b> {
+impl<'b> Render for Box<dyn Render + 'b> {
     #[inline]
     fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
         Render::render(&**self, tmpl);
     }
 }
 
-impl<'b> RenderOnce for Box<Render + 'b + Send> {
+impl<'b> RenderOnce for Box<dyn Render + 'b + Send> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
         Render::render(&*self, tmpl);
@@ -190,14 +190,14 @@ impl<'b> RenderOnce for Box<Render + 'b + Send> {
     }
 }
 
-impl<'b> RenderMut for Box<Render + 'b + Send> {
+impl<'b> RenderMut for Box<dyn Render + 'b + Send> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
         Render::render(&*self, tmpl);
     }
 }
 
-impl<'b> Render for Box<Render + 'b + Send> {
+impl<'b> Render for Box<dyn Render + 'b + Send> {
     #[inline]
     fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
         Render::render(&**self, tmpl);
@@ -412,7 +412,7 @@ where
 impl<T, E> RenderOnce for Result<T, E>
 where
     T: RenderOnce,
-    E: Into<Box<::std::error::Error + Send + Sync>>,
+    E: Into<Box<dyn std::error::Error + Send + Sync>>,
 {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer) {
