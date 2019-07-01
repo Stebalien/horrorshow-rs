@@ -289,6 +289,8 @@
 //! # Examples
 //!
 //! See the test cases.
+#![allow(clippy::redundant_field_names)]
+
 #[macro_use]
 mod macros;
 
@@ -296,12 +298,12 @@ mod macros;
 mod ops;
 
 mod error;
-pub use error::Error;
+pub use crate::error::Error;
 
 mod template;
-pub use template::{Template, TemplateBuffer};
+pub use crate::template::{Template, TemplateBuffer};
 mod render;
-pub use render::{FnRenderer, Raw, Render, RenderBox, RenderMut, RenderOnce};
+pub use crate::render::{FnRenderer, Raw, Render, RenderBox, RenderMut, RenderOnce};
 
 /// Traits that should always be imported.
 pub mod prelude;

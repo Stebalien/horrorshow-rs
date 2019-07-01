@@ -3,6 +3,7 @@ name = "horrorshow"
 description = "a templating library written in rust macros"
 version = "0.6.6"
 authors = ["Steven Allen <steven@stebalien.com>"]
+edition = "2018"
 
 documentation = "https://docs.rs/horrorshow"
 repository = "https://github.com/Stebalien/horrorshow-rs"

@@ -1,7 +1,8 @@
-use error::{self, Error};
-use render::RenderOnce;
 use std::fmt;
 use std::io;
+
+use crate::error::{self, Error};
+use crate::render::RenderOnce;
 
 /// A template that can be rendered into something.
 ///
@@ -111,7 +112,7 @@ impl<'a> TemplateBuffer<'a> {
     /// # }
     /// ```
     #[inline]
-    pub fn write_fmt(&mut self, args: fmt::Arguments) {
+    pub fn write_fmt(&mut self, args: fmt::Arguments<'_>) {
         use std::fmt::Write;
         let _ = self.as_writer().write_fmt(args);
     }
@@ -144,9 +145,7 @@ impl<'a> TemplateBuffer<'a> {
     }
 }
 
-pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>)
-where
-    'a: 'b;
+pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>);
 
 impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     // This is the fast-path.
@@ -174,9 +173,7 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     }
 }
 
-pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>)
-where
-    'a: 'b;
+pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>);
 
 impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
     fn write_str(&mut self, text: &str) -> fmt::Result {

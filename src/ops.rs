@@ -1,6 +1,7 @@
-use render::RenderOnce;
 use std::ops::Shl;
-use template::TemplateBuffer;
+
+use crate::render::RenderOnce;
+use crate::template::TemplateBuffer;
 
 impl<'a, 'b, T> Shl<T> for &'a mut TemplateBuffer<'b>
 where

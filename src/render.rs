@@ -1,11 +1,11 @@
 use std::fmt;
 
-use template::{Template, TemplateBuffer};
+use crate::template::{Template, TemplateBuffer};
 
 /// Something that can be rendered once.
 pub trait RenderOnce {
     /// Render this into a template buffer.
-    fn render_once(self, tmpl: &mut TemplateBuffer)
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>)
     where
         Self: Sized;
 
@@ -33,7 +33,7 @@ impl<'a, T: ?Sized> RenderOnce for &'a mut T
 where
     T: RenderMut,
 {
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         RenderMut::render_mut(self, tmpl)
     }
     fn size_hint(&self) -> usize {
@@ -45,7 +45,7 @@ impl<'a, T: ?Sized> RenderOnce for &'a T
 where
     T: Render,
 {
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(self, tmpl)
     }
     fn size_hint(&self) -> usize {
@@ -64,7 +64,7 @@ where
 pub trait RenderBox {
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>
     #[doc(hidden)]
-    fn render_box(self: Box<Self>, tmpl: &mut TemplateBuffer);
+    fn render_box(self: Box<Self>, tmpl: &mut TemplateBuffer<'_>);
 
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>
     #[doc(hidden)]
@@ -75,7 +75,7 @@ impl<T> RenderBox for T
 where
     T: RenderOnce,
 {
-    fn render_box(self: Box<T>, tmpl: &mut TemplateBuffer) {
+    fn render_box(self: Box<T>, tmpl: &mut TemplateBuffer<'_>) {
         (*self).render_once(tmpl);
     }
 
@@ -88,7 +88,7 @@ where
 
 impl<'b> RenderOnce for Box<dyn RenderBox + 'b> {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         RenderBox::render_box(self, tmpl);
     }
 
@@ -100,7 +100,7 @@ impl<'b> RenderOnce for Box<dyn RenderBox + 'b> {
 
 impl<'b> RenderOnce for Box<dyn RenderBox + 'b + Send> {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         RenderBox::render_box(self, tmpl);
     }
 
@@ -114,7 +114,7 @@ impl<'b> RenderOnce for Box<dyn RenderBox + 'b + Send> {
 
 impl<'b> RenderOnce for Box<dyn RenderMut + 'b> {
     #[inline]
-    fn render_once(mut self, tmpl: &mut TemplateBuffer) {
+    fn render_once(mut self, tmpl: &mut TemplateBuffer<'_>) {
         RenderMut::render_mut(&mut *self, tmpl);
     }
 
@@ -133,7 +133,7 @@ impl<'b> RenderMut for Box<dyn RenderMut + 'b> {
 
 impl<'b> RenderOnce for Box<dyn RenderMut + 'b + Send> {
     #[inline]
-    fn render_once(mut self, tmpl: &mut TemplateBuffer) {
+    fn render_once(mut self, tmpl: &mut TemplateBuffer<'_>) {
         RenderMut::render_mut(&mut *self, tmpl);
     }
 
@@ -154,7 +154,7 @@ impl<'b> RenderMut for Box<dyn RenderMut + 'b + Send> {
 
 impl<'b> RenderOnce for Box<dyn Render + 'b> {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(&*self, tmpl);
     }
 
@@ -180,7 +180,7 @@ impl<'b> Render for Box<dyn Render + 'b> {
 
 impl<'b> RenderOnce for Box<dyn Render + 'b + Send> {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(&*self, tmpl);
     }
 
@@ -212,7 +212,7 @@ pub struct FnRenderer<F> {
 
 impl<F> FnRenderer<F>
 where
-    F: FnOnce(&mut TemplateBuffer),
+    F: FnOnce(&mut TemplateBuffer<'_>),
 {
     pub fn new(f: F) -> Self {
         FnRenderer {
@@ -231,9 +231,9 @@ where
 
 impl<F> RenderOnce for FnRenderer<F>
 where
-    F: FnOnce(&mut TemplateBuffer),
+    F: FnOnce(&mut TemplateBuffer<'_>),
 {
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         (self.renderer)(tmpl)
     }
 
@@ -244,18 +244,18 @@ where
 
 impl<F> RenderMut for FnRenderer<F>
 where
-    F: FnMut(&mut TemplateBuffer),
+    F: FnMut(&mut TemplateBuffer<'_>),
 {
-    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         (self.renderer)(tmpl)
     }
 }
 
 impl<F> Render for FnRenderer<F>
 where
-    F: Fn(&mut TemplateBuffer),
+    F: Fn(&mut TemplateBuffer<'_>),
 {
-    fn render(&self, tmpl: &mut TemplateBuffer) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         (self.renderer)(tmpl)
     }
 }
@@ -265,17 +265,15 @@ impl<F> fmt::Display for FnRenderer<F>
 where
     FnRenderer<F>: Render,
 {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        struct Adapter<'a, 'b>(&'a mut fmt::Formatter<'b>)
-        where
-            'b: 'a;
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct Adapter<'a, 'b>(&'a mut fmt::Formatter<'b>);
         impl<'a, 'b> fmt::Write for Adapter<'a, 'b> {
             #[inline]
             fn write_str(&mut self, text: &str) -> fmt::Result {
                 self.0.write_str(text)
             }
             #[inline]
-            fn write_fmt(&mut self, args: fmt::Arguments) -> fmt::Result {
+            fn write_fmt(&mut self, args: fmt::Arguments<'_>) -> fmt::Result {
                 self.0.write_fmt(args)
             }
         }
@@ -296,7 +294,7 @@ impl<S> RenderOnce for Raw<S>
 where
     S: AsRef<str>,
 {
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_raw(self.0.as_ref())
     }
     fn size_hint(&self) -> usize {
@@ -308,7 +306,7 @@ impl<S> RenderMut for Raw<S>
 where
     S: AsRef<str>,
 {
-    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_raw(self.0.as_ref())
     }
 }
@@ -317,14 +315,14 @@ impl<S> Render for Raw<S>
 where
     S: AsRef<str>,
 {
-    fn render(&self, tmpl: &mut TemplateBuffer) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_raw(self.0.as_ref())
     }
 }
 
 impl<'a> RenderOnce for &'a str {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_str(self)
     }
 
@@ -336,21 +334,21 @@ impl<'a> RenderOnce for &'a str {
 
 impl<'a> RenderMut for &'a str {
     #[inline]
-    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_str(self)
     }
 }
 
 impl<'a> Render for &'a str {
     #[inline]
-    fn render(&self, tmpl: &mut TemplateBuffer) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_str(self)
     }
 }
 
 impl RenderOnce for String {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_str(&self)
     }
     #[inline]
@@ -361,14 +359,14 @@ impl RenderOnce for String {
 
 impl RenderMut for String {
     #[inline]
-    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_str(self)
     }
 }
 
 impl Render for String {
     #[inline]
-    fn render(&self, tmpl: &mut TemplateBuffer) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_str(self)
     }
 }
@@ -378,7 +376,7 @@ where
     T: RenderOnce,
 {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         if let Some(v) = self {
             v.render_once(tmpl);
         }
@@ -390,7 +388,7 @@ where
     T: RenderMut,
 {
     #[inline]
-    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         if let Some(v) = self.as_mut() {
             v.render_mut(tmpl);
         }
@@ -402,7 +400,7 @@ where
     T: Render,
 {
     #[inline]
-    fn render(&self, tmpl: &mut TemplateBuffer) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         if let Some(v) = self.as_ref() {
             v.render(tmpl);
         }
@@ -415,7 +413,7 @@ where
     E: Into<Box<dyn std::error::Error + Send + Sync>>,
 {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         match self {
             Ok(v) => v.render_once(tmpl),
             Err(e) => tmpl.record_error(e),
@@ -425,21 +423,21 @@ where
 
 impl<'a> RenderOnce for fmt::Arguments<'a> {
     #[inline]
-    fn render_once(self, tmpl: &mut TemplateBuffer) {
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
         self.render(tmpl)
     }
 }
 
 impl<'a> RenderMut for fmt::Arguments<'a> {
     #[inline]
-    fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         self.render(tmpl);
     }
 }
 
 impl<'a> Render for fmt::Arguments<'a> {
     #[inline]
-    fn render(&self, tmpl: &mut TemplateBuffer) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         tmpl.write_fmt(*self);
     }
 }
@@ -449,20 +447,20 @@ macro_rules! impl_fmt_render {
         $(
             impl Render for $t {
                 #[inline]
-                fn render(&self, tmpl: &mut TemplateBuffer) {
+                fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
                     write!(tmpl, "{}", self)
                 }
             }
             impl RenderMut for $t {
                 #[inline]
-                fn render_mut(&mut self, tmpl: &mut TemplateBuffer) {
+                fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
                     self.render(tmpl)
                 }
             }
 
             impl RenderOnce for $t {
                 #[inline]
-                fn render_once(self, tmpl: &mut TemplateBuffer) {
+                fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
                     self.render(tmpl)
                 }
             }
