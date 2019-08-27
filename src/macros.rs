@@ -77,6 +77,23 @@ macro_rules! box_html {
 #[macro_export]
 macro_rules! append_html {
 
+    // Nop out close-tags for void elements.
+    (@close_tag area) => {""};
+    (@close_tag base) => {""};
+    (@close_tag br) => {""};
+    (@close_tag col) => {""};
+    (@close_tag embed) => {""};
+    (@close_tag hr) => {""};
+    (@close_tag img) => {""};
+    (@close_tag input) => {""};
+    (@close_tag link) => {""};
+    (@close_tag meta) => {""};
+    (@close_tag param) => {""};
+    (@close_tag source) => {""};
+    (@close_tag track) => {""};
+    (@close_tag wbr) => {""};
+    (@close_tag $tag:ident) => {concat!("</", stringify!($tag), ">")};
+
     (@stringify_compressed $($tok:tt)*) => {
         concat!($(stringify!($tok)),*)
     };
@@ -235,11 +252,12 @@ macro_rules! append_html {
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident($($attrs:tt)+); $($next:tt)*) => {
         $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", stringify!($tag)), $($attrs)+);
-        $crate::append_html!($tmpl, (" />"), $($next)*);
+        $crate::append_html!($tmpl, (">", $crate::append_html!(@close_tag $tag)), $($next)*);
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident($($attrs:tt)+)) => {
         $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", stringify!($tag)), $($attrs)+);
-        $tmpl.write_raw(" />");
+        $tmpl.write_raw(">");
+        $tmpl.write_raw($crate::append_html!(@close_tag $tag));
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident { $($children:tt)* } $($next:tt)* ) => {
         $crate::append_html!($tmpl, ($($p,)* "<", stringify!($tag), ">"), $($children)*);
@@ -252,13 +270,13 @@ macro_rules! append_html {
         $crate::append_html!($tmpl, ($($p),*), $tag { : {$($code)*} } $($next)* );
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident; $($next:tt)*) => {
-        $crate::append_html!($tmpl, ($($p,)* "<", stringify!($tag), " />"), $($next)*);
+        $crate::append_html!($tmpl, ($($p,)* "<", stringify!($tag), ">", $crate::append_html!(@close_tag $tag)), $($next)*);
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident : $e:expr) => {
         $crate::append_html!($tmpl, ($($p),*), $tag { : $e; });
     };
     ($tmpl:ident, ($($p:expr),*), $tag:ident) => {
-        $crate::append_html!(@write_const $tmpl, $($p,)* "<", stringify!($tag), "/>");
+        $crate::append_html!(@write_const $tmpl, $($p,)* "<", stringify!($tag), ">", $crate::append_html!(@close_tag $tag));
     };
     ($tmpl:ident, ($($p:expr),*),) => {
         $crate::append_html!(@write_const $tmpl, $($p),*);

@@ -26,7 +26,7 @@ fn test_reentrant() {
         }
         .into_string()
         .unwrap(),
-        "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>"
+        "<p>&lt;a href=&quot;abcde&quot;&gt;&lt;/a&gt;</p>"
     );
 
     assert_eq!(
@@ -37,7 +37,7 @@ fn test_reentrant() {
         }
         .into_string()
         .unwrap(),
-        "<p>&lt;a href=&quot;abcde&quot; /&gt;</p>"
+        "<p>&lt;a href=&quot;abcde&quot;&gt;&lt;/a&gt;</p>"
     );
 
     assert_eq!(
@@ -48,7 +48,7 @@ fn test_reentrant() {
         }
         .into_string()
         .unwrap(),
-        "<p><a href=\"abcde\" /></p>"
+        "<p><a href=\"abcde\"></a></p>"
     );
 }
 
