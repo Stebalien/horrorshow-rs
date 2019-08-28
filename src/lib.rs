@@ -72,7 +72,7 @@
 //!       <li class=\"item\">9</li>\
 //!       <li class=\"item\">10</li>\
 //!     </ol>\
-//!     <br /><br />\
+//!     <br><br>\
 //!     <p>Easy!</p>\
 //!   </body>\
 //! </html>";

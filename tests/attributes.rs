@@ -13,7 +13,7 @@ fn test_dash() {
         }
         .into_string()
         .unwrap(),
-        "<my_tag><inner data-test=\"abcde\" /></my_tag>"
+        "<my_tag><inner data-test=\"abcde\"></inner></my_tag>"
     );
 }
 
@@ -27,7 +27,7 @@ fn test_no_value() {
         }
         .into_string()
         .unwrap(),
-        "<my_tag><inner a=\"test\" some_tag other=\"1\" /></my_tag>"
+        "<my_tag><inner a=\"test\" some_tag other=\"1\"></inner></my_tag>"
     );
 }
 
@@ -39,7 +39,7 @@ fn test_boolean() {
         }
         .into_string()
         .unwrap(),
-        "<tag flag />"
+        "<tag flag></tag>"
     );
 
     assert_eq!(
@@ -48,7 +48,7 @@ fn test_boolean() {
         }
         .into_string()
         .unwrap(),
-        "<tag />"
+        "<tag></tag>"
     );
 }
 
@@ -60,7 +60,7 @@ fn test_option() {
         }
         .into_string()
         .unwrap(),
-        "<tag flag=\"value\" />"
+        "<tag flag=\"value\"></tag>"
     );
 
     assert_eq!(
@@ -69,6 +69,6 @@ fn test_option() {
         }
         .into_string()
         .unwrap(),
-        "<tag />"
+        "<tag></tag>"
     );
 }
