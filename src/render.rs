@@ -1,4 +1,7 @@
-use std::fmt;
+use core::fmt;
+
+#[cfg(feature = "alloc")]
+use alloc::{boxed::Box, string::String};
 
 use crate::template::{Template, TemplateBuffer};
 
@@ -61,6 +64,7 @@ where
 /// `Box<RenderBox>`. This trait has methods but I've hidden them because you should never call
 /// them directly.  Instead, you should call the `RenderOnce` methods implemented on
 /// `Box<RenderBox>`.
+#[cfg(feature = "alloc")]
 pub trait RenderBox {
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>
     #[doc(hidden)]
@@ -71,6 +75,7 @@ pub trait RenderBox {
     fn size_hint_box(&self) -> usize;
 }
 
+#[cfg(feature = "alloc")]
 impl<T> RenderBox for T
 where
     T: RenderOnce,
@@ -86,6 +91,7 @@ where
 
 // Box<RenderBox>
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderOnce for Box<dyn RenderBox + 'b> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
@@ -98,6 +104,7 @@ impl<'b> RenderOnce for Box<dyn RenderBox + 'b> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderOnce for Box<dyn RenderBox + 'b + Send> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
@@ -112,6 +119,7 @@ impl<'b> RenderOnce for Box<dyn RenderBox + 'b + Send> {
 
 // Box<RenderMut>
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderOnce for Box<dyn RenderMut + 'b> {
     #[inline]
     fn render_once(mut self, tmpl: &mut TemplateBuffer<'_>) {
@@ -124,6 +132,7 @@ impl<'b> RenderOnce for Box<dyn RenderMut + 'b> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn RenderMut + 'b> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
@@ -131,6 +140,7 @@ impl<'b> RenderMut for Box<dyn RenderMut + 'b> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderOnce for Box<dyn RenderMut + 'b + Send> {
     #[inline]
     fn render_once(mut self, tmpl: &mut TemplateBuffer<'_>) {
@@ -143,6 +153,7 @@ impl<'b> RenderOnce for Box<dyn RenderMut + 'b + Send> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn RenderMut + 'b + Send> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
@@ -152,6 +163,7 @@ impl<'b> RenderMut for Box<dyn RenderMut + 'b + Send> {
 
 // Box<Render>
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderOnce for Box<dyn Render + 'b> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
@@ -164,6 +176,7 @@ impl<'b> RenderOnce for Box<dyn Render + 'b> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn Render + 'b> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
@@ -171,6 +184,7 @@ impl<'b> RenderMut for Box<dyn Render + 'b> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> Render for Box<dyn Render + 'b> {
     #[inline]
     fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
@@ -178,6 +192,7 @@ impl<'b> Render for Box<dyn Render + 'b> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderOnce for Box<dyn Render + 'b + Send> {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
@@ -190,6 +205,7 @@ impl<'b> RenderOnce for Box<dyn Render + 'b + Send> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn Render + 'b + Send> {
     #[inline]
     fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
@@ -197,6 +213,7 @@ impl<'b> RenderMut for Box<dyn Render + 'b + Send> {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl<'b> Render for Box<dyn Render + 'b + Send> {
     #[inline]
     fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
@@ -346,6 +363,7 @@ impl<'a> Render for &'a str {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl RenderOnce for String {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
@@ -357,6 +375,7 @@ impl RenderOnce for String {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl RenderMut for String {
     #[inline]
     fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
@@ -364,6 +383,7 @@ impl RenderMut for String {
     }
 }
 
+#[cfg(feature = "alloc")]
 impl Render for String {
     #[inline]
     fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
@@ -407,10 +427,40 @@ where
     }
 }
 
+#[cfg(feature = "std")]
 impl<T, E> RenderOnce for Result<T, E>
 where
     T: RenderOnce,
-    E: Into<Box<dyn std::error::Error + Send + Sync>>,
+    E: Into<Box<dyn ::std::error::Error + Send + Sync>>,
+{
+    #[inline]
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
+        match self {
+            Ok(v) => v.render_once(tmpl),
+            Err(e) => tmpl.record_error(e),
+        }
+    }
+}
+
+#[cfg(all(not(feature = "std"), feature = "alloc"))]
+impl<T, E> RenderOnce for Result<T, E>
+where
+    T: RenderOnce,
+    E: alloc::string::ToString,
+{
+    #[inline]
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
+        match self {
+            Ok(v) => v.render_once(tmpl),
+            Err(e) => tmpl.record_error(e),
+        }
+    }
+}
+
+#[cfg(not(feature = "alloc"))]
+impl<T> RenderOnce for Result<T, &'static str>
+where
+    T: RenderOnce,
 {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {

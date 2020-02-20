@@ -1,4 +1,4 @@
-use std::ops::Shl;
+use core::ops::Shl;
 
 use crate::render::RenderOnce;
 use crate::template::TemplateBuffer;

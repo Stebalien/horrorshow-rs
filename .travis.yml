@@ -6,3 +6,9 @@ rust:
   - stable
 before_script:
   - ./travis_setup.sh
+script:
+  - cargo build --verbose --all
+  - cargo test --verbose --all
+  - cargo test --tests --no-default-features --features=ops --verbose --all
+  - cargo test --tests --no-default-features --features=ops,alloc --verbose --all
+

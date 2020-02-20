@@ -1,4 +1,9 @@
-use std::fmt;
+use core::fmt;
+
+#[cfg(feature = "alloc")]
+use alloc::string::String;
+
+#[cfg(feature = "std")]
 use std::io;
 
 use crate::error::{self, Error};
@@ -10,6 +15,7 @@ use crate::render::RenderOnce;
 /// (through impls on references and boxes).
 pub trait Template: RenderOnce + Sized {
     /// Render this into a new String.
+    #[cfg(feature = "alloc")]
     fn into_string(self) -> Result<String, Error> {
         let mut string = String::with_capacity(self.size_hint());
         self.write_to_string(&mut string)?;
@@ -20,6 +26,7 @@ pub trait Template: RenderOnce + Sized {
     /// Render this into an existing String.
     ///
     /// Note: You could also use render_into_fmt but this is noticeably faster.
+    #[cfg(feature = "alloc")]
     fn write_to_string(self, string: &mut String) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Str(string),
@@ -46,6 +53,7 @@ pub trait Template: RenderOnce + Sized {
     /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
     /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
     /// system calls.
+    #[cfg(feature = "std")]
     fn write_to_io(self, writer: &mut dyn io::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
             writer: InnerTemplateWriter::Io(writer),
@@ -76,22 +84,37 @@ pub struct TemplateBuffer<'a> {
 }
 
 enum InnerTemplateWriter<'a> {
-    Io(&'a mut dyn io::Write),
     Fmt(&'a mut dyn fmt::Write),
+    #[cfg(feature = "alloc")]
     Str(&'a mut String),
+    #[cfg(feature = "std")]
+    Io(&'a mut dyn io::Write),
 }
 
 impl<'a> TemplateBuffer<'a> {
     #[cold]
+    #[cfg(feature = "std")]
     pub fn record_error<E: Into<Box<dyn std::error::Error + Send + Sync>>>(&mut self, e: E) {
         self.error.render.push(e.into());
+    }
+
+    #[cold]
+    #[cfg(all(not(feature = "std"), feature = "alloc"))]
+    pub fn record_error<E: alloc::string::ToString>(&mut self, e: E) {
+        self.error.render.push(e.to_string());
+    }
+
+    #[cold]
+    #[cfg(not(feature = "alloc"))]
+    pub fn record_error(&mut self, e: &'static str) {
+        self.error.render = Some(e);
     }
 
     /// Write a raw string to the template output.
     // NEVER REMOVE THIS INLINE!
     #[inline(always)]
     pub fn write_raw(&mut self, text: &str) {
-        use std::fmt::Write;
+        use alloc::fmt::Write;
         let _ = self.as_raw_writer().write_str(text);
     }
 
@@ -113,14 +136,14 @@ impl<'a> TemplateBuffer<'a> {
     /// ```
     #[inline]
     pub fn write_fmt(&mut self, args: fmt::Arguments<'_>) {
-        use std::fmt::Write;
+        use alloc::fmt::Write;
         let _ = self.as_writer().write_fmt(args);
     }
 
     /// Escape and write a string to the template output.
     #[inline]
     pub fn write_str(&mut self, text: &str) {
-        use std::fmt::Write;
+        use alloc::fmt::Write;
         let _ = self.as_writer().write_str(text);
     }
 
@@ -145,6 +168,18 @@ impl<'a> TemplateBuffer<'a> {
     }
 }
 
+#[cfg(not(feature = "std"))]
+#[inline(always)]
+fn new_fmt_err() -> fmt::Error {
+    fmt::Error
+}
+
+#[cfg(feature = "std")]
+#[inline(always)]
+fn new_fmt_err() -> io::Error {
+    io::Error::new(io::ErrorKind::Other, "Format Error")
+}
+
 pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>);
 
 impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
@@ -157,16 +192,18 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
             return Ok(());
         }
         match self.0.writer {
-            Io(ref mut writer) => {
-                self.0.error.write = writer.write_all(text.as_bytes()).err();
-            }
             Fmt(ref mut writer) => {
                 if writer.write_str(text).is_err() {
-                    self.0.error.write = Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
+                    self.0.error.write = Some(new_fmt_err());
                 }
             }
+            #[cfg(feature = "alloc")]
             Str(ref mut writer) => {
                 let _ = writer.write_str(text);
+            }
+            #[cfg(feature = "std")]
+            Io(ref mut writer) => {
+                self.0.error.write = writer.write_all(text.as_bytes()).err();
             }
         }
         Ok(())
@@ -192,20 +229,6 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
         }
 
         match self.0.writer {
-            Io(ref mut writer) => {
-                for b in text.bytes() {
-                    if let Err(e) = match (should_escape(b), b) {
-                        (true, b'&') => writer.write_all(b"&amp;"),
-                        (true, b'"') => writer.write_all(b"&quot;"),
-                        (true, b'<') => writer.write_all(b"&lt;"),
-                        (true, b'>') => writer.write_all(b"&gt;"),
-                        _ => writer.write_all(&[b] as &[u8]),
-                    } {
-                        self.0.error.write = Some(e);
-                        break;
-                    }
-                }
-            }
             Fmt(ref mut writer) => {
                 for c in text.chars() {
                     if (match (c.is_ascii() && should_escape(c as u8), c as u8) {
@@ -217,12 +240,12 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                     })
                     .is_err()
                     {
-                        self.0.error.write =
-                            Some(io::Error::new(io::ErrorKind::Other, "Format Error"));
+                        self.0.error.write = Some(new_fmt_err());
                         break;
                     }
                 }
             }
+            #[cfg(feature = "alloc")]
             Str(ref mut writer) => {
                 for b in text.bytes() {
                     match (should_escape(b), b) {
@@ -232,6 +255,21 @@ impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
                         (true, b'>') => writer.push_str("&gt;"),
                         // NOTE: Do not add an unreachable case. It makes this slower.
                         _ => unsafe { writer.as_mut_vec() }.push(b),
+                    }
+                }
+            }
+            #[cfg(feature = "std")]
+            Io(ref mut writer) => {
+                for b in text.bytes() {
+                    if let Err(e) = match (should_escape(b), b) {
+                        (true, b'&') => writer.write_all(b"&amp;"),
+                        (true, b'"') => writer.write_all(b"&quot;"),
+                        (true, b'<') => writer.write_all(b"&lt;"),
+                        (true, b'>') => writer.write_all(b"&gt;"),
+                        _ => writer.write_all(&[b] as &[u8]),
+                    } {
+                        self.0.error.write = Some(e);
+                        break;
                     }
                 }
             }

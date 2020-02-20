@@ -1,3 +1,5 @@
+#![cfg(feature = "alloc")]
+
 #[macro_use]
 extern crate horrorshow;
 
