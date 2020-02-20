@@ -1,3 +1,5 @@
+#![cfg(feature = "std")]
+
 use std::error::Error;
 use std::io;
 

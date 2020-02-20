@@ -290,6 +290,9 @@
 //!
 //! See the test cases.
 #![allow(clippy::redundant_field_names)]
+#![cfg_attr(not(feature = "std"), no_std)]
+
+extern crate alloc;
 
 #[macro_use]
 mod macros;
@@ -303,7 +306,10 @@ pub use crate::error::Error;
 mod template;
 pub use crate::template::{Template, TemplateBuffer};
 mod render;
-pub use crate::render::{FnRenderer, Raw, Render, RenderBox, RenderMut, RenderOnce};
+
+#[cfg(feature = "alloc")]
+pub use crate::render::RenderBox;
+pub use crate::render::{FnRenderer, Raw, Render, RenderMut, RenderOnce};
 
 /// Traits that should always be imported.
 pub mod prelude;

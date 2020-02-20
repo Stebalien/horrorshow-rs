@@ -1,3 +1,6 @@
+#![cfg(feature = "alloc")]
+
+extern crate alloc;
 #[macro_use]
 extern crate horrorshow;
 
@@ -96,7 +99,7 @@ fn test_embed_twice() {
 
 #[test]
 fn test_display() {
-    use std::fmt::Write;
+    use alloc::fmt::Write;
     let r = html! {
         |tmpl| tmpl << "test";
     };

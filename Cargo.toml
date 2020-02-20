@@ -12,5 +12,7 @@ categories = ["template-engine"]
 license = "MIT/Apache-2.0"
 
 [features]
-default = ["ops"]
+default = ["ops", "std", "alloc"]
+alloc = []
 ops = []
+std = ["alloc"]
