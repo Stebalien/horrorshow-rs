@@ -9,6 +9,25 @@ A macro-based html templating library, compatible with stable rust (currently re
 * git: https://stebalien.github.io/horrorshow-rs/horrorshow/
 * release: https://docs.rs/horrorshow/
 
+## Features
+
+This crate will degrade gracefully when compiled without `std` (disable the "std"
+feature) and even without `alloc (disable the "alloc" feature).
+
+When compiled with `alloc` but without `std`:
+
+* `Template::write_to_io()` is not defined.
+* Templates may only emit errors implementing `ToString` and all such errors are
+  immediately converted to strings.
+
+When compiled with just core:
+
+* `RenderBox` is no longer defined (no allocation).
+* The `Template::into_string()` and `Template::write_to_string()` are no longer
+  defined. The only template rendering method available is
+  `Template::write_to_fmt()`.
+* Templates may only emit static `&str` errors, and only the first is recorded.
+
 ## Example:
 
 ```rust
