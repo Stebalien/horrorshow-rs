@@ -64,6 +64,8 @@ where
 /// `Box<RenderBox>`. This trait has methods but I've hidden them because you should never call
 /// them directly.  Instead, you should call the `RenderOnce` methods implemented on
 /// `Box<RenderBox>`.
+///
+/// FEATURE: requires "alloc"
 #[cfg(feature = "alloc")]
 pub trait RenderBox {
     /// Do not call. Called by RenderOnce impl on Box<RenderBox>

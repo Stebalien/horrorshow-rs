@@ -6,10 +6,22 @@ use alloc::vec::Vec;
 #[cfg(feature = "std")]
 use std::io;
 
+/// Error type returned when formatting templates.
 #[derive(Debug, Default)]
 #[cfg(feature = "std")]
 pub struct Error {
+    /// The error returned by the underlying writer when formatting a template.
+    ///
+    /// FEATURE: When built without "std", this is a `core::fmt::Error`.
     pub write: Option<io::Error>,
+    /// The error(s) emitted by the template itself.
+    ///
+    /// FEATURE:
+    ///
+    /// * When built without "std" but with "alloc", this is a `Vec<String>`.
+    /// * When built without "std" and without "alloc", this is an
+    ///   `Option<&'static str>`. If multiple errors are emitted, only the first
+    ///   is stored.
     pub render: Vec<Box<dyn std::error::Error + Send + Sync>>,
 }
 

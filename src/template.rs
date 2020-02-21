@@ -107,7 +107,9 @@ impl<'a> TemplateBuffer<'a> {
     #[cold]
     #[cfg(not(feature = "alloc"))]
     pub fn record_error(&mut self, e: &'static str) {
-        self.error.render = Some(e);
+        if self.error.is_none() {
+            self.error.render = Some(e);
+        }
     }
 
     /// Write a raw string to the template output.

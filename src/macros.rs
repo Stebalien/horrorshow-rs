@@ -1,7 +1,7 @@
 // rustfmt doesn't like this file (lines too long, too hard to fix)
 #![cfg_attr(rustfmt, rustfmt_skip)]  
 
-/// Create a new html template
+/// Create a new html template.
 #[macro_export]
 macro_rules! html {
     ($($inner:tt)*) => {{
@@ -15,7 +15,7 @@ macro_rules! html {
     }}
 }
 
-/// Create a new html template taking ownership of any variables used inside
+/// Create a new html template taking ownership of any variables used inside.
 #[macro_export]
 macro_rules! owned_html {
     ($($inner:tt)*) => {{
