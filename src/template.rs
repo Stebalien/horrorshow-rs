@@ -15,6 +15,8 @@ use crate::render::RenderOnce;
 /// (through impls on references and boxes).
 pub trait Template: RenderOnce + Sized {
     /// Render this into a new String.
+    ///
+    /// FEATURE: requires "alloc".
     #[cfg(feature = "alloc")]
     fn into_string(self) -> Result<String, Error> {
         let mut string = String::with_capacity(self.size_hint());
@@ -26,6 +28,8 @@ pub trait Template: RenderOnce + Sized {
     /// Render this into an existing String.
     ///
     /// Note: You could also use render_into_fmt but this is noticeably faster.
+    ///
+    /// FEATURE: requires "alloc".
     #[cfg(feature = "alloc")]
     fn write_to_string(self, string: &mut String) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
@@ -53,6 +57,8 @@ pub trait Template: RenderOnce + Sized {
     /// Note: If you're writing directly to a file/socket etc., you should *seriously* consider
     /// wrapping your writer in a BufWriter. Otherwise, you'll end up making quite a few unnecessary
     /// system calls.
+    ///
+    /// FEATURE: requires "std".
     #[cfg(feature = "std")]
     fn write_to_io(self, writer: &mut dyn io::Write) -> Result<(), Error> {
         let mut buffer = TemplateBuffer {
@@ -92,6 +98,15 @@ enum InnerTemplateWriter<'a> {
 }
 
 impl<'a> TemplateBuffer<'a> {
+    /// Record an error. If a template calls this function, rendering will be
+    /// short-circuited and the error will be returned to the user.
+    ///
+    /// FEATURE:
+    ///
+    ///  * With "alloc" but without "std", accepts anything that can be
+    ///    converted to a string (anything implementing `ToString`).
+    ///  * Without "std" _or_ "alloc", accepts a static `&str`. Multiple calls
+    ///    will record the _first_ error.
     #[cold]
     #[cfg(feature = "std")]
     pub fn record_error<E: Into<Box<dyn std::error::Error + Send + Sync>>>(&mut self, e: E) {
@@ -182,6 +197,9 @@ fn new_fmt_err() -> io::Error {
     io::Error::new(io::ErrorKind::Other, "Format Error")
 }
 
+/// Write adapter that forwards writes to the underlying template. This writer
+/// will never return an error. Any errors encountered will be recorded
+/// internally.
 pub struct RawTemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>);
 
 impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
@@ -212,6 +230,9 @@ impl<'a, 'b> fmt::Write for RawTemplateWriter<'a, 'b> {
     }
 }
 
+/// Write adapter that escapes writes then forwards them to the underlying
+/// template. This writer will never return an error. Any errors encountered
+/// will be recorded internally.
 pub struct TemplateWriter<'a, 'b>(&'b mut TemplateBuffer<'a>);
 
 impl<'a, 'b> fmt::Write for TemplateWriter<'a, 'b> {
