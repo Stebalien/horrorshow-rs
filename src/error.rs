@@ -25,13 +25,13 @@ pub struct Error {
 
 #[inline]
 #[cfg(feature = "alloc")]
-pub fn is_empty(e: &Error) -> bool {
+pub(crate) fn is_empty(e: &Error) -> bool {
     e.write.is_none() && e.render.is_empty()
 }
 
 #[inline]
 #[cfg(not(feature = "alloc"))]
-pub fn is_empty(e: &Error) -> bool {
+pub(crate) fn is_empty(e: &Error) -> bool {
     e.write.is_none() && e.render.is_none()
 }
 
