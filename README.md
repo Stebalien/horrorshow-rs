@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Stebalien/horrorshow-rs.svg?branch=master)](https://travis-ci.org/Stebalien/horrorshow-rs)
 
-A macro-based html templating library, compatible with stable rust (currently requires rust >= 1.30).
+A macro-based html templating library, compatible with stable rust (currently requires rust >= 1.37).
 
 ## Documentation
 
