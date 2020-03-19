@@ -339,6 +339,22 @@ where
     }
 }
 
+// Concat renders each item in the iterator sequentially.
+#[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
+pub struct Concat<I>(pub I);
+
+impl<I> RenderOnce for Concat<I>
+where
+    I: IntoIterator,
+    I::Item: RenderOnce,
+{
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
+        for r in self.0 {
+            r.render_once(tmpl)
+        }
+    }
+}
+
 impl<'a> RenderOnce for &'a str {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
