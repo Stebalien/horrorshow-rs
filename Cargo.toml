@@ -1,7 +1,7 @@
 [package]
 name = "horrorshow"
 description = "a templating library written in rust macros"
-version = "0.8.1"
+version = "0.8.2"
 authors = ["Steven Allen <steven@stebalien.com>"]
 edition = "2018"
 
