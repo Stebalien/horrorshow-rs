@@ -22,6 +22,36 @@ fn test_prim() {
 }
 
 #[test]
+fn test_hyphen() {
+    assert_eq!(
+        html! {
+            foo-bar {
+                : "foo"
+            }
+        }
+        .into_string()
+        .unwrap(),
+        "<foo-bar>foo</foo-bar>"
+    );
+    assert_eq!(
+        html! {
+            foo-bar : "foo"
+        }
+        .into_string()
+        .unwrap(),
+        "<foo-bar>foo</foo-bar>"
+    );
+    assert_eq!(
+        html! {
+            foo-bar;
+        }
+        .into_string()
+        .unwrap(),
+        "<foo-bar></foo-bar>"
+    );
+}
+
+#[test]
 fn test_reentrant() {
     assert_eq!(
         &html! {

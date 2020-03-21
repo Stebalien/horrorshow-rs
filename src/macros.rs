@@ -92,8 +92,9 @@ macro_rules! append_html {
     (@close_tag source) => {""};
     (@close_tag track) => {""};
     (@close_tag wbr) => {""};
-    (@close_tag $tag:ident) => {concat!("</", stringify!($tag), ">")};
-
+    (@close_tag $($tag:ident)-+) => {
+        concat!("</", $crate::append_html!(@stringify_compressed $($tag)-+), ">");
+    };
     (@stringify_compressed $($tok:tt)*) => {
         concat!($(stringify!($tok)),*)
     };
@@ -236,47 +237,47 @@ macro_rules! append_html {
         let mut $var: &mut $crate::TemplateBuffer = &mut *$tmpl;
         $code;
     }};
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {
-        $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", stringify!($tag)), $($attrs)+);
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+($($attrs:tt)+) { $($children:tt)* } $($next:tt)* ) => {
+        $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", $crate::append_html!(@stringify_compressed $($tag)-+)), $($attrs)+);
         $crate::append_html!($tmpl, (">"), $($children)*);
-        $crate::append_html!($tmpl, ("</", stringify!($tag), ">"), $($next)*);
+        $crate::append_html!($tmpl, ("</", $crate::append_html!(@stringify_compressed $($tag)-+), ">"), $($next)*);
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attr:tt)+) : $e:expr; $($next:tt)* ) => {
-        $crate::append_html!($tmpl, ($($p),*), $tag($($attr)+) { : $e; } $($next)* );
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+($($attr:tt)+) : $e:expr; $($next:tt)* ) => {
+        $crate::append_html!($tmpl, ($($p),*), $($tag)-+($($attr)+) { : $e; } $($next)* );
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attr:tt)+) : $e:expr) => {
-        $crate::append_html!($tmpl, ($($p),*), $tag($($attr)+) { : $e });
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+($($attr:tt)+) : $e:expr) => {
+        $crate::append_html!($tmpl, ($($p),*), $($tag)-+($($attr)+) { : $e });
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attr:tt)+) : {$($code:tt)*} $($next:tt)* ) => {
-        $crate::append_html!($tmpl, ($($p),*), $tag($($attr)+) { : {$($code)*} } $($next)* );
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+($($attr:tt)+) : {$($code:tt)*} $($next:tt)* ) => {
+        $crate::append_html!($tmpl, ($($p),*), $($tag)-+($($attr)+) { : {$($code)*} } $($next)* );
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attrs:tt)+); $($next:tt)*) => {
-        $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", stringify!($tag)), $($attrs)+);
-        $crate::append_html!($tmpl, (">", $crate::append_html!(@close_tag $tag)), $($next)*);
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+($($attrs:tt)+); $($next:tt)*) => {
+        $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", $crate::append_html!(@stringify_compressed $($tag)-+)), $($attrs)+);
+        $crate::append_html!($tmpl, (">", $crate::append_html!(@close_tag $($tag)-+)), $($next)*);
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident($($attrs:tt)+)) => {
-        $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", stringify!($tag)), $($attrs)+);
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+($($attrs:tt)+)) => {
+        $crate::append_html!(@append_attrs $tmpl, ($($p,)* "<", $crate::append_html!(@stringify_compressed $($tag)-+)), $($attrs)+);
         $tmpl.write_raw(">");
-        $tmpl.write_raw($crate::append_html!(@close_tag $tag));
+        $tmpl.write_raw($crate::append_html!(@close_tag $($tag)-+));
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident { $($children:tt)* } $($next:tt)* ) => {
-        $crate::append_html!($tmpl, ($($p,)* "<", stringify!($tag), ">"), $($children)*);
-        $crate::append_html!($tmpl, ("</", stringify!($tag), ">"), $($next)*);
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+ { $($children:tt)* } $($next:tt)* ) => {
+        $crate::append_html!($tmpl, ($($p,)* "<", $crate::append_html!(@stringify_compressed $($tag)-+), ">"), $($children)*);
+        $crate::append_html!($tmpl, ("</", $crate::append_html!(@stringify_compressed $($tag)-+), ">"), $($next)*);
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident : $e:expr; $($next:tt)* ) => {
-        $crate::append_html!($tmpl, ($($p),*), $tag { : $e; } $($next)* );
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+ : $e:expr; $($next:tt)* ) => {
+        $crate::append_html!($tmpl, ($($p),*), $($tag)-+ { : $e; } $($next)* );
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident : {$($code:tt)*} $($next:tt)* ) => {
-        $crate::append_html!($tmpl, ($($p),*), $tag { : {$($code)*} } $($next)* );
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+ : {$($code:tt)*} $($next:tt)* ) => {
+        $crate::append_html!($tmpl, ($($p),*), $($tag)-+ { : {$($code)*} } $($next)* );
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident; $($next:tt)*) => {
-        $crate::append_html!($tmpl, ($($p,)* "<", stringify!($tag), ">", $crate::append_html!(@close_tag $tag)), $($next)*);
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+; $($next:tt)*) => {
+        $crate::append_html!($tmpl, ($($p,)* "<", $crate::append_html!(@stringify_compressed $($tag)-+), ">", $crate::append_html!(@close_tag $($tag)-+)), $($next)*);
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident : $e:expr) => {
-        $crate::append_html!($tmpl, ($($p),*), $tag { : $e; });
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+ : $e:expr) => {
+        $crate::append_html!($tmpl, ($($p),*), $($tag)-+ { : $e; });
     };
-    ($tmpl:ident, ($($p:expr),*), $tag:ident) => {
-        $crate::append_html!(@write_const $tmpl, $($p,)* "<", stringify!($tag), ">", $crate::append_html!(@close_tag $tag));
+    ($tmpl:ident, ($($p:expr),*), $($tag:ident)-+) => {
+        $crate::append_html!(@write_const $tmpl, $($p,)* "<", $crate::append_html!(@stringify_compressed $($tag)-+), ">", $crate::append_html!(@close_tag $($tag)-+));
     };
     ($tmpl:ident, ($($p:expr),*),) => {
         $crate::append_html!(@write_const $tmpl, $($p),*);
