@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Stebalien/horrorshow-rs.svg?branch=master)](https://travis-ci.org/Stebalien/horrorshow-rs)
 [![Documentation](https://docs.rs/mio/badge.svg)](https://docs.rs/horrorshow/)
+[![crates.io](https://img.shields.io/crates/v/horrorshow.svg)](https://crates.io/crates/horrorshow)
 
 A macro-based html templating library, compatible with stable rust (currently requires rust >= 1.37).
 
