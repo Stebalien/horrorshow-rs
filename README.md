@@ -1,18 +1,14 @@
 # Horrorshow
 
 [![Build Status](https://travis-ci.org/Stebalien/horrorshow-rs.svg?branch=master)](https://travis-ci.org/Stebalien/horrorshow-rs)
+[![Documentation](https://docs.rs/mio/badge.svg)](https://docs.rs/horrorshow/)
 
 A macro-based html templating library, compatible with stable rust (currently requires rust >= 1.37).
-
-## Documentation
-
-* git: https://stebalien.github.io/horrorshow-rs/horrorshow/
-* release: https://docs.rs/horrorshow/
 
 ## Features
 
 This crate will degrade gracefully when compiled without `std` (disable the "std"
-feature) and even without `alloc (disable the "alloc" feature).
+feature) and even without `alloc` (disable the "alloc" feature).
 
 When compiled with `alloc` but without `std`:
 
