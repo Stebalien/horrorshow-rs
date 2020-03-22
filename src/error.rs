@@ -73,19 +73,28 @@ impl fmt::Display for Error {
         }
         #[cfg(feature = "alloc")]
         {
-            if !self.render.is_empty() {
-                displayed = true;
-                write!(f, "render errors: ")?;
-                for i in 0..(self.render.len() - 1) {
-                    write!(f, "{}, ", self.render[i])?;
+            let mut errs = self.render.iter().fuse();
+            if let Some(err) = errs.next() {
+                if displayed {
+                    write!(f, "; ")?;
+                } else {
+                    displayed = true;
                 }
-                write!(f, "{}", self.render.last().unwrap())?
+                write!(f, "render errors: {}", err)?;
+                for err in errs {
+                    write!(f, ", {}", err)?;
+                }
+                write!(f, "; ")?;
             }
         }
         #[cfg(not(feature = "alloc"))]
         {
             if let Some(e) = self.render.as_ref() {
-                displayed = true;
+                if displayed {
+                    write!(f, "; ")?;
+                } else {
+                    displayed = true;
+                }
                 write!(f, "render error: {}", e)?;
             }
         }
