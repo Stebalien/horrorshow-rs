@@ -283,7 +283,7 @@ macro_rules! append_html {
         $crate::append_html!(@write_const $tmpl, $($p),*);
     };
     ($tmpl:ident, ($($p:expr),*), $t:tt $($tr:tt)*) => {
-        compile_error!(concat!("unexpected token tree: ", stringify!($t)), "\n\nYou're probably missing a semicolon somewhere.");
+        compile_error!(concat!("unexpected token tree: ", stringify!($t), "\n\nYou're probably missing a semicolon somewhere."));
     }
 }
 
