@@ -130,7 +130,7 @@ impl<'b> RenderOnce for Box<dyn RenderMut + 'b> {
 
     #[inline]
     fn size_hint(&self) -> usize {
-        RenderMut::size_hint(&**self)
+        <dyn RenderMut>::size_hint(&**self)
     }
 }
 
@@ -151,7 +151,7 @@ impl<'b> RenderOnce for Box<dyn RenderMut + 'b + Send> {
 
     #[inline]
     fn size_hint(&self) -> usize {
-        RenderMut::size_hint(&**self)
+        <dyn RenderMut>::size_hint(&**self)
     }
 }
 
@@ -174,7 +174,7 @@ impl<'b> RenderOnce for Box<dyn Render + 'b> {
 
     #[inline]
     fn size_hint(&self) -> usize {
-        Render::size_hint(&**self)
+        <dyn Render>::size_hint(&**self)
     }
 }
 
@@ -203,7 +203,7 @@ impl<'b> RenderOnce for Box<dyn Render + 'b + Send> {
 
     #[inline]
     fn size_hint(&self) -> usize {
-        Render::size_hint(&**self)
+        <dyn Render>::size_hint(&**self)
     }
 }
 

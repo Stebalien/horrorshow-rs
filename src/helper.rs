@@ -2,7 +2,7 @@
 
 macro_rules! c {
     ($doc:expr => $name:ident $value:tt) => {
-        #[doc($doc)]
+        #[doc = $doc]
         #[allow(non_upper_case_globals)]
         pub const $name: $crate::render::Raw<&'static str> = $crate::render::Raw($value);
     };
