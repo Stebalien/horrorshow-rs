@@ -292,6 +292,7 @@
 #![allow(clippy::redundant_field_names)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(feature = "alloc")]
 extern crate alloc;
 
 #[macro_use]
