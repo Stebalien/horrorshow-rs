@@ -21,13 +21,13 @@ pub trait RenderOnce {
 /// Something that can be rendered by mutable reference.
 pub trait RenderMut: RenderOnce {
     /// Render this into a template buffer.
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>);
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>);
 }
 
 /// Something that can be rendered by reference.
 pub trait Render: RenderMut {
     /// Render this into a template buffer.
-    fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>);
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>);
 }
 
 // RenderOnce is the trait we really care about.
@@ -137,7 +137,7 @@ impl<'b> RenderOnce for Box<dyn RenderMut + 'b> {
 #[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn RenderMut + 'b> {
     #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         RenderMut::render_mut(&mut **self, tmpl);
     }
 }
@@ -158,7 +158,7 @@ impl<'b> RenderOnce for Box<dyn RenderMut + 'b + Send> {
 #[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn RenderMut + 'b + Send> {
     #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         RenderMut::render_mut(&mut **self, tmpl);
     }
 }
@@ -181,7 +181,7 @@ impl<'b> RenderOnce for Box<dyn Render + 'b> {
 #[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn Render + 'b> {
     #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(&*self, tmpl);
     }
 }
@@ -189,7 +189,7 @@ impl<'b> RenderMut for Box<dyn Render + 'b> {
 #[cfg(feature = "alloc")]
 impl<'b> Render for Box<dyn Render + 'b> {
     #[inline]
-    fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(&**self, tmpl);
     }
 }
@@ -210,7 +210,7 @@ impl<'b> RenderOnce for Box<dyn Render + 'b + Send> {
 #[cfg(feature = "alloc")]
 impl<'b> RenderMut for Box<dyn Render + 'b + Send> {
     #[inline]
-    fn render_mut<'a>(&mut self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(&*self, tmpl);
     }
 }
@@ -218,7 +218,7 @@ impl<'b> RenderMut for Box<dyn Render + 'b + Send> {
 #[cfg(feature = "alloc")]
 impl<'b> Render for Box<dyn Render + 'b + Send> {
     #[inline]
-    fn render<'a>(&self, tmpl: &mut TemplateBuffer<'a>) {
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>) {
         Render::render(&**self, tmpl);
     }
 }
