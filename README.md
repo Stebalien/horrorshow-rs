@@ -92,7 +92,7 @@ fn main() {
           <li>9</li>\
           <li>10</li>\
         </ol>\
-        <br /><br />\
+        <br><br>\
         <p>Easy!</p>\
       </body>\
     </html>";

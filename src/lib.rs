@@ -295,6 +295,9 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+#[cfg(doctest)]
+doc_comment::doctest!("../README.md");
+
 #[macro_use]
 mod macros;
 
