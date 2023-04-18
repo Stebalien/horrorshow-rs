@@ -16,3 +16,7 @@ default = ["ops", "std", "alloc"]
 alloc = []
 ops = []
 std = ["alloc"]
+
+[dev-dependencies]
+# To test the readme.
+doc-comment = "0.3"
