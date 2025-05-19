@@ -558,3 +558,59 @@ macro_rules! impl_fmt_render {
 }
 
 impl_fmt_render!(i8, i16, i32, i64, isize, u8, u16, u32, u64, usize, f32, f64, char);
+
+/// Render the inner template and escape the output.
+///
+/// This is the inverse of [`Raw`].
+#[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
+pub struct Escape<R>(pub R);
+
+impl<R> RenderOnce for Escape<R>
+where
+    R: RenderOnce,
+{
+    #[inline]
+    fn render_once(self, tmpl: &mut TemplateBuffer<'_>)
+    where
+        Self: Sized,
+    {
+        if let Err(err) = self.0.write_to_fmt(&mut tmpl.as_writer()) {
+            tmpl.record_error(err);
+        }
+    }
+
+    #[inline]
+    fn size_hint(&self) -> usize {
+        self.0.size_hint()
+    }
+}
+
+impl<R> RenderMut for Escape<R>
+where
+    R: RenderMut,
+{
+    #[inline]
+    fn render_mut(&mut self, tmpl: &mut TemplateBuffer<'_>)
+    where
+        Self: Sized,
+    {
+        if let Err(err) = (&mut self.0).write_to_fmt(&mut tmpl.as_writer()) {
+            tmpl.record_error(err);
+        }
+    }
+}
+
+impl<R> Render for Escape<R>
+where
+    R: Render,
+{
+    #[inline]
+    fn render(&self, tmpl: &mut TemplateBuffer<'_>)
+    where
+        Self: Sized,
+    {
+        if let Err(err) = (&self.0).write_to_fmt(&mut tmpl.as_writer()) {
+            tmpl.record_error(err);
+        }
+    }
+}

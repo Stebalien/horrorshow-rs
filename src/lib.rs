@@ -313,7 +313,7 @@ mod render;
 
 #[cfg(feature = "alloc")]
 pub use crate::render::RenderBox;
-pub use crate::render::{Concat, FnRenderer, Join, Raw, Render, RenderMut, RenderOnce};
+pub use crate::render::{Concat, Escape, FnRenderer, Join, Raw, Render, RenderMut, RenderOnce};
 
 /// Traits that should always be imported.
 pub mod prelude;
