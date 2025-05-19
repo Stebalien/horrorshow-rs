@@ -3,7 +3,7 @@
 #[macro_use]
 extern crate horrorshow;
 
-use horrorshow::{Concat, Template};
+use horrorshow::{Concat, Join, Template};
 
 #[test]
 fn test_cat() {
@@ -14,5 +14,17 @@ fn test_cat() {
         .into_string()
         .unwrap(),
         "abc"
+    );
+}
+
+#[test]
+fn test_join() {
+    assert_eq!(
+        html! {
+            : Join(" ", &["a", "b", "c"])
+        }
+        .into_string()
+        .unwrap(),
+        "a b c"
     );
 }

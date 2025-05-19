@@ -355,6 +355,27 @@ where
     }
 }
 
+// Join renders each item in the iterator sequentially, interleaving the specified separator.
+#[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
+pub struct Join<S, I>(pub S, pub I);
+
+impl<S, I> RenderOnce for Join<S, I>
+where
+    I: IntoIterator,
+    I::Item: RenderOnce,
+    S: RenderMut,
+{
+    fn render_once(mut self, tmpl: &mut TemplateBuffer<'_>) {
+        let mut iter = self.1.into_iter();
+        let Some(first) = iter.next() else { return };
+        first.render_once(tmpl);
+        for r in iter {
+            self.0.render_mut(tmpl);
+            r.render_once(tmpl)
+        }
+    }
+}
+
 impl<'a> RenderOnce for &'a str {
     #[inline]
     fn render_once(self, tmpl: &mut TemplateBuffer<'_>) {
