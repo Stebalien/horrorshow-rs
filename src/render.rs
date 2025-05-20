@@ -367,8 +367,10 @@ where
 {
     fn render_once(mut self, tmpl: &mut TemplateBuffer<'_>) {
         let mut iter = self.1.into_iter();
-        let Some(first) = iter.next() else { return };
-        first.render_once(tmpl);
+        match iter.next() {
+            Some(first) => first.render_once(tmpl),
+            None => return,
+        }
         for r in iter {
             self.0.render_mut(tmpl);
             r.render_once(tmpl)
