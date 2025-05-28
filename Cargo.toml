@@ -1,13 +1,13 @@
 [package]
 name = "horrorshow"
 description = "a templating library written in rust macros"
-version = "0.8.7"
+version = "0.8.8"
 authors = ["Steven Allen <steven@stebalien.com>"]
 edition = "2018"
 
 documentation = "https://docs.rs/horrorshow"
 repository = "https://github.com/Stebalien/horrorshow-rs"
-keywords = ["html", "template"]
+keywords = ["xml", "html", "template"]
 categories = ["template-engine"]
 license = "MIT/Apache-2.0"
 

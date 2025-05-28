@@ -3,7 +3,7 @@
 [![Documentation](https://docs.rs/mio/badge.svg)](https://docs.rs/horrorshow/)
 [![crates.io](https://img.shields.io/crates/v/horrorshow.svg)](https://crates.io/crates/horrorshow)
 
-A macro-based html templating library, compatible with stable rust (currently requires rust >= 1.48).
+A macro-based HTML and XML templating library, compatible with stable rust (currently requires rust >= 1.48).
 
 ## Features
 
