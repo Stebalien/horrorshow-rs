@@ -133,6 +133,9 @@ macro_rules! append_html {
     (@write_const $tmpl:ident, $type:ident, $($p:expr),+) => {
         $tmpl.write_raw(concat!($($p),*));
     };
+    (@expr_and_block $tmpl:ident, $type:ident, parse_match_block, (match $($prefix:tt)*), {$($pattern:pat => {$($inner:tt)*})*} $($next:tt)*) => {
+        $crate::append_html!(@parse_match_block $tmpl, $type, (match ($($prefix)*) {$($pattern => {$($inner)*})*}), $($next)*);
+    };
     (@expr_and_block $tmpl:ident, $type:ident, $goto:ident, ($($prefix:tt)*), {$($inner:tt)*} $($next:tt)*) => {
         $crate::append_html!(@$goto $tmpl, $type, ($($prefix)* {$crate::append_html!($tmpl, $type, (), $($inner)*);}), $($next)*);
     };
@@ -197,6 +200,12 @@ macro_rules! append_html {
     (@parse_if_block $tmpl:ident, $type:ident, ($($prefix:tt)*), $($next:tt)*) => {
         $crate::append_html!(@cont $tmpl, $type, ($($prefix)*), $($next)*);
     };
+    //////// MATCH
+    (@parse_match_block $tmpl:ident, $type:ident, (match ($($prefix:tt)*) {$($pattern:pat => {$($inner:tt)*})*}), $($next:tt)*) => {
+        $crate::append_html!(@cont $tmpl, $type, (match ($($prefix)*) {$(
+            $pattern => { $crate::append_html!($tmpl, $type, (), $($inner)*); }
+        )*}), $($next)*);
+    };
     //// Condition
     ($tmpl:ident, $type:ident, ($($p:expr),*), @ if $($next:tt)+) => {
         $crate::append_html!(@write_const $tmpl, $type, $($p),*);
@@ -213,6 +222,10 @@ macro_rules! append_html {
     ($tmpl:ident, $type:ident, ($($p:expr),*), @ while $e:tt $($next:tt)*) => {
         $crate::append_html!(@write_const $tmpl, $type, $($p),*);
         $crate::append_html!(@expr_and_block $tmpl, $type, cont, (while $e), $($next)*);
+    };
+    ($tmpl:ident, $type:ident, ($($p:expr),*), @ match $e:tt $($next:tt)+) => {
+        $crate::append_html!(@write_const $tmpl, $type, $($p),*);
+        $crate::append_html!(@expr_and_block $tmpl, $type, parse_match_block, (match $e), $($next)*);
     };
     ($tmpl:ident, $type:ident, ($($p:expr),*), : {$($code:tt)*} $($next:tt)*) => {
         $crate::append_html!(@write_const, $tmpl, $type, $($p),*);

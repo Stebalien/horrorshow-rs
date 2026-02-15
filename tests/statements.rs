@@ -114,6 +114,31 @@ fn test_for() {
 }
 
 #[test]
+fn test_match() {
+    let people = [None, Some("Name")];
+
+    assert_eq!(
+        html! {
+            p : "before";
+            main {
+                @ for item in &people {
+                    span {
+                        @ match item {
+                            None => { b : "MISSING"; }
+                            Some(name) => { : name; }
+                        }
+                    }
+                }
+            }
+            p : "after";
+        }
+        .into_string()
+        .unwrap(),
+        "<p>before</p><main><span><b>MISSING</b></span><span>Name</span></main><p>after</p>"
+    );
+}
+
+#[test]
 fn test_while() {
     let mut i = 2;
     assert_eq!(
